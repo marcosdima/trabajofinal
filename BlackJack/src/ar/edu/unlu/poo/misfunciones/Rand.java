@@ -32,6 +32,13 @@ public class Rand {
 		return num;
 	}
 	
+	public int randomNum(int base, int tope) {
+		
+		int res = this.randomNum(tope-1) + base;
+		return res;
+		
+	}
+	
 	public int randomNum() {
 		int num;
 		
@@ -57,17 +64,17 @@ public class Rand {
 		
 		for (i = 0; i < tam; i++) {
 			
-			numero = this.randomNum(tam);
-			libre = listaDeAciertos[numero];
+			numero = this.randomNum(1, tam);
+			libre = listaDeAciertos[numero-1];
 			
 			while (!libre) {
 
-				numero = this.randomNum(tam);
-				libre = listaDeAciertos[numero];
+				numero = this.randomNum(1, tam);
+				libre = listaDeAciertos[numero-1];
 				
 			}
 			
-			listaDeAciertos[numero] = false;
+			listaDeAciertos[numero-1] = false;
 			listaDeNumeros[i] = numero;
 			
 		}
