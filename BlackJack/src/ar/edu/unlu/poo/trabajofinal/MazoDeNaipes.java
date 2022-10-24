@@ -6,11 +6,12 @@ import ar.edu.unlu.poo.trabajofinal.enumerados.Palo;
 
 public class MazoDeNaipes extends Mazo {
 	
-	public Rand random = new Rand();
+	public Rand random;
 	
 	public MazoDeNaipes() {
 		
 		super(52);
+		this.random = new Rand();
 		
 	}
 
