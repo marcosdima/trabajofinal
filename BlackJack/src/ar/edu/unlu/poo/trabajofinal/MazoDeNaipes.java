@@ -1,9 +1,12 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import ar.edu.unlu.poo.misfunciones.Rand;
+import ar.edu.unlu.poo.mistads.Pila;
 import ar.edu.unlu.poo.trabajofinal.enumerados.Palo;
 
 public class MazoDeNaipes extends Mazo {
+	
+	public Rand random = new Rand();
 	
 	public MazoDeNaipes() {
 		
@@ -13,7 +16,6 @@ public class MazoDeNaipes extends Mazo {
 
 	public void setCartas() {
 		
-		int tam = this.getNumeroDeCartas();
 		Palo[] palos = {Palo.CORAZON, Palo.DIAMANTE, Palo.PICA, Palo.TREBOL};
 		Carta card;
 		Rand azar = new Rand();
@@ -34,8 +36,20 @@ public class MazoDeNaipes extends Mazo {
 	}
 
 	public void barajar() {
-		// TODO Auto-generated method stub
 		
+		int tamanio = this.getNumeroDeCartas();
+		int[] lista = random.randomList(tamanio);
+		Pila contenedor = new Pila(this.getNumeroDeCartas());
+		
+		
+		for (int numero : lista) {
+			
+			contenedor.apilar(this.getMazoDeCartas().get(numero - 1));
+			
+		}
+		
+		this.setBaraja(contenedor);
+	
 	}
 	
 }

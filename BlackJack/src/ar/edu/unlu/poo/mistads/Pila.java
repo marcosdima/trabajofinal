@@ -104,42 +104,6 @@ public class Pila {
 		}
 		
 	}
-	
-	// Retorna un array con todas las claves.
-	public String[] getDatos() {
-		
-		int iteraciones;
-		boolean vacia = this.estaVacia();
-		String[] claves;
-		Pila pilaAux = new Pila(this.tam);
-		
-		if (!vacia) {
-			
-			claves = new String[this.nroNodos];
-			iteraciones = this.nroNodos;
-			
-			for (int i = 0; i < iteraciones; i++) {
-				
-				claves[i] = this.getTope().getDato().getClave();
-				
-				pilaAux.apilar(this.tope.getDato());
-				this.desapilar();
-				
-			}		
-			
-			pilaAux.pasarContenido(this);
-			
-		}
-		else {
-			
-			claves = null;
-			
-		}
-		
-		
-		return claves;
-		
-	}
 
 	// Pasa el contenido de la pila, a la otra (invirtiendolo).
 	public void pasarContenido(Pila pila) {
@@ -165,13 +129,6 @@ public class Pila {
 		
 		boolean res = (this.tam == pila.getTam());
 		return res;
-		
-	}
-	
-	// Retorna un string con todos los datos separados con coma. (No programado)
-	public String returnCSV() {
-		
-		return "";
 		
 	}
 	

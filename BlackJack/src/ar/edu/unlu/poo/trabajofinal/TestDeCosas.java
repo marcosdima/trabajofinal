@@ -1,5 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import ar.edu.unlu.poo.mistads.NodoPila;
+import ar.edu.unlu.poo.trabajofinal.enumerados.Palo;
+
 public class TestDeCosas {
 
 	public static void main(String[] args) {
@@ -14,6 +17,12 @@ public class TestDeCosas {
 			i++;
 			
 		}
+		
+		mazo.barajar();
+		
+		Carta cartinha = (Carta) mazo.getBaraja().getTope().getDato().getContenido();
+		
+		System.out.println(cartinha.getPaloDeCarta() + "" + cartinha.getInt());
 		
 	}
 

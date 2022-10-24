@@ -1,8 +1,9 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import ar.edu.unlu.poo.mistads.Dato;
 import ar.edu.unlu.poo.trabajofinal.enumerados.Palo;
 
-public class Carta {
+public class Carta implements Dato {
 	
 	private Palo paloDeCarta;
 	private int numero;
@@ -28,6 +29,26 @@ public class Carta {
 
 	private void setNumero(int numero) {
 		this.numero = numero;
+	}
+
+	
+	public String getClave() {
+		
+		String clave = this.getPaloDeCarta().toString();
+		
+		return clave;
+	}
+
+
+	@Override
+	public int getInt() {
+		
+		return this.getNumero();
+	}
+
+
+	public Object getContenido() {
+		return this;
 	}
 
 	
