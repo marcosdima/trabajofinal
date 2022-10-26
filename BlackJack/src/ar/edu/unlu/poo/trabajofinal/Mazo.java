@@ -70,6 +70,7 @@ public abstract class Mazo {
 		return numeroDeCartas;
 	}
 	
+	// Queda pendiente pensar en la medida control. Si mezclamos cada vez que termina la partida no hace falta.
 	public Carta agarrarCarta() {
 		
 		Carta res = this.baraja.getTope();
