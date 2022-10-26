@@ -1,17 +1,17 @@
 package ar.edu.unlu.poo.mistads;
 
-public class Pila {
+public class Pila<Cosa> {
 
 	private int tam;
 	private int nroNodos;
-	private NodoPila tope;
+	private NodoPila<Cosa> tope;
 	
 	private final int MAX = 1000;
 	
 	public Pila(int tam) {
 		
 		this.setTam(tam);
-		this.tope = new NodoPila();
+		this.tope = new NodoPila<Cosa>();
 		this.nroNodos = 0;
 		
 	}
@@ -37,8 +37,8 @@ public class Pila {
 	}
 	
 	// Retorna el nodo tope.
- 	public NodoPila getTope() {
-		return this.tope;
+ 	public Cosa getTope() {
+		return this.tope.getElemento();
 	}
 	
 	// Retorna true si el tope es nulo.
@@ -89,11 +89,11 @@ public class Pila {
 	}
 	
 	// Apila el elemento (Si no esta llena ni el elemento es null).
-	public void apilar(Dato elemento) {
+	public void apilar(Cosa elemento) {
 		
 		boolean llena = this.estaLlena();
 		
-		NodoPila elementoAux = new NodoPila(elemento);
+		NodoPila<Cosa> elementoAux = new NodoPila<Cosa>(elemento);
 		
 		if ((!llena)){
 			
@@ -106,16 +106,16 @@ public class Pila {
 	}
 
 	// Pasa el contenido de la pila, a la otra (invirtiendolo).
-	public void pasarContenido(Pila pila) {
+	public void pasarContenido(Pila<Cosa> pila) {
 		
 		boolean vacia = this.estaVacia();
-		pila = new Pila(this.tam);
+		pila = new Pila<Cosa>(this.tam);
 		
 		if ((!vacia)) {
 			
 			for (int i = 0; i < this.nroNodos; i++) {
 				
-				pila.apilar(this.tope.getDato());
+				pila.apilar(this.tope.getElemento());
 				this.desapilar();
 				
 			}
@@ -125,7 +125,7 @@ public class Pila {
 	}
 	
 	// Retorna true si esta pila y la que pasan por parámetro tienen el mismo tamaño.
-	public boolean sameTam(Pila pila) {
+	public boolean sameTam(Pila<Cosa> pila) {
 		
 		boolean res = (this.tam == pila.getTam());
 		return res;

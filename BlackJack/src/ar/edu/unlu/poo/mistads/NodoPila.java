@@ -1,18 +1,18 @@
 package ar.edu.unlu.poo.mistads;
 
-public class NodoPila {
+public class NodoPila<Cosa> {
 	
-	private Dato dato;
-	private NodoPila anterior;
+	private Cosa elemento;
+	private NodoPila<Cosa> anterior;
 	
-	public NodoPila(Dato dato, NodoPila anterior) {
+	public NodoPila(Cosa elemento, NodoPila<Cosa> anterior) {
 		
-		this.setDato(dato);
+		this.setCosa(elemento);
 		this.setAnterior(anterior);
 		
 	}
 	
-	public NodoPila(Dato dato) {
+	public NodoPila(Cosa dato) {
 		
 		this (dato, null);
 	
@@ -24,19 +24,19 @@ public class NodoPila {
 		
 	}
 
-	public Dato getDato() {
-		return dato;
+	public Cosa getElemento() {
+		return elemento;
 	}
 
-	public void setDato(Dato dato) {
-		this.dato = dato;
+	public void setCosa(Cosa dato) {
+		this.elemento = dato;
 	}
 
-	public NodoPila getAnterior() {
+	public NodoPila<Cosa> getAnterior() {
 		return anterior;
 	}
 
-	public void setAnterior(NodoPila anterior) {
+	public void setAnterior(NodoPila<Cosa> anterior) {
 		this.anterior = anterior;
 	}
 	
@@ -44,7 +44,7 @@ public class NodoPila {
 		
 		boolean res = false;
 		
-		if (this.dato == null) {
+		if (this.elemento == null) {
 			
 			res = true;
 			

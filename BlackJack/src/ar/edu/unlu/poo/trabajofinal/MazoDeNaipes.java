@@ -40,12 +40,12 @@ public class MazoDeNaipes extends Mazo {
 		
 		int tamanio = this.getNumeroDeCartas();
 		int[] lista = random.randomList(tamanio);
-		Pila contenedor = new Pila(this.getNumeroDeCartas());
+		Pila<Carta> contenedor = new Pila<Carta>(this.getNumeroDeCartas());
 		
 		
 		for (int numero : lista) {
 			
-			contenedor.apilar(this.getMazoDeCartas().get(numero - 1));
+			contenedor.apilar(this.getConjuntoDeCartas().get(numero - 1));
 			
 		}
 		

@@ -6,8 +6,8 @@ import ar.edu.unlu.poo.mistads.Pila;
 public abstract class Mazo {
 	
 	private int numeroDeCartas;
-	private ArrayList<Carta> mazoDeCartas;
-	private Pila baraja;
+	private ArrayList<Carta> conjuntoDeCartas;
+	private Pila<Carta> baraja;
 	
 	public Mazo(int tam) {
 
@@ -27,23 +27,23 @@ public abstract class Mazo {
 	
 	protected void addCarta(Carta cartita) {
 		
-		if (this.mazoDeCartas == null) {
-			this.mazoDeCartas = new ArrayList<Carta>(this.numeroDeCartas);
+		if (this.conjuntoDeCartas == null) {
+			this.conjuntoDeCartas = new ArrayList<Carta>(this.numeroDeCartas);
 		}
 		
-		this.mazoDeCartas.add(cartita);
+		this.conjuntoDeCartas.add(cartita);
 		
 	};
 
-	public ArrayList<Carta> getMazoDeCartas() {
-		return mazoDeCartas;
+	public ArrayList<Carta> getConjuntoDeCartas() {
+		return conjuntoDeCartas;
 	}
 
-	public Pila getBaraja() {
+	public Pila<Carta> getBaraja() {
 		return baraja;
 	}
 
-	public void setBaraja(Pila baraja) {
+	public void setBaraja(Pila<Carta> baraja) {
 		this.baraja = baraja;
 	}
 
