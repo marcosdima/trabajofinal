@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.util.ArrayList;
+
+import ar.edu.unlu.poo.misfunciones.Rand;
 import ar.edu.unlu.poo.mistads.Pila;
 
 public abstract class Mazo {
@@ -8,13 +10,15 @@ public abstract class Mazo {
 	private int numeroDeCartas;
 	private ArrayList<Carta> conjuntoDeCartas;
 	private Pila<Carta> baraja;
+	public Rand random;
 	
 	public Mazo(int tam) {
 
 		super();
+		this.random = new Rand();
 		this.setNumeroDeCartas(tam);
-		this.setCartas();;
-		
+		this.setCartas();
+	
 	}
 
 	public void setNumeroDeCartas(int numeroDeCartas) {
@@ -23,7 +27,22 @@ public abstract class Mazo {
 	
 	public abstract void setCartas();
 	
-	public abstract void barajar();
+	public void barajar() {
+		
+		int tamanio = this.getNumeroDeCartas();
+		int[] lista = random.randomList(tamanio);
+		Pila<Carta> contenedor = new Pila<Carta>(this.getNumeroDeCartas());
+		
+		
+		for (int numero : lista) {
+			
+			contenedor.apilar(this.getConjuntoDeCartas().get(numero - 1));
+			
+		}
+		
+		this.setBaraja(contenedor);
+	
+	};
 	
 	protected void addCarta(Carta cartita) {
 		
@@ -51,6 +70,12 @@ public abstract class Mazo {
 		return numeroDeCartas;
 	}
 	
-	
+	public Carta agarrarCarta() {
+		
+		Carta res = this.baraja.getTope();
+		this.baraja.desapilar();
+		return res;
+		
+	}
 
 }

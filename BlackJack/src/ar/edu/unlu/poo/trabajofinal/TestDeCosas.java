@@ -17,14 +17,11 @@ public class TestDeCosas {
 		*/
 		
 		mazo.barajar();
-		System.out.println(mazo.getBaraja().getTope().getPaloDeCarta());
-		mazo.barajar();
-		System.out.println(mazo.getBaraja().getTope().getPaloDeCarta());
-		mazo.barajar();
-		System.out.println(mazo.getBaraja().getTope().getPaloDeCarta());
-		mazo.barajar();
-		System.out.println(mazo.getBaraja().getTope().getPaloDeCarta());
-		
+		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
+		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
+		mazo.agarrarCarta();
+		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
+		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
 	}
 
 }
