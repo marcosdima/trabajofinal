@@ -7,12 +7,13 @@ public class MazoDeNaipes extends Mazo {
 	public MazoDeNaipes() {
 		
 		super(52);
+		this.setCartas();
 		
 	}
 
 	public void setCartas() {
 		
-		Palo[] palos = {Palo.CORAZON, Palo.DIAMANTE, Palo.PICA, Palo.TREBOL};
+		Palo[] palos = Palo.values();
 		Carta card;
 		
 		for (Palo palo : palos) {
