@@ -15,8 +15,6 @@ public abstract class Mazo extends ConjuntoDeCartas {
 	
 	}
 	
-	public abstract void setCartas();
-	
 	public void barajar() {
 		
 		int tamanio = this.getTam();

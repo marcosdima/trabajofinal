@@ -1,16 +1,19 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import ar.edu.unlu.poo.trabajofinal.enumerados.ContenidoDeCarta;
 import ar.edu.unlu.poo.trabajofinal.enumerados.Palo;
 
 public class Carta{
 	
 	private Palo paloDeCarta;
-	private int numero;
+	private ContenidoDeCarta contenido; 
+	private boolean visible;
 	
-	public Carta(Palo palo, int nro) {
+	public Carta(Palo palo, ContenidoDeCarta cartita) {
 		
-		this.setNumero(nro);
+		this.contenido = cartita;
 		this.setPaloDeCarta(palo);
+		this.setVisibilidad(false);
 		
 	}
 
@@ -22,19 +25,19 @@ public class Carta{
 		this.paloDeCarta = paloDeCarta;
 	}
 
-	public int getNumero() {
-		return numero;
-	}
-
-	private void setNumero(int numero) {
-		this.numero = numero;
-	}
-
-	public String getClave() {
-		
-		String clave = this.getPaloDeCarta().toString();
-		
-		return clave;
+	public ContenidoDeCarta getValor() {
+		return this.contenido;
 	}
 	
+	public void setVisibilidad(boolean esVisible) {
+		
+		this.visible = esVisible;
+		
+	}
+	
+	public boolean esVisible() {
+		
+		return this.visible;
+		
+	}
 }

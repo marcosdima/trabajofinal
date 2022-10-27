@@ -19,8 +19,6 @@ public abstract class ConjuntoDeCartas {
 		this.cartas.add(carta);
 		
 	}
-	
-	public abstract void setCartas();
 
 	public ArrayList<Carta> getCartas() {
 		return cartas;
@@ -34,6 +32,10 @@ public abstract class ConjuntoDeCartas {
 		this.tam = tam;
 	}
 	
-	
+	protected void clear() {
+		
+		this.cartas = new ArrayList<Carta>(this.getTam());
+		
+	}
 
 }

@@ -4,24 +4,16 @@ public class TestDeCosas {
 
 	public static void main(String[] args) {
 		
-		MazoDeNaipes mazo = new MazoDeNaipes();
-		int i = 1;
+		MazoDeNaipes mazo = new MazoDeNaipes();		
 		
 		/*
-		for (Carta c : mazo.getConjuntoDeCartas()) {
+		for (Carta c : mazo.getCartas()) {
 			
-			System.out.println("Carta " + i + ": " + c.getNumero() + " de " + c.getPaloDeCarta());
-			i++;
+			System.out.println(c.getClaveDeCarta());
 			
 		}
 		*/
 		
-		mazo.barajar();
-		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
-		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
-		mazo.agarrarCarta();
-		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
-		System.out.println(mazo.getBaraja().getTope().getNumero() + " de " + mazo.getBaraja().getTope().getPaloDeCarta());
 	}
 
 }
