@@ -1,16 +1,15 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
-
-public abstract class Persona implements Puntuable{
+public class Persona {
 
 	private String nombre;
-	private Mano manoActual;
-	
-	public Persona(String nombre) {
-		
+	private int dinero;
+
+
+	public Persona(String nombre, int dinero) {
+		super();
 		this.setNombre(nombre);
-		
+		this.setDinero(dinero);
 	}
 
 	public String getNombre() {
@@ -21,10 +20,12 @@ public abstract class Persona implements Puntuable{
 		this.nombre = nombre;
 	}
 
-	public Mano getManoActual() {
-		return manoActual;
+	public int getDinero() {
+		return dinero;
 	}
-	
-	public abstract int getPuntaje();
-	
+
+	public void setDinero(int dinero) {
+		this.dinero = dinero;
+	}
+
 }

@@ -1,64 +1,51 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import ar.edu.unlu.poo.trabajofinal.enumerados.Evento;
+import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 
-public class Jugador extends Persona {
+public abstract class Jugador extends Persona implements Puntuable{
+
 	
-	private Mano segundaMano;
-	private int dinero;
-	private Apuesta apuesta;
+	private Mano manoActual;
 	
 	public Jugador(String nombre, int money) {
 		
-		super(nombre);
-		this.apuesta = new Apuesta();
-		this.setDinero(money);
+		super(nombre, money);
 		
 	}
 
-	public void darCarta(Carta carta) {
+	public void addCarta(Carta carta) {
 		
 		this.getManoActual().addCarta(carta);
 		
 	}
+	
+	public Mano getManoActual() {
+		return manoActual;
+	}
+	
+	public int getPuntaje() {
+		
+		return this.manoActual.getPuntaje();
+		
+	};
 
-	// Si en un futuro implemento segundaMano, modificar.
 	public void clearMano() {
 		
 		this.getManoActual().clear();
 	
 	}
-
 	
-
-	@Override
-	public int getPuntaje() {
+	public void mostrarCarta(int pos) {
 		
-		return this.getManoActual().getPuntaje();
+		this.getManoActual().getCartas().get(pos).setVisibilidad(true);
 		
 	}
-
 	
-	public int getDinero() {
-		return dinero;
+	public void mostrarCarta() {
+		
+		this.mostrarCarta(0);
+		
 	}
-
 	
-	public void setDinero(int dinero) {
-		this.dinero = dinero;
-	}
-
-	
-	public Apuesta getApuesta() {
-		return apuesta;
-	}
-
-	
-	public void setApuesta(Apuesta apuesta) {
-		this.apuesta = apuesta;
-	}
-
-	
-	//public void splitMano() {}; Puede que en un futuro lo implemente, no es prioridad.
 	
 }
