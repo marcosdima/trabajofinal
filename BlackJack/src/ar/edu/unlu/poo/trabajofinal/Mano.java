@@ -2,11 +2,13 @@ package ar.edu.unlu.poo.trabajofinal;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 
-public abstract class Mano extends ConjuntoDeCartas implements Puntuable {
+public class Mano extends ConjuntoDeCartas implements Puntuable {
 	
-	public Mano(int tam) {
+	private static final int MAXIMO = 10;
+	
+	public Mano() {
 		
-		super(tam);
+		super(MAXIMO);
 		
 	}
 	
@@ -15,6 +17,12 @@ public abstract class Mano extends ConjuntoDeCartas implements Puntuable {
 	public int getPuntaje() {
 		
 		int puntos = 0;
+		
+		for (Carta c : this.getCartas()) {
+			
+			puntos += c.getValor();
+			
+		}
 		
 		return puntos;
 		

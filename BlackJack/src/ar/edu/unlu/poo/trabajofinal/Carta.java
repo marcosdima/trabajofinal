@@ -25,8 +25,8 @@ public class Carta{
 		this.paloDeCarta = paloDeCarta;
 	}
 
-	public ContenidoDeCarta getValor() {
-		return this.contenido;
+	public int getValor() {
+		return this.contenido.getValor();
 	}
 	
 	public void setVisibilidad(boolean esVisible) {
