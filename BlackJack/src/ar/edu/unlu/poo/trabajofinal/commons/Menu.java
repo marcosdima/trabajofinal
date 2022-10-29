@@ -18,7 +18,7 @@ public class Menu {
 	
 	public Menu(OpcionesMenuPrincipal op) {
 		
-		this ("Menú Principal", op);
+		this ("Menu Principal", op);
 		
 	}
 	
