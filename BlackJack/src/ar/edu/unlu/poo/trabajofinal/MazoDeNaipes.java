@@ -1,8 +1,5 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import ar.edu.unlu.poo.trabajofinal.enumerados.ContenidoDeCarta;
-import ar.edu.unlu.poo.trabajofinal.enumerados.Palo;
-
 public class MazoDeNaipes extends Mazo {
 	
 	public MazoDeNaipes() {

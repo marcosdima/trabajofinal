@@ -16,6 +16,12 @@ public class Menu {
 		
 	}
 	
+	public Menu(OpcionesMenuPrincipal op) {
+		
+		this ("Menú Principal", op);
+		
+	}
+	
 	public void setTitulo(String title) {
 		this.titulo = title;
 	}
