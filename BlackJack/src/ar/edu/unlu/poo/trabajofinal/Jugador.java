@@ -10,6 +10,7 @@ public abstract class Jugador extends Persona implements Puntuable{
 	public Jugador(String nombre, int money) {
 		
 		super(nombre, money);
+		manoActual = new Mano();
 		
 	}
 

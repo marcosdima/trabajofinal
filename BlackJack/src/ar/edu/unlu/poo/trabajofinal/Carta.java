@@ -40,4 +40,17 @@ public class Carta{
 		return this.visible;
 		
 	}
+
+	public String getLabel() {
+		
+		return this.contenido.getLabel();
+		
+	}
+	
+	public String getDesc() {
+		
+		return this.getLabel() + " de " + this.paloDeCarta;
+		
+	}
+	
 }

@@ -4,44 +4,54 @@ import java.util.ArrayList;
 
 //Pensar si Observado deberías ser implementado por 'Jugador'.
 
-public class Crupier extends Jugador {
+public abstract class Crupier extends Jugador {
+
+	private Mazo mazo;
 	
-	private ArrayList<Jugador> jugadores;
-	private MazoDeNaipes mazo;
-	
-	public Crupier(ArrayList<Jugador> players) {
+	public Crupier() {
 		
 		// En un futuro podría darle dinero y plantear un final con eso.
 		super("Crupier", 0);
-		this.setJugadores(players);
-		this.mazo = new MazoDeNaipes();
+		this.setMazo();
 	
 	}
-
 	
-	public ArrayList<Jugador> getJugadores() {
-		return jugadores;
-	}
-
-	
-	public void setJugadores(ArrayList<Jugador> jugadores) {
-		this.jugadores = jugadores;
-	}
-
-	public void repartirPrimeraMano() {
-
+	public void barajar() {
 		
-		for (Jugador player : this.jugadores) {
+		this.mazo.barajar();
+		
+	};
+	
+	public void setMazo(Mazo mazo) {
+		
+		this.mazo = mazo;
+		
+	}
+	
+	public abstract void setMazo();
+	
+	public void terminarMano(ArrayList<Jugador> jugadores) {
+		
+		for (Jugador player : jugadores) {
 			
-			player.addCarta(this.mazo.agarrarCarta());
-			player.addCarta(this.mazo.agarrarCarta());
-			player.mostrarCarta();	
+			player.clearMano();
+			
 		}
 		
-		this.addCarta(this.mazo.agarrarCarta());
-		this.addCarta(this.mazo.agarrarCarta());
-		this.mostrarCarta();
+		this.clearMano();
+		
+	}
+	
+	public void darCarta(Jugador player) {
+		
+		Carta cartita = this.mazo.agarrarCarta();
+		player.addCarta(cartita);
 		
 	}
 
+	
+	public Mazo getMazo() {
+		return mazo;
+	}
+	
 }

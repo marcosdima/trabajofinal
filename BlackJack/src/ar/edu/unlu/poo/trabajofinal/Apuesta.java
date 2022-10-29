@@ -2,7 +2,7 @@ package ar.edu.unlu.poo.trabajofinal;
 
 public class Apuesta {
 	
-	private int apuesta;
+	private int monto;
 	
 	public Apuesta() {
 		
@@ -10,12 +10,12 @@ public class Apuesta {
 		
 	}
 
-	public int getApuesta() {
-		return apuesta;
+	public int getMonto() {
+		return monto;
 	}
 
 	public void setApuesta(int apuesta) {
-		this.apuesta = apuesta;
+		this.monto = apuesta;
 	}
 
 	

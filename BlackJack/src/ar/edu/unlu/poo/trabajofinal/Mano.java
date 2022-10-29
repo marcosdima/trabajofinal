@@ -14,6 +14,7 @@ public class Mano extends ConjuntoDeCartas implements Puntuable {
 	
 	public void clear() {};
 	
+	//Puede que convenga agregar una clase puntaje, de ahí resolver el tema del as.
 	public int getPuntaje() {
 		
 		int puntos = 0;
