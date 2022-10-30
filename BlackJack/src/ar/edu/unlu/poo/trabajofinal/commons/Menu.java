@@ -2,17 +2,19 @@ package ar.edu.unlu.poo.trabajofinal.commons;
 
 import java.util.Scanner;
 
+import ar.edu.unlu.poo.misfunciones.Print;
+
 public class Menu {
 	
 	private IOpciones opciones;
 	private Scanner sc;
-	private String titulo;
+	private Print p;
 	
 	public Menu(String titulo, IOpciones op) {
 		
 		this.setOpciones(op);
-		this.setTitulo(titulo);
 		sc = new Scanner(System.in);
+		p = new Print();
 		
 	}
 	
@@ -21,10 +23,6 @@ public class Menu {
 		this ("Menu Principal", op);
 		
 	}
-	
-	public void setTitulo(String title) {
-		this.titulo = title;
-	}
 
 	public void setOpciones(IOpciones opciones) {
 		this.opciones = opciones;
@@ -32,17 +30,15 @@ public class Menu {
 	
 	public int print() {
 		
-		System.out.println(this.titulo);
-		System.out.println(" ");
+		p.printConEspacio(this.opciones.getTitulo());
 		
 		for (String linea : this.opciones.getOpciones()) {
 			
-			System.out.println(linea);
+			p.print(linea);
 			
 		}
 		
-		System.out.println(" ");
-		System.out.println("Ingrese un número del 1 al " + Integer.toString(this.opciones.size()) + ": ");
+		p.printConEspacioAlto("Ingrese un número del 1 al " + Integer.toString(this.opciones.size()) + ": ");
 		int numero = sc.nextInt();
 		
 		return numero;
