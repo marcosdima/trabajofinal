@@ -1,7 +1,5 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import java.util.ArrayList;
-
 //Pensar si Observado deberías ser implementado por 'Jugador'.
 
 public abstract class Crupier extends Jugador {
@@ -30,17 +28,7 @@ public abstract class Crupier extends Jugador {
 	
 	public abstract void setMazo();
 	
-	public void terminarMano(ArrayList<Jugador> jugadores) {
-		
-		for (Jugador player : jugadores) {
-			
-			player.clearMano();
-			
-		}
-		
-		this.clearMano();
-		
-	}
+	public abstract void terminarMano();
 	
 	public void darCarta(Jugador player) {
 		
@@ -49,7 +37,6 @@ public abstract class Crupier extends Jugador {
 		
 	}
 
-	
 	public Mazo getMazo() {
 		return mazo;
 	}

@@ -6,10 +6,10 @@ public class CrupierBlackJack extends Crupier {
 
 	private ArrayList<JugadorBlackJack> jugadores;
 	
-	public CrupierBlackJack(ArrayList<JugadorBlackJack> players) {
+	public CrupierBlackJack(int nroDeJugadores) {
 	
 		super();
-		this.setJugadores(players);
+		this.setJugadores(nroDeJugadores);
 
 	}
 
@@ -61,9 +61,27 @@ public class CrupierBlackJack extends Crupier {
 		return jugadores;
 	}
 
-	public void setJugadores(ArrayList<JugadorBlackJack> jugadores) {
-		this.jugadores = jugadores;
+	public void setJugadores(int n) {
+		this.jugadores = new ArrayList<JugadorBlackJack>(n);
 	}
 
-	
+	public boolean addJugador(String nombre, int plata) {
+		
+		JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
+		return this.jugadores.add(player);
+		
+	}
+
+	public void terminarMano() {
+		
+		for (Jugador player : this.jugadores) {
+			
+			player.clearMano();
+			
+		}
+		
+		this.clearMano();
+		
+	}
+			
 }

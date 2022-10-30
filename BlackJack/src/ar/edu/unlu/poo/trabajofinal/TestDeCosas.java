@@ -1,35 +1,27 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
-
 public class TestDeCosas {
 
 	public static void main(String[] args) {
 		
-		ArrayList<JugadorBlackJack> pys = new ArrayList<JugadorBlackJack>(4);
 		
-		for (int i = 0; i < 1; i++) {
+		CrupierBlackJack cj = new CrupierBlackJack(2);
+		
+		for (int i = 0; i < 2; i++) {
 			
-			JugadorBlackJack py = new JugadorBlackJack(("Player " + Integer.toString(i)), 1000);
-			pys.add(py);
+			cj.addJugador(("Player " + i), 1000);
 			
 		}
-		
-		
-		CrupierBlackJack cj = new CrupierBlackJack(pys);
 		
 		cj.barajar();
 		
 		cj.repartirPrimeraMano();
 		
 		boolean jugar = true;
-		Scanner sc = new Scanner(System.in);
 		
 		while (jugar) {
 			
-			for (JugadorBlackJack player : pys) {
+			for (JugadorBlackJack player : cj.getJugadores()) {
 				
 				for (Carta c : player.getManoActual().getCartas()){
 					
