@@ -4,12 +4,18 @@ public class Apuesta {
 	
 	private int monto;
 	
-	public Apuesta() {
+	public Apuesta(int monto) {
 		
-		this.setApuesta(0);
+		this.setApuesta(monto);
 		
 	}
-
+	
+	public Apuesta() {
+		
+		this (0);
+		
+	}
+	
 	public int getMonto() {
 		return monto;
 	}

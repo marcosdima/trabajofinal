@@ -1,42 +1,16 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import ar.edu.unlu.poo.trabajofinal.vistas.VistaConsola;
+
 public class TestDeCosas {
 
 	public static void main(String[] args) {
 		
+		BlackJack juego = new BlackJack();
+		VistaConsola interfaz = new VistaConsola(juego);
 		
-		CrupierBlackJack cj = new CrupierBlackJack(2);
+		interfaz.menuPrincipal();
 		
-		for (int i = 0; i < 2; i++) {
-			
-			cj.addJugador(("Player " + i), 1000);
-			
-		}
-		
-		cj.barajar();
-		
-		cj.repartirPrimeraMano();
-		
-		boolean jugar = true;
-		
-		while (jugar) {
-			
-			for (JugadorBlackJack player : cj.getJugadores()) {
-				
-				for (Carta c : player.getManoActual().getCartas()){
-					
-					System.out.println(c.getDesc());
-					
-				}
-				
-				System.out.println(player.getPuntaje());
-				
-			}
-			
-			jugar = false;
-			
-		}
-	
 	}
 
 }

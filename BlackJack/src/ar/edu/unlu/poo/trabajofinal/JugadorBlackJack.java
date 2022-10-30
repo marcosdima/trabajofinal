@@ -21,13 +21,13 @@ public class JugadorBlackJack extends Jugador{
 		this.apuesta = apuesta;
 	}
 
-	public void yaPerdio() {
+	public void noSigue() {
 		
 		this.estaJugando = false;
 		
 	}
 	
-	public boolean getEstado() {
+	public boolean sigueJugando() {
 		
 		return this.estaJugando;
 		
