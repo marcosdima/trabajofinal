@@ -29,7 +29,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				
 				player.addCarta(this.getMazo().agarrarCarta());
 				player.addCarta(this.getMazo().agarrarCarta());
-				player.mostrarCartas();
+				player.mostrarCarta();
 				
 			}
 		
@@ -199,11 +199,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 
 	@Override
-	public boolean notificar(IMensaje algo, JugadorBlackJack actualizacion) {
+	public boolean notificar(IMensaje mensaje, JugadorBlackJack actuJugador) {
 		
 		for (Observador observer: observers) {
 			
-			observer.actualizar(algo, actualizacion);
+			observer.actualizar(mensaje, actuJugador);
 			
 		}
 		
@@ -212,23 +212,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 	
 	@Override
-	public boolean notificar(IMensaje error, Apuesta actualizacion) {
+	public boolean notificar(IMensaje mensaje, Apuesta actuApuesta) {
 		
 		for (Observador observer: observers) {
 			
-			observer.actualizar(error, actualizacion);
-			
-		}
-		
-		return true;
-		
-	}
-
-	public boolean notificar(IMensaje algo) {
-		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(algo);
+			observer.actualizar(mensaje, actuApuesta);
 			
 		}
 		
@@ -237,11 +225,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 
 	@Override
-	public boolean notificar(IMensaje algo, ArrayList<DatosDeJugador> actualizacion) {
+	public boolean notificar(IMensaje mensaje, ArrayList<DatosDeJugador> actuDatos) {
 		
 		for (Observador observer: observers) {
 			
-			observer.actualizar(algo, actualizacion);
+			observer.actualizar(mensaje, actuDatos);
 			
 		}
 		
@@ -249,4 +237,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	public boolean notificar(IMensaje mensaje) {
+		
+		for (Observador observer: observers) {
+			
+			observer.actualizar(mensaje);
+			
+		}
+		
+		return true;
+		
+	}
+
+	
 }

@@ -10,11 +10,11 @@ public interface Observado {
 	
 	// Hago que devulva un booleano para saber si se notificó algo.
 	
-	public boolean notificar(IMensaje algo, JugadorBlackJack actualizacion);
+	public boolean notificar(IMensaje mensaje, JugadorBlackJack actuJugador);
 	
-	public boolean notificar(IMensaje algo, Apuesta actualizacion);
+	public boolean notificar(IMensaje mensaje, Apuesta actuApuesta);
 	
-	public boolean notificar(IMensaje algo, ArrayList<DatosDeJugador> actualizacion);
+	public boolean notificar(IMensaje mensaje, ArrayList<DatosDeJugador> actuDatos);
 	
 	public boolean notificar(IMensaje tagEvento);
 	

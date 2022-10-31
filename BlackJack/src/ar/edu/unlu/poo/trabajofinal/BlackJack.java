@@ -13,7 +13,7 @@ public class BlackJack implements Observador {
 	private CrupierBlackJack crupier;
 	private ArrayList<IVista> interfaces;
 	public static final int MAXIMODEJUGADORES = 4;
-	public static final int DINEROBASE = 1000;
+	private static int DINEROBASE = 1000;
 	private static int JUGADORES;
 	private int apuestaMinima;
 	
@@ -100,31 +100,15 @@ public class BlackJack implements Observador {
 			vista.mostrarMensaje(event);
 			
 			switch ((Evento) event) {
-			
-				case JUGADORCARGADO:
-					
-					vista.formularioAgregarJugador();
 					
 				case PRIMERAREPARTIDA:
 					
 					this.setInicio();
 					this.getDatosJugadores();
 					
-				case APUESTASETEADA:
-					
-					vista.formularioSetApuesta();
-					
-				case NOAPUESTA:
-					
-					vista.formularioSetApuesta();
-					
 				default:
 					
 					switch ((Error) event) {
-					
-						case ERRORMAXJUGADORES:
-							
-							vista.formularioAgregarJugador();
 					
 						default:
 							break;
@@ -137,22 +121,13 @@ public class BlackJack implements Observador {
 		
 	}
 	
-	// No sé si debería hacerlo así.
-	@Override
-	public void actualizar(IMensaje event) {
-		
-		this.actualizar(event, null);
-		
-	}
-
 	@Override
 	public void actualizar(IMensaje event, ArrayList<DatosDeJugador> objeto) {
 		
 		for (IVista vista: this.interfaces) {
 			
-			
 			switch ((Evento) event) {
-			
+
 			case MOSTRARMANO:
 				
 				vista.mostrarMano(objeto);
@@ -160,6 +135,10 @@ public class BlackJack implements Observador {
 			default:
 				
 				switch ((Error) event) {
+				
+					case ERRORMAXJUGADORES:
+					
+						vista.formularioAgregarJugador();
 
 					default:
 						break;
@@ -172,6 +151,84 @@ public class BlackJack implements Observador {
 		
 	}
 
+	
+	@Override
+	public void actualizar(IMensaje event, JugadorBlackJack objeto) {
+	
+		for (IVista vista: this.interfaces) {
+			
+			
+			switch ((Evento) event) {
+			
+			case JUGADORCARGADO:
+				
+				vista.formularioAgregarJugador();
+				
+			default:
+				
+				switch ((Error) event) {
+				
+				case ERRORMAXJUGADORES:
+				
+					vista.formularioAgregarJugador();
+
+				default:
+					break;
+		
+				}
+			
+			}
+			
+		}
+			
+	}
+	
+
+	@Override
+	public void actualizar(IMensaje event, Apuesta objeto) {
+		
+		
+		for (IVista vista: this.interfaces) {
+			
+			
+			switch ((Evento) event) {
+			
+				case APUESTASETEADA:
+		
+					vista.formularioSetApuesta();
+		
+				case NOAPUESTA:
+				
+					vista.formularioSetApuesta();
+		
+				default:
+				
+					switch ((Error) event) {
+				
+						case ERRORMAXJUGADORES:
+				
+							vista.formularioAgregarJugador();
+
+						default:
+							
+							break;
+		
+				}
+			
+			}
+			
+		}
+		
+	}
 
 
+	// No sé si debería hacerlo así.
+	@Override
+	public void actualizar(IMensaje event) {
+		
+		this.actualizar(event, new Object());
+		
+	}
+
+	
 }
