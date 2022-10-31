@@ -72,7 +72,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	public void addJugador(String nombre, int plata) {
 			
-		if (!nombre.matches("p")) {
+		if (nombre != null) {
 			
 			boolean seAgrego;
 			
