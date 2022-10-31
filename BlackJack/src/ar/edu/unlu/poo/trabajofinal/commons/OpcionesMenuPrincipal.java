@@ -1,8 +1,6 @@
-package ar.edu.unlu.poo.trabajofinal.enumerados;
+package ar.edu.unlu.poo.trabajofinal.commons;
 
-import ar.edu.unlu.poo.trabajofinal.commons.IOpciones;
-
-public enum OpcionesMenuPrincipal implements IOpciones{
+public enum OpcionesMenuPrincipal implements IOpciones {
 	
 	JUGAR(1, "Jugar"),
 	CONFIGURACION(2, "Configuración"),
@@ -10,15 +8,16 @@ public enum OpcionesMenuPrincipal implements IOpciones{
 	
 	private int id;
 	private String label;
+	private String titulo;
 	
-	OpcionesMenuPrincipal(int id, String label) {
+ 	OpcionesMenuPrincipal(int id, String label) {
 		
 		this.id = id;
 		this.label = label;
+		this.titulo = "Menu Principal";
 		
 	}
 
-	
 	public int getId() {
 		return id;
 	}
@@ -27,7 +26,6 @@ public enum OpcionesMenuPrincipal implements IOpciones{
 		return label;
 	}
 
-	@Override
 	public String[] getOpciones() {
 		
 		String[] arreglo = new String[(OpcionesMenuPrincipal.values().length)];
@@ -50,5 +48,13 @@ public enum OpcionesMenuPrincipal implements IOpciones{
 		
 	}
 
-	
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
 }
+	

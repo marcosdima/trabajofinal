@@ -1,4 +1,4 @@
-package ar.edu.unlu.poo.trabajofinal.enumerados;
+package ar.edu.unlu.poo.trabajofinal;
 
 public enum Palo {
 	
