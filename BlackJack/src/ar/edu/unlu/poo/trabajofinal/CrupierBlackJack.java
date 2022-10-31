@@ -28,9 +28,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			if (player.sigueJugando()) {
 				
 				player.addCarta(this.getMazo().agarrarCarta());
-				
 				player.addCarta(this.getMazo().agarrarCarta());
-				player.mostrarCarta();	
+				player.mostrarCartas();
 				
 			}
 		
@@ -39,12 +38,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		this.addCarta(this.getMazo().agarrarCarta());
 		this.addCarta(this.getMazo().agarrarCarta());
 		this.mostrarCarta();
-		
-	}
-
-	public void mostrarCartas(Jugador player) {
-	
-		player.mostrarCarta(1);
 		
 	}
 
@@ -106,6 +99,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		else {
 			
+			this.repartirPrimeraTanda();
+			this.getDatosJugadores();
 			this.notificar(Evento.PRIMERAREPARTIDA);
 			
 		}
@@ -125,7 +120,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	public void setApuestas(int apuestaMinima, int monto) {
 		
 		Apuesta apuesta = new Apuesta(monto);
@@ -163,13 +157,33 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 			}
 			
-			if (seteado) {
+		if (!seteado) {
 				
-				this.notificar(Evento.PRIMERAREPARTIDA);
+			this.notificar(Evento.JUGAR);
 				
-			}
+		}
 			
 		}
+		
+	}
+
+	public void getDatosJugadores() {
+		
+		DatosDeJugador datos;
+		ArrayList<DatosDeJugador> datosDeJugadores = new ArrayList<DatosDeJugador>(this.jugadores.size() + 1);
+		
+		for (JugadorBlackJack player : this.jugadores) {
+			
+			datos = new DatosDeJugador(player);
+			datosDeJugadores.add(datos);
+			
+		}
+		
+		// Por último, agrego al crupier para que quede en la última posición.
+		datos = new DatosDeJugador(this);
+		datosDeJugadores.add(datos);
+		
+		this.notificar(Evento.MOSTRARMANO, datosDeJugadores);
 		
 	}
 	
@@ -197,7 +211,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-
 	@Override
 	public boolean notificar(IMensaje error, Apuesta actualizacion) {
 		
@@ -223,6 +236,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	@Override
+	public boolean notificar(IMensaje algo, ArrayList<DatosDeJugador> actualizacion) {
+		
+		for (Observador observer: observers) {
+			
+			observer.actualizar(algo, actualizacion);
+			
+		}
+		
+		return true;
+		
+	}
 
-	
 }

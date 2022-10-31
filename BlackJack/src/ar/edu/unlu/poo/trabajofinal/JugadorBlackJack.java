@@ -9,6 +9,7 @@ public class JugadorBlackJack extends Jugador{
 		
 		super(nombre, money);
 		this.estaJugando = true;
+		this.setTodaviaNoJugo(true);
 		this.setApuesta(new Apuesta());
 		
 	}
@@ -32,5 +33,6 @@ public class JugadorBlackJack extends Jugador{
 		return this.estaJugando;
 		
 	}
+
 	
 }

@@ -6,6 +6,7 @@ public abstract class Jugador extends Persona implements Puntuable{
 
 	
 	private Mano manoActual;
+	private boolean todaviaNoJugo;
 	
 	public Jugador(String nombre, int money) {
 		
@@ -48,5 +49,22 @@ public abstract class Jugador extends Persona implements Puntuable{
 		
 	}
 	
+	public void mostrarCartas() {
+		
+		for (Carta carta : this.manoActual.getCartas()) {
+			
+			carta.setVisibilidad(true);
+			
+		}
+		
+	}
 	
+	public boolean todaviaNoJugo() {
+		return todaviaNoJugo;
+	}
+
+	public void setTodaviaNoJugo(boolean terminoTurno) {
+		this.todaviaNoJugo = terminoTurno;
+	}
+
 }
