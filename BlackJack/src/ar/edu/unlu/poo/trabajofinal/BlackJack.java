@@ -135,10 +135,6 @@ public class BlackJack implements Observador {
 			default:
 				
 				switch ((Error) event) {
-				
-					case ERRORMAXJUGADORES:
-					
-						vista.formularioAgregarJugador();
 
 					default:
 						break;
@@ -204,10 +200,6 @@ public class BlackJack implements Observador {
 				default:
 				
 					switch ((Error) event) {
-				
-						case ERRORMAXJUGADORES:
-				
-							vista.formularioAgregarJugador();
 
 						default:
 							

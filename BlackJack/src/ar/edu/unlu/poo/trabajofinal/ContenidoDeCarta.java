@@ -2,7 +2,7 @@ package ar.edu.unlu.poo.trabajofinal;
 
 public enum ContenidoDeCarta {
 	
-	AS(1, "As"),
+	AS(11, "As"),
 	DOS(2, "2"),
 	TRES(3, "3"),
 	CUATRO(4, "4"),

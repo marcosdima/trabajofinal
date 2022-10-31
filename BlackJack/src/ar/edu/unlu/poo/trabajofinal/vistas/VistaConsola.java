@@ -70,14 +70,16 @@ public class VistaConsola implements IVista {
 		p.print("('p' para empezar a jugar)");
 		nombre = sc.next();
 		
-		if (nombre == "p") {
+		if (nombre.equals("p")) {
 			
-			nombre = null;
+			this.controlador.addJugador(null);
 			
 		}
-		
-		this.controlador.addJugador(nombre);
+		else {
 			
+			this.controlador.addJugador(nombre);
+		
+		}
 	}
 
 	public void menuConfiguracion() {
@@ -88,21 +90,25 @@ public class VistaConsola implements IVista {
 	@SuppressWarnings("unchecked")
 	public void mostrarMano(ArrayList<DatosDeJugador>  datos) {
 			
+		p.espacio();
+		
 		// Preguntar si esta bien.
 		int i = 0;
-		ArrayList<DatosDeJugador> datosDeJugadores = (ArrayList<DatosDeJugador>) datos;
-		DatosDeJugador dato = datosDeJugadores.get(i);
-		DatosDeJugador datoCrupier = datosDeJugadores.get(datosDeJugadores.size() - 1);
+		DatosDeJugador dato = datos.get(i);
+		DatosDeJugador datoCrupier = datos.get(datos.size() - 1);
 		
-		while ((!dato.todaviaNoJugo()) && (i < datosDeJugadores.size() - 1)) {
+		while ((!dato.todaviaNoJugo()) && (i < datos.size() - 1)) {
 			
 			i++;
-			dato = datosDeJugadores.get(i);
+			dato = datos.get(i);
 			
 		}
 		
+		// Hay que detectar si ya aposto, por los puntos.
 		this.printDatos(dato);
 		this.printDatos(datoCrupier);
+		
+		sc.next();
 			
 	}
 	
@@ -143,5 +149,17 @@ public class VistaConsola implements IVista {
 		p.printConEspacio(datos.getPuntaje());
 		
 	};
+	
+	//////////////////////////////////
+	//		Métodos de Consola		//
+	//////////////////////////////////
+	
+	private void printJugadores(ArrayList<DatosDeJugador> datos) {
+		
+		
+		
+		
+		
+	}
 	
 }

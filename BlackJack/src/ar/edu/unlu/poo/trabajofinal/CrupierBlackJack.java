@@ -72,9 +72,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	public void addJugador(String nombre, int plata) {
 			
-		if (nombre != null) {
-			
-			boolean seAgrego;
+		boolean nombreNulo = (nombre == null);
+		boolean noHayJugadores = this.jugadores.isEmpty();
+		boolean seAgrego;
+		
+		if (!nombreNulo) {
 			
 			JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
 			
@@ -92,7 +94,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}
 			
 		}
-		else if (this.jugadores.isEmpty()) {
+		else if (noHayJugadores) {
 			
 			this.notificar(Error.NOHAYJUGADORESCARGADOS);
 			
