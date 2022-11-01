@@ -1,5 +1,7 @@
 package ar.edu.unlu.poo.misfunciones;
 
+import java.util.ArrayList;
+
 public class Print {
 	
 	private char separador;
@@ -99,5 +101,92 @@ public class Print {
 		this.printsEnBlanco(Print.MAXIMO);
 		
 	}
+
+	public void printSeguido(String[] printeable, int size, String espacio) {
+		
+		String linea = "";
+		int agregado;
+		int i;
+		
+		for (String str : printeable) {
+			
+			linea += str;
+			agregado = size;
+			
+			if (str != null) {
+				
+				agregado = size - str.length();
+				
+			}
+			
+			
+			for (i = 0; i < agregado; i++) {
+				
+				linea += espacio;
+				
+			}
+			
+		}
+		
+		this.printConEspacio(linea);
+		
+	}
 	
+	public void printSeguido(String[] printeable, int size) {
+		
+		this.printSeguido(printeable, size, " ");
+		
+	}
+
+	public void printSeguido(ArrayList<String[]> printeable, int size) {
+		
+		String espacio = "";
+		String[] arregloAuxiliar;
+	
+		int i;
+		int o;
+		int a;
+		int mayor = 0;
+		int largo = printeable.size();
+		
+		for (String[] arreglo : printeable) {
+			
+			if (arreglo.length > mayor) {
+				
+				mayor = arreglo.length;
+				
+			}
+			
+		}
+		
+		for (a = 0; a < size; a++) {
+			
+			espacio += " ";
+			
+		}
+		
+		for (i = 0; i < printeable.size(); i++) {
+			
+			arregloAuxiliar = new String[largo];
+			
+			for (o = 0; o < printeable.size(); o++) {
+				
+				try {
+					
+					arregloAuxiliar[o] = printeable.get(o)[i];
+					
+				}
+				catch(Exception e) {
+					
+					arregloAuxiliar[o] = " ";
+
+				}
+			
+			}
+			
+			this.printSeguido(arregloAuxiliar, size);
+			
+		}
+		
+	}
 }

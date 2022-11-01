@@ -172,13 +172,20 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public void getDatosJugadores() {
 		
 		DatosDeJugador datos;
+		boolean sigue;
 		ArrayList<DatosDeJugador> datosDeJugadores = new ArrayList<DatosDeJugador>(this.jugadores.size() + 1);
 		
 		for (JugadorBlackJack player : this.jugadores) {
 			
-			datos = new DatosDeJugador(player);
-			datosDeJugadores.add(datos);
+			sigue = player.sigueJugando();
 			
+			if (sigue) {
+				
+				datos = new DatosDeJugador(player);
+				datosDeJugadores.add(datos);
+				
+			}
+
 		}
 		
 		// Por último, agrego al crupier para que quede en la última posición.

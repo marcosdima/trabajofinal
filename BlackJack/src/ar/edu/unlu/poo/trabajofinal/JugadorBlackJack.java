@@ -3,12 +3,10 @@ package ar.edu.unlu.poo.trabajofinal;
 public class JugadorBlackJack extends Jugador{
 	
 	private Apuesta apuesta;
-	private boolean estaJugando;
 	
 	public JugadorBlackJack(String nombre, int money) {
 		
 		super(nombre, money);
-		this.estaJugando = true;
 		this.setTodaviaNoJugo(true);
 		this.setApuesta(new Apuesta());
 		
@@ -22,17 +20,4 @@ public class JugadorBlackJack extends Jugador{
 		this.apuesta = apuesta;
 	}
 
-	public void noSigue() {
-		
-		this.estaJugando = false;
-		
-	}
-	
-	public boolean sigueJugando() {
-		
-		return this.estaJugando;
-		
-	}
-
-	
 }

@@ -87,27 +87,10 @@ public class VistaConsola implements IVista {
 		
 	}
 
-	@SuppressWarnings("unchecked")
 	public void mostrarMano(ArrayList<DatosDeJugador>  datos) {
 			
 		p.espacio();
-		
-		// Preguntar si esta bien.
-		int i = 0;
-		DatosDeJugador dato = datos.get(i);
-		DatosDeJugador datoCrupier = datos.get(datos.size() - 1);
-		
-		while ((!dato.todaviaNoJugo()) && (i < datos.size() - 1)) {
-			
-			i++;
-			dato = datos.get(i);
-			
-		}
-		
-		// Hay que detectar si ya aposto, por los puntos.
-		this.printDatos(dato);
-		this.printDatos(datoCrupier);
-		
+		this.printJugadores(datos);
 		sc.next();
 			
 	}
@@ -141,14 +124,6 @@ public class VistaConsola implements IVista {
 		this.controlador.apostar(monto);
 		
 	}
-
-	public void printDatos(DatosDeJugador datos) {
-	
-		p.printConEspacio(datos.getNombre());
-		p.printConEspacio(datos.getCartas());
-		p.printConEspacio(datos.getPuntaje());
-		
-	};
 	
 	//////////////////////////////////
 	//		Métodos de Consola		//
@@ -156,10 +131,32 @@ public class VistaConsola implements IVista {
 	
 	private void printJugadores(ArrayList<DatosDeJugador> datos) {
 		
+		int contador = 0;
+		int espacio = 30;
+		int size = datos.size();
+		String[] conjuntoNombres = new String[size];
+		ArrayList<String[]> conjuntoCartas = new ArrayList<String[]>(size);
+		String[] conjuntoPuntajes = new String[size];
+
 		
 		
+		for (DatosDeJugador dato : datos) {
+			
+			if (dato.sigueJugando()) {
+
+				conjuntoNombres[contador] = dato.getNombre();
+				conjuntoCartas.add(dato.getCartas());
+				conjuntoPuntajes[contador] = dato.getPuntaje();
+
+				
+			}
+			
+		}
 		
+		p.printSeguido(conjuntoNombres, espacio);
+		p.printSeguido(conjuntoCartas, espacio);
+		p.printSeguido(conjuntoPuntajes, espacio);
 		
 	}
-	
+
 }

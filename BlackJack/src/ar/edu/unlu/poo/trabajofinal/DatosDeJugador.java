@@ -3,10 +3,11 @@ package ar.edu.unlu.poo.trabajofinal;
 public class DatosDeJugador {
 
 	private String nombre;
-	private String cartas;
+	private String[] cartas;
 	private String puntaje;
 	private Jugador player;
 	private boolean todaviaNoJugo;
+	private boolean sigueJugando;
 	
 	public DatosDeJugador(Jugador player) {
 		
@@ -25,26 +26,30 @@ public class DatosDeJugador {
 		this.setCartas();
 		this.puntaje = Integer.toString(this.player.getPuntaje());
 		this.todaviaNoJugo = player.todaviaNoJugo();
+		this.sigueJugando = player.sigueJugando();
 		
 	}
 
-	
 	private void setCartas() {
 		
-		String cartas = "";
+		int size = this.player.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
 		
 		for (Carta cartita : this.player.getManoActual().getCartas()) {
 			
 			if (cartita.esVisible()) {
 				
-				cartas += cartita.getDesc() + '\r' + '\n';
+				cartas[contador] = cartita.getDesc();
 				
 			}
 			else {
 				
-				cartas += "🂠";
+				cartas[contador] = "Cubierta";
 				
 			}
+			
+			contador++;
 			
 		}
 		
@@ -56,21 +61,22 @@ public class DatosDeJugador {
 		return nombre;
 	}
 
-	
-	public String getCartas() {
+	public String[] getCartas() {
 		return cartas;
 	}
 
-	
 	public String getPuntaje() {
 		return puntaje;
 	}
 
-	
 	public boolean todaviaNoJugo() {
 		return todaviaNoJugo;
 	}
 	
-	
+	public boolean sigueJugando() {
+		
+		return this.sigueJugando;
+		
+	}
 	
 }
