@@ -51,12 +51,6 @@ public class BlackJack implements Observador {
 		
 	}
 
-	public void darCarta(JugadorBlackJack player) {
-		
-		this.crupier.darCarta(player);
-		
-	}
-	
 	public void terminarMano() {
 		
 		this.crupier.terminarMano();
@@ -87,7 +81,6 @@ public class BlackJack implements Observador {
 		
 	}
 	
-	
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
@@ -105,15 +98,14 @@ public class BlackJack implements Observador {
 					
 					this.setInicio();
 					this.getDatosJugadores();
+					vista.formularioSetApuesta(this.crupier.getApostador());
+					
+				case JUGAR:
+					//this.crupier.repartir();
 					
 				default:
 					
-					switch ((Error) event) {
-					
-						default:
-							break;
-				
-				}
+					break;
 				
 			}
 		
@@ -134,85 +126,41 @@ public class BlackJack implements Observador {
 				
 			default:
 				
-				switch ((Error) event) {
-
-					default:
-						break;
-			
-				}
-			
+					break;
+		
 			}
 				
 		}
 		
 	}
 
-	
 	@Override
 	public void actualizar(IMensaje event, JugadorBlackJack objeto) {
-	
+			
 		for (IVista vista: this.interfaces) {
 			
+			vista.mostrarMensaje(event);
 			
 			switch ((Evento) event) {
 			
 			case JUGADORCARGADO:
 				
 				vista.formularioAgregarJugador();
+			
+			case APUESTASETEADA:
+				
+				DatosDeJugador datazo = new DatosDeJugador(objeto);
+				vista.formularioSetApuesta(datazo);
 				
 			default:
-				
-				switch ((Error) event) {
-				
-				case ERRORMAXJUGADORES:
-				
-					vista.formularioAgregarJugador();
 
-				default:
 					break;
 		
 				}
 			
 			}
 			
-		}
-			
 	}
-	
-
-	@Override
-	public void actualizar(IMensaje event, Apuesta objeto) {
-		
-		
-		for (IVista vista: this.interfaces) {
-			
-			
-			switch ((Evento) event) {
-			
-				case APUESTASETEADA:
-		
-					vista.formularioSetApuesta();
-		
-				case NOAPUESTA:
-				
-					vista.formularioSetApuesta();
-		
-				default:
-				
-					switch ((Error) event) {
-
-						default:
-							
-							break;
-		
-				}
-			
-			}
-			
-		}
-		
-	}
-
 
 	// No sé si debería hacerlo así.
 	@Override

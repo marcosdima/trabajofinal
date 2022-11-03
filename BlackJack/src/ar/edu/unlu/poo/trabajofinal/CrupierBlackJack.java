@@ -101,8 +101,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		else {
 			
-			this.repartirPrimeraTanda();
-			this.getDatosJugadores();
 			this.notificar(Evento.PRIMERAREPARTIDA);
 			
 		}
@@ -193,6 +191,70 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		datosDeJugadores.add(datos);
 		
 		this.notificar(Evento.MOSTRARMANO, datosDeJugadores);
+		
+	}
+	
+	public void repartir(boolean quiereMas) {
+		
+		Jugador contenedorJugador = this.seleccionarJugador();
+		
+		if (quiereMas) {
+			
+			
+		
+		}
+		
+		
+	}
+	
+	private Jugador seleccionarJugador() {
+		
+		boolean seteado = false;
+		Jugador contenedorJugador = new JugadorBlackJack("Contenedor", 0);
+		
+		for (JugadorBlackJack player: this.jugadores) {
+			
+			if ((player.todaviaNoJugo()) && (!seteado)) {
+				
+				contenedorJugador = player;
+				seteado = true;
+				
+			}
+			
+		}
+		
+		if ((!seteado) && (this.todaviaNoJugo())) {
+			
+			contenedorJugador = this;
+			
+		}
+		else if (!seteado) {
+			
+			contenedorJugador = null;
+			
+		}
+		
+		return contenedorJugador;
+		
+	}
+	
+	public DatosDeJugador getApostador() {
+		
+		boolean seteado = false;
+		DatosDeJugador dato = new DatosDeJugador(new JugadorBlackJack("Container", 0));
+		
+		for (JugadorBlackJack player : this.jugadores) {
+			
+			if (player.sigueJugando() && (!seteado)) {
+				
+				dato = new DatosDeJugador(player);
+				seteado = true;
+				
+			}
+			
+		}
+		
+		return dato;
 		
 	}
 	

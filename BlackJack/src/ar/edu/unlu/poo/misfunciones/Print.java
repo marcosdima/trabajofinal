@@ -43,6 +43,13 @@ public class Print {
 	}
 	
 	// Printea sin salto de linea.
+	public void justPrint(String c) {
+		
+		System.out.print(c);
+		
+	}
+	
+	// Printea un char sin salto de linea.
 	public void justPrint(char c) {
 		
 		System.out.print(c);

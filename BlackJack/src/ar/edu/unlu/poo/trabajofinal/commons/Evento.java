@@ -7,6 +7,7 @@ public enum Evento implements IMensaje{
 	PRIMERAREPARTIDA(""),
 	NOAPUESTA("Perfecto, proseguimos."),
 	APUESTASETEADA("Apuesta seteada!"),
+	TERMINOLAMANO("Se terminó la mano!"),
 	JUGAR("");
 	
 	String label;

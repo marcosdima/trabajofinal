@@ -91,7 +91,6 @@ public class VistaConsola implements IVista {
 			
 		p.espacio();
 		this.printJugadores(datos);
-		sc.next();
 			
 	}
 	
@@ -107,17 +106,17 @@ public class VistaConsola implements IVista {
 		if (msj.getDescripcion() != "") {
 			
 			p.espacio();	
-			p.print(msj.getDescripcion());
+			p.justPrint(msj.getDescripcion());
 			
 		}
 
 	}
 
-	public void formularioSetApuesta() {
+	public void formularioSetApuesta(DatosDeJugador dato) {
 		
 		int monto;
 		
-		p.print("Ingrese su apuesta: ");
+		p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
 		p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
 		monto = sc.nextInt();
 		
@@ -132,7 +131,7 @@ public class VistaConsola implements IVista {
 	private void printJugadores(ArrayList<DatosDeJugador> datos) {
 		
 		int contador = 0;
-		int espacio = 30;
+		int espacio = 20;
 		int size = datos.size();
 		String[] conjuntoNombres = new String[size];
 		ArrayList<String[]> conjuntoCartas = new ArrayList<String[]>(size);
@@ -147,6 +146,7 @@ public class VistaConsola implements IVista {
 				conjuntoNombres[contador] = dato.getNombre();
 				conjuntoCartas.add(dato.getCartas());
 				conjuntoPuntajes[contador] = dato.getPuntaje();
+				contador++;
 
 				
 			}

@@ -20,6 +20,6 @@ public interface IVista {
 	
 	public void mostrarMano(ArrayList<DatosDeJugador>  datos);
 	
-	public void formularioSetApuesta();
+	public void formularioSetApuesta(DatosDeJugador dato);
 	
 }
