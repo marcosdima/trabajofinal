@@ -2,7 +2,6 @@ package ar.edu.unlu.poo.trabajofinal;
 
 import java.util.ArrayList;
 
-import ar.edu.unlu.poo.trabajofinal.commons.Error;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
@@ -101,7 +100,12 @@ public class BlackJack implements Observador {
 					vista.formularioSetApuesta(this.crupier.getApostador());
 					
 				case JUGAR:
-					//this.crupier.repartir();
+					
+					this.crupier.repartir(true);
+					
+				case PREGUNTAROTRA:
+					
+					this.crupier.repartir(vista.siONo(event));
 					
 				default:
 					

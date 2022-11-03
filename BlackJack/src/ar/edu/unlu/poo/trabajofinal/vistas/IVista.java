@@ -21,5 +21,6 @@ public interface IVista {
 	public void mostrarMano(ArrayList<DatosDeJugador>  datos);
 	
 	public void formularioSetApuesta(DatosDeJugador dato);
-	
+
+	public boolean siONo(IMensaje msj);
 }

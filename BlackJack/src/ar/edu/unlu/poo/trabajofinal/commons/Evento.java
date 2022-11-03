@@ -8,6 +8,7 @@ public enum Evento implements IMensaje{
 	NOAPUESTA("Perfecto, proseguimos."),
 	APUESTASETEADA("Apuesta seteada!"),
 	TERMINOLAMANO("Se terminó la mano!"),
+	PREGUNTAROTRA("¿Querés otra carta?"),
 	JUGAR("");
 	
 	String label;

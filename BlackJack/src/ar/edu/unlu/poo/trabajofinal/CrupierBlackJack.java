@@ -27,16 +27,16 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			if (player.sigueJugando()) {
 				
-				player.addCarta(this.getMazo().agarrarCarta());
-				player.addCarta(this.getMazo().agarrarCarta());
+				player.addCarta(this.darCarta());
+				player.addCarta(this.darCarta());
 				player.mostrarCarta();
 				
 			}
 		
 		}
 		
-		this.addCarta(this.getMazo().agarrarCarta());
-		this.addCarta(this.getMazo().agarrarCarta());
+		this.addCarta(this.darCarta());
+		this.addCarta(this.darCarta());
 		this.mostrarCarta();
 		
 	}
@@ -84,6 +84,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			if (seAgrego) {
 				
+				player.aposto();
 				this.notificar(Evento.JUGADORCARGADO, player);
 				
 			}
@@ -194,19 +195,56 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	public Carta darCarta() {
+		
+		return this.getMazo().agarrarCarta();
+		
+	}
+	
 	public void repartir(boolean quiereMas) {
 		
 		Jugador contenedorJugador = this.seleccionarJugador();
 		
 		if (quiereMas) {
 			
+			if (contenedorJugador.getManoActual().getCartas().size() == 2) {
+				
+				contenedorJugador.mostrarCartas();
+				this.checkEstadoJugador(contenedorJugador);
+				this.notificar(Evento.PREGUNTAROTRA);
+				
+			}
+			else {
+				
+				contenedorJugador.addCarta(this.darCarta());
+				
+				if (contenedorJugador.getPuntaje() == 21) {
+					
+					contenedorJugador.yaJugo();
+					this.notificar(Evento.JUGAR);
+					
+				}
+				
+			}
 			
-		
+			
+				
+		}
+		else {
+			
+			contenedorJugador.yaJugo();
+			this.notificar(Evento.JUGAR);
+			
 		}
 		
 		
 	}
 	
+	private void checkEstadoJugador(Jugador contenedorJugador) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private Jugador seleccionarJugador() {
 		
 		boolean seteado = false;

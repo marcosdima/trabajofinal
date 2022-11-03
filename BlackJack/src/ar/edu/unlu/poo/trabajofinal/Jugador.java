@@ -82,14 +82,25 @@ public abstract class Jugador extends Persona implements Puntuable{
 		
 	}
 	
-	public boolean todaviaNoJugo() {
-		return todaviaNoJugo;
-	}
+	
+	//Estos son de la mano.
 
 	public void setTodaviaNoJugo(boolean terminoTurno) {
 		this.todaviaNoJugo = terminoTurno;
 	}
 
+	public boolean todaviaNoJugo() {
+		return todaviaNoJugo;
+	}
+
+	public void yaJugo() {
+		
+		this.setTodaviaNoJugo(false);
+		
+	}
+
+	
+	// Estos dos son de partida.
 	public boolean sigueJugando() {
 		
 		return this.estaJugando;

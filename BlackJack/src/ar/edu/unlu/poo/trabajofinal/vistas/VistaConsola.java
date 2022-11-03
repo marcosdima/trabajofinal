@@ -124,6 +124,25 @@ public class VistaConsola implements IVista {
 		
 	}
 	
+	@Override
+	public boolean siONo(IMensaje msj) {
+		
+		boolean res = false;
+		String respuesta;
+		
+		this.mostrarMensaje(msj);
+		respuesta = sc.next();
+		
+		if (respuesta.toLowerCase() == "si") {
+			
+			res = true;
+			
+		}
+		
+		return res;
+		
+	}
+	
 	//////////////////////////////////
 	//		Métodos de Consola		//
 	//////////////////////////////////
@@ -158,5 +177,8 @@ public class VistaConsola implements IVista {
 		p.printSeguido(conjuntoPuntajes, espacio);
 		
 	}
+
+	
+
 
 }
