@@ -204,44 +204,30 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public void repartir(boolean quiereMas) {
 		
 		Jugador contenedorJugador = this.seleccionarJugador();
+		EstadoMano status  = this.checkEstadoJugador(contenedorJugador);
+		boolean puedeSeguir = status.sigue();
 		
-		if (quiereMas) {
+		if ((quiereMas) && (puedeSeguir)) {
 			
-			if (contenedorJugador.getManoActual().getCartas().size() == 2) {
-				
-				contenedorJugador.mostrarCartas();
-				this.checkEstadoJugador(contenedorJugador);
-				this.notificar(Evento.PREGUNTAROTRA);
-				
-			}
-			else {
-				
-				contenedorJugador.addCarta(this.darCarta());
-				
-				if (contenedorJugador.getPuntaje() == 21) {
-					
-					contenedorJugador.yaJugo();
-					this.notificar(Evento.JUGAR);
-					
-				}
-				
-			}
+			contenedorJugador.addCarta(this.darCarta());
 			
-			
-				
 		}
 		else {
 			
 			contenedorJugador.yaJugo();
-			this.notificar(Evento.JUGAR);
 			
 		}
+		
+		this.notificar(Evento.JUGAR);
 		
 		
 	}
 	
-	private void checkEstadoJugador(Jugador contenedorJugador) {
-		// TODO Auto-generated method stub
+	private EstadoMano checkEstadoJugador(Jugador contenedorJugador) {
+		
+		
+		
+		return null;
 		
 	}
 

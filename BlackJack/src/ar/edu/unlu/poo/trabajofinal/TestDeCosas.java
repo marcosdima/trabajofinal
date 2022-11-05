@@ -11,6 +11,8 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
+		// Realicé la implementación de repartir, pero queda testearla.
+		
 	}
 
 }
