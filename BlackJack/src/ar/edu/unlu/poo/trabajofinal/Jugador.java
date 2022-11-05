@@ -12,7 +12,7 @@ public abstract class Jugador extends Persona implements Puntuable{
 	public Jugador(String nombre, int money) {
 		
 		super(nombre, money);
-		manoActual = new Mano();
+		this.setManoActual();
 		this.estaJugando = true;
 		
 	}
@@ -23,36 +23,7 @@ public abstract class Jugador extends Persona implements Puntuable{
 		
 	}
 	
-	public Mano getManoActual() {
-		return manoActual;
-	}
-	
-	public int getPuntaje() {
-		
-		int res = 0;
-		
-		if (this.getManoActual().getCartas().size() > 2) {
-			
-			res = this.manoActual.getPuntaje();
-			
-		}
-		else {
-			
-			for (Carta cartita : this.getManoActual().getCartas()) {
-				
-				if (cartita.esVisible()) {
-					
-					res += cartita.getValor();
-					
-				}
-				
-			}
-			
-		}
-		
-		return res;
-		
-	}
+	public abstract int getPuntaje();
 
 	public void clearMano() {
 		
@@ -85,6 +56,16 @@ public abstract class Jugador extends Persona implements Puntuable{
 	
 	//Estos son de la mano.
 
+	public Mano getManoActual() {
+		return manoActual;
+	}
+	
+	public void setManoActual() {
+		
+		this.manoActual = new Mano();
+		
+	} 
+	
 	public void setTodaviaNoJugo(boolean terminoTurno) {
 		this.todaviaNoJugo = terminoTurno;
 	}

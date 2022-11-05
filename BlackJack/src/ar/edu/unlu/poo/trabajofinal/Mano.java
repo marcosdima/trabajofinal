@@ -5,12 +5,10 @@ import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 public class Mano extends ConjuntoDeCartas implements Puntuable {
 	
 	private static final int MAXIMO = 10;
-	private EstadoMano estado;
 	
 	public Mano() {
 		
 		super(MAXIMO);
-		this.setEstado(EstadoMano.NULO);
 		
 	}
 	
@@ -23,7 +21,10 @@ public class Mano extends ConjuntoDeCartas implements Puntuable {
 		
 		for (Carta c : this.getCartas()) {
 			
-			puntos += c.getValor();
+			if (c.esVisible()) {
+				puntos += c.getValor();
+				
+			}
 			
 		}
 		
@@ -31,16 +32,4 @@ public class Mano extends ConjuntoDeCartas implements Puntuable {
 		
 	}
 
-	
-	public EstadoMano getEstado() {
-		return estado;
-	}
-
-	
-	public void setEstado(EstadoMano estado) {
-		this.estado = estado;
-	};
-	
-	
-	
 }

@@ -11,7 +11,7 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// Realicé la implementación de repartir, pero falta implementar bien lo de checkJugador.
+		// Cuando apuesta le da otra carta y no completa el ciclo de apuestas. Error con el puntaje.
 		
 	}
 

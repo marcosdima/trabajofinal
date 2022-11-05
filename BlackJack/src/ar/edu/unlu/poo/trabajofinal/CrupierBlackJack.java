@@ -21,6 +21,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	}
 
+	
 	public void repartirPrimeraTanda() {
 
 		for (JugadorBlackJack player : this.getJugadores()) {
@@ -41,6 +42,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	public boolean puedeSeguirJugando(Jugador player) {
 		
 		boolean res = true;
@@ -62,14 +64,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	
 	public ArrayList<JugadorBlackJack> getJugadores() {
 		return jugadores;
 	}
 
+	
 	public void setJugadores(int n) {
 		this.jugadores = new ArrayList<JugadorBlackJack>(n);
 	}
 
+	
 	public void addJugador(String nombre, int plata) {
 			
 		boolean nombreNulo = (nombre == null);
@@ -109,6 +114,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	public void terminarMano() {
 		
 		for (Jugador player : this.jugadores) {
@@ -121,6 +127,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	public void setApuestas(int apuestaMinima, int monto) {
 		
 		Apuesta apuesta = new Apuesta(monto);
@@ -168,6 +175,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+		
 	public void getDatosJugadores() {
 		
 		DatosDeJugador datos;
@@ -195,11 +203,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	
 	public Carta darCarta() {
 		
 		return this.getMazo().agarrarCarta();
 		
 	}
+	
 	
 	public void repartir(boolean quiereMas) {
 		
@@ -226,7 +236,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-	// Devuelve el la condición actual de la mano del jugador. Así puede determinar si se le permite pedir otra carta.
+	
 	private EstadoMano checkEstadoJugador(Jugador player) {
 		
 		Mano mano = player.getManoActual();
@@ -262,6 +272,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	private Jugador seleccionarJugador() {
 		
 		boolean seteado = false;
@@ -293,6 +304,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	
 	public DatosDeJugador getApostador() {
 		
 		boolean seteado = false;
@@ -313,6 +325,47 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	
+	public int getPuntaje() {
+		
+		Mano mano = this.getManoActual();
+		int puntos = mano.getPuntaje();
+		ContenidoDeCarta contenido;
+
+		for (Carta cartita : mano.getCartas()) {
+			
+			contenido = cartita.getContenido();
+		
+			switch (contenido) {
+		
+				case AS:
+				
+					if (puntos > 21) {
+						puntos -= 10;
+					}
+			
+				case CABALLERO:
+				
+					puntos -= 1;
+				
+				case REINA:
+				
+					puntos -= 2;
+				
+				case REY:
+				
+					puntos -= 3;
+		
+				default:;
+				
+			}
+			
+		}
+		
+		return puntos;
+		
+	}
+	
 	//////////////////////////////////
 	// Implementación de Observado //
 	//////////////////////////////////
@@ -324,6 +377,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	@Override
 	public boolean notificar(IMensaje mensaje, JugadorBlackJack actuJugador) {
 		
@@ -349,6 +403,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return true;
 		
 	}
+	
 
 	@Override
 	public boolean notificar(IMensaje mensaje, ArrayList<DatosDeJugador> actuDatos) {
@@ -363,6 +418,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	public boolean notificar(IMensaje mensaje) {
 		
 		for (Observador observer: observers) {
@@ -374,6 +430,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return true;
 		
 	}
+
 
 	
 }

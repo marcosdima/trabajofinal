@@ -50,4 +50,10 @@ public class Carta{
 		
 	}
 	
+	public ContenidoDeCarta getContenido() {
+		
+		return this.contenido;
+		
+	}
+	
 }

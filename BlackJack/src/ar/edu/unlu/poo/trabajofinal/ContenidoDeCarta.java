@@ -12,9 +12,9 @@ public enum ContenidoDeCarta {
 	OCHO(8, "8"),
 	NUEVE(9, "9"),
 	DIEZ(10, "10"),
-	CABALLERO(10, "Caballero"),
-	REINA(10, "Reina"),
-	REY(10, "Rey");
+	CABALLERO(11, "Caballero"),
+	REINA(12, "Reina"),
+	REY(13, "Rey");
 	
 	private int valor;
 	private String key;

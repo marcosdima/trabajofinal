@@ -6,7 +6,7 @@ public class JugadorBlackJack extends Jugador{
 	private boolean todaviaNoAposto;
 	private boolean perdioLaMano;
 	
-	public JugadorBlackJack(String nombre, int money) {
+ 	public JugadorBlackJack(String nombre, int money) {
 		
 		super(nombre, money);
 		this.setTodaviaNoJugo(true);
@@ -57,6 +57,48 @@ public class JugadorBlackJack extends Jugador{
 	public boolean todaviaNoAposto() {
 		
 		return this.todaviaNoAposto;
+		
+	}
+	
+	
+	@Override
+	public int getPuntaje() {
+		
+		Mano mano = this.getManoActual();
+		int puntos = mano.getPuntaje();
+		ContenidoDeCarta contenido;
+
+		for (Carta cartita : mano.getCartas()) {
+			
+			contenido = cartita.getContenido();
+		
+			switch (contenido) {
+		
+				case AS:
+				
+					if (puntos > 21) {
+						puntos -= 10;
+					}
+			
+				case CABALLERO:
+				
+					puntos -= 1;
+				
+				case REINA:
+				
+					puntos -= 2;
+				
+				case REY:
+				
+					puntos -= 3;
+		
+				default:;
+				
+			}
+			
+		}
+		
+		return puntos;
 		
 	}
 	
