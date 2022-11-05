@@ -21,7 +21,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	}
 
-	
 	public void repartirPrimeraTanda() {
 
 		for (JugadorBlackJack player : this.getJugadores()) {
@@ -42,7 +41,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	public boolean puedeSeguirJugando(Jugador player) {
 		
 		boolean res = true;
@@ -64,17 +62,14 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-	
 	public ArrayList<JugadorBlackJack> getJugadores() {
 		return jugadores;
 	}
 
-	
 	public void setJugadores(int n) {
 		this.jugadores = new ArrayList<JugadorBlackJack>(n);
 	}
 
-	
 	public void addJugador(String nombre, int plata) {
 			
 		boolean nombreNulo = (nombre == null);
@@ -89,7 +84,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			if (seAgrego) {
 				
-				player.aposto();
 				this.notificar(Evento.JUGADORCARGADO, player);
 				
 			}
@@ -114,7 +108,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	public void terminarMano() {
 		
 		for (Jugador player : this.jugadores) {
@@ -127,18 +120,15 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	public void setApuestas(int apuestaMinima, int monto) {
 		
 		Apuesta apuesta = new Apuesta(monto);
-		boolean seteado;
+		boolean seteado = false;
 		
 		for (JugadorBlackJack player : this.jugadores) { 
-			
-			seteado = false;
-			
+
 			// Hay que hacer que se setee en null siempre que se termine la mano.
-			if (player.getApuesta() == null) {
+			if ((player.todaviaNoAposto()) && (!seteado)) {
 				
 				if (apuesta.getMonto() > player.getDinero()) {
 					
@@ -147,11 +137,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				}
 				else if (monto < apuestaMinima) {
 					
-					seteado = this.notificar(Error.ERRORAPUESTA, apuesta);
+					seteado = this.notificar(Error.ERRORAPUESTA);
 					
 				}
 				else if (monto == 0) {
 					
+					player.aposto();
 					player.noSigue();
 					seteado = this.notificar(Evento.NOAPUESTA, player);
 					
@@ -159,23 +150,23 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				else {
 					
 					player.setApuesta(apuesta);
+					player.aposto();
 					seteado = this.notificar(Evento.APUESTASETEADA, player);
 				
 				}
-		
+				
 			}
 			
+		}
+		
 		if (!seteado) {
 				
 			this.notificar(Evento.JUGAR);
 				
 		}
-			
-		}
 		
 	}
-
-		
+	
 	public void getDatosJugadores() {
 		
 		DatosDeJugador datos;
@@ -203,13 +194,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-	
 	public Carta darCarta() {
 		
 		return this.getMazo().agarrarCarta();
 		
 	}
-	
 	
 	public void repartir(boolean quiereMas) {
 		
@@ -235,7 +224,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		
 	}
-	
 	
 	private EstadoMano checkEstadoJugador(Jugador player) {
 		
@@ -272,7 +260,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	private Jugador seleccionarJugador() {
 		
 		boolean seteado = false;
@@ -304,7 +291,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-	
 	public DatosDeJugador getApostador() {
 		
 		boolean seteado = false;
@@ -324,7 +310,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return dato;
 		
 	}
-	
 	
 	public int getPuntaje() {
 		
@@ -377,7 +362,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	@Override
 	public boolean notificar(IMensaje mensaje, JugadorBlackJack actuJugador) {
 		
@@ -404,7 +388,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-
 	@Override
 	public boolean notificar(IMensaje mensaje, ArrayList<DatosDeJugador> actuDatos) {
 		
@@ -418,7 +401,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	public boolean notificar(IMensaje mensaje) {
 		
 		for (Observador observer: observers) {

@@ -107,9 +107,7 @@ public class BlackJack implements Observador {
 					vista.mostrarMensaje(event);
 					this.crupier.repartir(vista.siONo(event));
 					
-				default:
-					
-					break;
+				default:;
 				
 			}
 		
@@ -156,9 +154,7 @@ public class BlackJack implements Observador {
 				DatosDeJugador datazo = new DatosDeJugador(objeto);
 				vista.formularioSetApuesta(datazo);
 				
-			default:
-
-					break;
+			default:;
 		
 				}
 			

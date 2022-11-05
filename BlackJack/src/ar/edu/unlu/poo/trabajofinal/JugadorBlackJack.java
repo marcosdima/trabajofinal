@@ -13,7 +13,7 @@ public class JugadorBlackJack extends Jugador{
 		this.setApuesta(new Apuesta());
 		this.noAposto();
 		this.noPerdioLaMano();
-		
+
 	}
 
 	private void noPerdioLaMano() {
@@ -59,7 +59,6 @@ public class JugadorBlackJack extends Jugador{
 		return this.todaviaNoAposto;
 		
 	}
-	
 	
 	@Override
 	public int getPuntaje() {

@@ -6,8 +6,8 @@ public class TestFunc {
 
 	public static void main(String[] args) {
 		
-		Rand random = new Rand();
-		int[] k = new int[10];
+		//Rand random = new Rand();
+		//int[] k = new int[10];
 		
 		ArrayList<Rand> test = new ArrayList<Rand>(2);
 		
