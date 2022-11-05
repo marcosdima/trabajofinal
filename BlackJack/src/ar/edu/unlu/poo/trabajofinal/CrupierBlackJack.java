@@ -226,12 +226,39 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-	private EstadoMano checkEstadoJugador(Jugador contenedorJugador) {
+	// Devuelve el la condición actual de la mano del jugador. Así puede determinar si se le permite pedir otra carta.
+	private EstadoMano checkEstadoJugador(Jugador player) {
 		
-		//HAY QUE IMPLEMENTARLO BIEN!
-		contenedorJugador.getManoActual().setEstado(EstadoMano.MENORA21);
+		Mano mano = player.getManoActual();
+		ArrayList<Carta> cartas = mano.getCartas();
+		int tam = cartas.size();
+		int puntaje = mano.getPuntaje();
 		
-		return EstadoMano.MENORA21;
+		EstadoMano res;
+
+		if ((tam == 2) && (puntaje == 21)) {
+			
+			res = EstadoMano.BLACKJACK;
+			
+		}
+		else if (puntaje < 21) {
+			
+			res = EstadoMano.MENORA21;
+			
+		}
+		else if (puntaje > 21) {
+			
+			res = EstadoMano.MAYORA21;
+			
+		}
+		else {
+			
+			res = EstadoMano.IGUALA21;
+			
+		}
+		
+		
+		return res;
 		
 	}
 

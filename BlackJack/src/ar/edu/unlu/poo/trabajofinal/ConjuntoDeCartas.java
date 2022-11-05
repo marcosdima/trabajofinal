@@ -38,4 +38,22 @@ public abstract class ConjuntoDeCartas {
 		
 	}
 
+	public boolean contains(ContenidoDeCarta carta) {
+		
+		boolean res = false;
+		
+		for (Carta cartita : this.cartas) {
+			
+			if (cartita.getLabel() == carta.getLabel()) {
+				
+				res = true;
+				
+			}
+			
+		}
+		
+		return res;
+		
+	}
+	
 }
