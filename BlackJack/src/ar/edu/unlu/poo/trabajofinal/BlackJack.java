@@ -87,30 +87,43 @@ public class BlackJack implements Observador {
 	@Override
 	public void actualizar(IMensaje event, Object objeto) {
 		
-		for (IVista vista: this.interfaces) {
-			
-			
-			switch ((Evento) event) {
+		IVista vista = this.interfaces.get(0);
+		
+		switch ((Evento) event) {
+				
+			case PRIMERAREPARTIDA:
+				
+				this.setInicio();
+				this.getDatosJugadores();
+				
+			case PREGUNTAROTRA:
+				
+				vista.mostrarMensaje(event);
+				this.crupier.repartir(vista.siONo(event));
+				
+			case PRIMERAPUESTA:
+				
+				DatosDeJugador datazoUno = this.crupier.getApostador();
+				vista.formularioSetApuesta(datazoUno);
+				
+			case APUESTASETEADA:
+				
+				DatosDeJugador datazoDos = this.crupier.getApostador();
+				
+				if (datazoDos != null) {
 					
-				case PRIMERAREPARTIDA:
+					vista.mostrarMensaje(event);
+					vista.formularioSetApuesta(datazoDos);
 					
-					this.setInicio();
-					this.getDatosJugadores();
-					vista.formularioSetApuesta(this.crupier.getApostador());
-					
-				case JUGAR:
+				}
+				else {
 					
 					this.crupier.repartir(true);
 					
-				case PREGUNTAROTRA:
-					
-					vista.mostrarMensaje(event);
-					this.crupier.repartir(vista.siONo(event));
-					
-				default:;
+				}
 				
-			}
-		
+			default:;
+			
 		}
 		
 	}
@@ -118,46 +131,35 @@ public class BlackJack implements Observador {
 	@Override
 	public void actualizar(IMensaje event, ArrayList<DatosDeJugador> objeto) {
 		
-		for (IVista vista: this.interfaces) {
+		IVista vista = this.interfaces.get(0);
 			
-			switch ((Evento) event) {
+		switch ((Evento) event) {
 
-			case MOSTRARMANO:
-				
-				vista.mostrarMano(objeto);
-				
-			default:
-				
-					break;
-		
-			}
-				
+		case MOSTRARMANO:
+			
+			vista.mostrarMano(objeto);
+			
+		default:;
+	
 		}
-		
+				
 	}
 
 	@Override
 	public void actualizar(IMensaje event, JugadorBlackJack objeto) {
 			
-		for (IVista vista: this.interfaces) {
+		IVista vista = this.interfaces.get(0);
 			
-			vista.mostrarMensaje(event);
-			
-			switch ((Evento) event) {
-			
-			case JUGADORCARGADO:
-				
-				vista.formularioAgregarJugador();
-			
-			case APUESTASETEADA:
-				
-				DatosDeJugador datazo = new DatosDeJugador(objeto);
-				vista.formularioSetApuesta(datazo);
-				
-			default:;
+		vista.mostrarMensaje(event);
 		
-				}
+		switch ((Evento) event) {
+		
+		case JUGADORCARGADO:
 			
+			vista.formularioAgregarJugador();
+
+		default:;
+	
 			}
 			
 	}

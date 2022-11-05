@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Print {
 	
 	private char separador;
-	private static final int MAXIMO = 2;
+	private static final int MAXIMO = 3;
 	private static final int MAXIMOLINEA = 50;
 	
 	public Print(char caracter) {

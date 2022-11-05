@@ -106,7 +106,7 @@ public class VistaConsola implements IVista {
 		if (msj.getDescripcion() != "") {
 			
 			p.espacio();	
-			p.printConEspacio(msj.getDescripcion());
+			p.justPrint(msj.getDescripcion());
 			
 		}
 
@@ -117,6 +117,7 @@ public class VistaConsola implements IVista {
 		int monto;
 		
 		p.espacio();
+		p.print();
 		p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
 		p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
 		monto = sc.nextInt();
