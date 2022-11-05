@@ -11,7 +11,7 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// Realicé la implementación de repartir, pero queda testearla.
+		// Realicé la implementación de repartir, pero falta implementar bien lo de checkJugador.
 		
 	}
 

@@ -156,6 +156,7 @@ public class Print {
 		int mayor = 0;
 		int largo = printeable.size();
 		
+		// Setea el tamaño del array más grande.
 		for (String[] arreglo : printeable) {
 			
 			if (arreglo.length > mayor) {
@@ -166,26 +167,28 @@ public class Print {
 			
 		}
 		
+		// Setea la variable 'espacio'.
 		for (a = 0; a < size; a++) {
 			
 			espacio += " ";
 			
 		}
 		
-		for (i = 0; i < printeable.size(); i++) {
+		for (i = 0; i < mayor; i++) {
 			
+			// Creo un array que va a contener las cartas, para lugo ser printeadas.
 			arregloAuxiliar = new String[largo];
 			
-			for (o = 0; o < printeable.size(); o++) {
+			for (o = 0; o < (largo); o++) {
 				
-				try {
+				if (printeable.get(o).length <= (i)) {
 					
-					arregloAuxiliar[o] = printeable.get(o)[i];
+					arregloAuxiliar[o] = espacio;
 					
 				}
-				catch(Exception e) {
+				else {
 					
-					arregloAuxiliar[o] = " ";
+					arregloAuxiliar[o] = printeable.get(o)[i];
 
 				}
 			
@@ -196,4 +199,5 @@ public class Print {
 		}
 		
 	}
+
 }

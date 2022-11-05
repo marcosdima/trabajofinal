@@ -218,16 +218,20 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		}
 		
-		this.notificar(Evento.JUGAR);
+		// NO FUNCIONA!
+		contenedorJugador.mostrarCartas();
+		this.getDatosJugadores();
+		this.notificar(Evento.PREGUNTAROTRA);
 		
 		
 	}
 	
 	private EstadoMano checkEstadoJugador(Jugador contenedorJugador) {
 		
+		//HAY QUE IMPLEMENTARLO BIEN!
+		contenedorJugador.getManoActual().setEstado(EstadoMano.MENORA21);
 		
-		
-		return null;
+		return EstadoMano.MENORA21;
 		
 	}
 

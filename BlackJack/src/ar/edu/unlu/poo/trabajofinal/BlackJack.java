@@ -89,7 +89,6 @@ public class BlackJack implements Observador {
 		
 		for (IVista vista: this.interfaces) {
 			
-			vista.mostrarMensaje(event);
 			
 			switch ((Evento) event) {
 					
@@ -105,6 +104,7 @@ public class BlackJack implements Observador {
 					
 				case PREGUNTAROTRA:
 					
+					vista.mostrarMensaje(event);
 					this.crupier.repartir(vista.siONo(event));
 					
 				default:

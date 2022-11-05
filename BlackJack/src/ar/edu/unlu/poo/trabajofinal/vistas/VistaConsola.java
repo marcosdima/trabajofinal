@@ -106,7 +106,7 @@ public class VistaConsola implements IVista {
 		if (msj.getDescripcion() != "") {
 			
 			p.espacio();	
-			p.justPrint(msj.getDescripcion());
+			p.printConEspacio(msj.getDescripcion());
 			
 		}
 
@@ -127,10 +127,11 @@ public class VistaConsola implements IVista {
 	@Override
 	public boolean siONo(IMensaje msj) {
 		
+		// DESPUES HAY QUE CREAR LA CLASE SCANNER PROPIA!
 		boolean res = false;
 		String respuesta;
 		
-		this.mostrarMensaje(msj);
+		p.print();
 		respuesta = sc.next();
 		
 		if (respuesta.toLowerCase() == "si") {
@@ -150,7 +151,7 @@ public class VistaConsola implements IVista {
 	private void printJugadores(ArrayList<DatosDeJugador> datos) {
 		
 		int contador = 0;
-		int espacio = 20;
+		int espacio = 25;
 		int size = datos.size();
 		String[] conjuntoNombres = new String[size];
 		ArrayList<String[]> conjuntoCartas = new ArrayList<String[]>(size);
@@ -164,7 +165,7 @@ public class VistaConsola implements IVista {
 
 				conjuntoNombres[contador] = dato.getNombre();
 				conjuntoCartas.add(dato.getCartas());
-				conjuntoPuntajes[contador] = dato.getPuntaje();
+				conjuntoPuntajes[contador] = "Puntaje: " + dato.getPuntaje();
 				contador++;
 
 				
