@@ -69,29 +69,30 @@ public class JugadorBlackJack extends Jugador{
 
 		for (Carta cartita : mano.getCartas()) {
 			
-			contenido = cartita.getContenido();
+			if (cartita.esVisible()) {
 		
-			switch (contenido) {
-		
-				case AS:
+				contenido = cartita.getContenido();
 				
-					if (puntos > 21) {
-						puntos -= 10;
-					}
-			
-				case CABALLERO:
-				
+				if ((contenido == ContenidoDeCarta.AS) && (puntos > 21)) {
+					
+					puntos -= 10;
+					
+				}
+				else if (contenido == ContenidoDeCarta.CABALLERO) {
+					
 					puntos -= 1;
-				
-				case REINA:
-				
-					puntos -= 2;
-				
-				case REY:
-				
-					puntos -= 3;
-		
-				default:;
+					
+				}
+				else if (contenido == ContenidoDeCarta.REINA) {
+					
+					puntos -= 1;
+					
+				}
+				else if (contenido == ContenidoDeCarta.REY) {
+					
+					puntos -= 1;
+					
+				}
 				
 			}
 			
