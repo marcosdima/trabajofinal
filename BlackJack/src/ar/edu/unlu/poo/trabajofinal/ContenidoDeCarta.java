@@ -2,7 +2,7 @@ package ar.edu.unlu.poo.trabajofinal;
 
 public enum ContenidoDeCarta {
 	
-	AS(1, "As"),
+	AS(11, "As"),
 	DOS(2, "2"),
 	TRES(3, "3"),
 	CUATRO(4, "4"),
@@ -12,9 +12,9 @@ public enum ContenidoDeCarta {
 	OCHO(8, "8"),
 	NUEVE(9, "9"),
 	DIEZ(10, "10"),
-	CABALLERO(11, "Caballero"),
-	REINA(12, "Reina"),
-	REY(13, "Rey");
+	CABALLERO(10, "Caballero"),
+	REINA(10, "Reina"),
+	REY(10, "Rey");
 	
 	private int valor;
 	private String key;

@@ -75,25 +75,10 @@ public class JugadorBlackJack extends Jugador{
 				
 				if ((contenido == ContenidoDeCarta.AS) && (puntos > 21)) {
 					
-					puntos -= 10;
+					puntos = puntos - 10;
 					
 				}
-				else if (contenido == ContenidoDeCarta.CABALLERO) {
-					
-					puntos -= 1;
-					
-				}
-				else if (contenido == ContenidoDeCarta.REINA) {
-					
-					puntos -= 1;
-					
-				}
-				else if (contenido == ContenidoDeCarta.REY) {
-					
-					puntos -= 1;
-					
-				}
-				
+			
 			}
 			
 		}

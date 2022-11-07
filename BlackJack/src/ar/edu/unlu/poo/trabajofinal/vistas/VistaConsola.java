@@ -1,5 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
+import ar.edu.unlu.poo.misfunciones.Escaner;
 import ar.edu.unlu.poo.misfunciones.Print;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
 import ar.edu.unlu.poo.trabajofinal.DatosDeJugador;
@@ -7,7 +8,6 @@ import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Menu;
 import ar.edu.unlu.poo.trabajofinal.commons.OpcionesMenuPrincipal;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class VistaConsola implements IVista {
 	
@@ -15,7 +15,7 @@ public class VistaConsola implements IVista {
 	private BlackJack controlador;
 	private Menu menu;
 	private OpcionesMenuPrincipal menuPrincipal = OpcionesMenuPrincipal.JUGAR;
-	private Scanner sc;
+	private Escaner sc;
 	
 	public VistaConsola(BlackJack controlador) {
 		
@@ -23,7 +23,7 @@ public class VistaConsola implements IVista {
 		this.controlador.addIntefaz(this);
 		p = new Print();
 		menu = new Menu(menuPrincipal);
-		sc = new Scanner(System.in);
+		sc = new Escaner();
 		
 	}
 	
@@ -129,18 +129,10 @@ public class VistaConsola implements IVista {
 	@Override
 	public boolean siONo(IMensaje msj) {
 		
-		// DESPUES HAY QUE CREAR LA CLASE SCANNER PROPIA!
-		boolean res = false;
-		String respuesta;
+		boolean res;
 		
 		p.print();
-		respuesta = sc.next();
-		
-		if (respuesta.toLowerCase() == "si") {
-			
-			res = true;
-			
-		}
+		res = sc.siONo();
 		
 		return res;
 		

@@ -22,12 +22,13 @@ public class Mano extends ConjuntoDeCartas implements Puntuable {
 		for (Carta c : this.getCartas()) {
 			
 			if (c.esVisible()) {
+				
 				puntos += c.getValor();
 				
 			}
 			
 		}
-		
+
 		return puntos;
 		
 	}

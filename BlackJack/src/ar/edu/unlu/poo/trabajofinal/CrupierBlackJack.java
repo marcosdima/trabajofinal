@@ -313,30 +313,16 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 		for (Carta cartita : mano.getCartas()) {
 			
-			contenido = cartita.getContenido();
+			if (cartita.esVisible()) {
 		
-			switch (contenido) {
-		
-				case AS:
+				contenido = cartita.getContenido();
 				
-					if (puntos > 21) {
-						puntos -= 10;
-					}
+				if ((contenido == ContenidoDeCarta.AS) && (puntos > 21)) {
+					
+					puntos = puntos - 10;
+					
+				}
 			
-				case CABALLERO:
-				
-					puntos -= 1;
-				
-				case REINA:
-				
-					puntos -= 2;
-				
-				case REY:
-				
-					puntos -= 3;
-		
-				default:;
-				
 			}
 			
 		}
