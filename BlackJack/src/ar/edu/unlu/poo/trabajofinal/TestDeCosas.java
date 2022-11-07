@@ -11,7 +11,8 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// Cuando apuesta le da otra carta y no completa el ciclo de apuestas. Error con el puntaje.
+		// No esta siguiendo bien el flujo y también validar que no se pase de 21.
+		// Podría replantear lo de getDatos(), que no salte de ahí al MOSTRARMANO.
 		
 	}
 

@@ -12,12 +12,12 @@ public class DatosDeJugador {
 	public DatosDeJugador(Jugador player) {
 		
 		this.setPlayer(player);
-		this.setDatos();
 
 	}
 	
 	public void setPlayer(Jugador player) {
 		this.player = player;
+		this.setDatos();
 	}
 	
 	public void setDatos() {

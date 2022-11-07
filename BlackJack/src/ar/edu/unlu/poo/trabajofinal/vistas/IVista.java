@@ -22,5 +22,5 @@ public interface IVista {
 	
 	public void formularioSetApuesta(DatosDeJugador dato);
 
-	public boolean siONo(IMensaje msj);
+	public boolean siONo(IMensaje msj, DatosDeJugador dato);
 }

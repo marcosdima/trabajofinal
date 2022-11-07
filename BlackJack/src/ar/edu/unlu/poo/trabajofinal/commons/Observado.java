@@ -2,7 +2,6 @@ package ar.edu.unlu.poo.trabajofinal.commons;
 
 import java.util.ArrayList;
 
-import ar.edu.unlu.poo.trabajofinal.Apuesta;
 import ar.edu.unlu.poo.trabajofinal.DatosDeJugador;
 import ar.edu.unlu.poo.trabajofinal.JugadorBlackJack;
 
@@ -12,7 +11,7 @@ public interface Observado {
 	
 	public boolean notificar(IMensaje mensaje, JugadorBlackJack actuJugador);
 	
-	public boolean notificar(IMensaje mensaje, Apuesta actuApuesta);
+	public boolean notificar(IMensaje mensaje, DatosDeJugador data);
 	
 	public boolean notificar(IMensaje mensaje, ArrayList<DatosDeJugador> actuDatos);
 	

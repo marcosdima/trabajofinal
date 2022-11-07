@@ -127,11 +127,13 @@ public class VistaConsola implements IVista {
 	}
 	
 	@Override
-	public boolean siONo(IMensaje msj) {
+	public boolean siONo(IMensaje msj, DatosDeJugador data) {
 		
 		boolean res;
 		
+		p.espacio();
 		p.print();
+		p.print("¿Queres otra carta " + data.getNombre() + "?");
 		res = sc.siONo();
 		
 		return res;
@@ -162,7 +164,6 @@ public class VistaConsola implements IVista {
 				conjuntoPuntajes[contador] = "Puntaje: " + dato.getPuntaje();
 				contador++;
 
-				
 			}
 			
 		}
@@ -172,8 +173,5 @@ public class VistaConsola implements IVista {
 		p.printSeguido(conjuntoPuntajes, espacio);
 		
 	}
-
-	
-
 
 }

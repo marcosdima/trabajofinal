@@ -90,23 +90,15 @@ public class BlackJack implements Observador {
 		IVista vista = this.interfaces.get(0);
 		
 		switch ((Evento) event) {
-				
-			case PRIMERAREPARTIDA:
-				
-				this.setInicio();
-				this.getDatosJugadores();
-				
-			case PREGUNTAROTRA:
-				
-				vista.mostrarMensaje(event);
-				this.crupier.repartir(vista.siONo(event));
-				
+								
 			case PRIMERAPUESTA:
 				
 				DatosDeJugador datazoUno = this.crupier.getApostador();
 				vista.formularioSetApuesta(datazoUno);
 				
 			case APUESTASETEADA:
+				
+				vista.mostrarMensaje(event);
 				
 				DatosDeJugador datazoDos = this.crupier.getApostador();
 				
@@ -117,8 +109,8 @@ public class BlackJack implements Observador {
 					
 				}
 				else {
-					
-					this.crupier.repartir(true);
+
+					this.actualizar(Evento.PREGUNTAROTRA, this.crupier.getDatoDeJugador());
 					
 				}
 				
@@ -164,6 +156,23 @@ public class BlackJack implements Observador {
 			
 	}
 
+	public void actualizar(IMensaje event, DatosDeJugador data) {
+		
+		IVista vista = this.interfaces.get(0);
+		
+		switch ((Evento) event) {
+		
+		case PREGUNTAROTRA:
+			
+			this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+			vista.siONo(event, data);
+
+		default:;
+	
+			}
+		
+	};
+	
 	// No sé si debería hacerlo así.
 	@Override
 	public void actualizar(IMensaje event) {

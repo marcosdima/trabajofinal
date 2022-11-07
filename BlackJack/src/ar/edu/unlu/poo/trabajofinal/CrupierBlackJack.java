@@ -102,7 +102,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		else {
 			
 			this.repartirPrimeraTanda();
-			this.getDatosJugadores();
+			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 			this.notificar(Evento.PRIMERAPUESTA);
 		
 		}
@@ -158,10 +158,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}	
 			
 		}
+		
+
+			
+		this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+		this.notificar(Evento.PREGUNTAROTRA, new DatosDeJugador(this.seleccionarJugador()));
+			
+
 			
 	}
 	
-	public void getDatosJugadores() {
+	public ArrayList<DatosDeJugador> getDatosJugadores() {
 		
 		DatosDeJugador datos;
 		boolean sigue;
@@ -184,7 +191,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		datos = new DatosDeJugador(this);
 		datosDeJugadores.add(datos);
 		
-		this.notificar(Evento.MOSTRARMANO, datosDeJugadores);
+		return datosDeJugadores;
+		
+	}
+	
+	public DatosDeJugador getDatoDeJugador() {
+		
+		return new DatosDeJugador(this.seleccionarJugador());
 		
 	}
 	
@@ -198,11 +211,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		Jugador contenedorJugador = this.seleccionarJugador();
 		EstadoMano status  = this.checkEstadoJugador(contenedorJugador);
-		boolean puedeSeguir = status.sigue();
+		boolean puedeSeguir = true;//(status == EstadoMano.MENORA21);
+		
 		
 		if ((quiereMas) && (puedeSeguir)) {
 			
 			contenedorJugador.addCarta(this.darCarta());
+			System.out.println(contenedorJugador.getManoActual().getCartas().size());
 			
 		}
 		else {
@@ -249,7 +264,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		}
 		
-		
 		return res;
 		
 	}
@@ -257,7 +271,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public Jugador seleccionarJugador() {
 		
 		boolean seteado = false;
-		Jugador contenedorJugador = new JugadorBlackJack("Contenedor", 0);
+		Jugador contenedorJugador = this;
 		
 		for (JugadorBlackJack player: this.jugadores) {
 			
@@ -270,13 +284,9 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		}
 		
-		if ((!seteado) && (this.todaviaNoJugo())) {
+		if (!seteado) {
 			
-			contenedorJugador = this;
-			
-		}
-		else if (!seteado) {
-			
+			// Lo pongo en null para detectar si no lo carga;
 			contenedorJugador = null;
 			
 		}
@@ -356,11 +366,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 	
 	@Override
-	public boolean notificar(IMensaje mensaje, Apuesta actuApuesta) {
+	public boolean notificar(IMensaje mensaje, DatosDeJugador data) {
 		
 		for (Observador observer: observers) {
 			
-			observer.actualizar(mensaje, actuApuesta);
+			observer.actualizar(mensaje, data);
 			
 		}
 		
