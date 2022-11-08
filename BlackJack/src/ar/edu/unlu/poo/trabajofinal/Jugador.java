@@ -52,7 +52,37 @@ public abstract class Jugador extends Persona implements Puntuable{
 		}
 		
 	}
+
+	public DatosDeJugador getData() {
+		
+		DatosDeJugador data = new DatosDeJugador(this);
+		return data;
+		
+	}
+
+	public int getNroCartas() {
+		
+		return this.getManoActual().getCartas().size();
+		
+	}
 	
+	public boolean primeraMano() {
+		
+		boolean res = false;
+		
+		for (Carta cartita : this.manoActual.getCartas()) {
+			
+			if (!cartita.esVisible()) {
+				
+				res = true;
+				
+			}
+			
+		}
+		
+		return res;
+		
+	}
 	
 	//Estos son de la mano.
 

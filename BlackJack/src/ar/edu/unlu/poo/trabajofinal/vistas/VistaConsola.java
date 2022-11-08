@@ -101,11 +101,12 @@ public class VistaConsola implements IVista {
 	}
 
 	@Override
-	public void mostrarMensaje(IMensaje msj) {
+	public void mostrarMensaje(IMensaje msj, DatosDeJugador data) {
 		
 		if (msj.getDescripcion() != "") {
 			
 			p.espacio();	
+			p.print(data.getNombre() + ": ");
 			p.justPrint(msj.getDescripcion());
 			
 		}

@@ -96,24 +96,6 @@ public class BlackJack implements Observador {
 				DatosDeJugador datazoUno = this.crupier.getApostador();
 				vista.formularioSetApuesta(datazoUno);
 				
-			case APUESTASETEADA:
-				
-				vista.mostrarMensaje(event);
-				
-				DatosDeJugador datazoDos = this.crupier.getApostador();
-				
-				if (datazoDos != null) {
-					
-					vista.mostrarMensaje(event);
-					vista.formularioSetApuesta(datazoDos);
-					
-				}
-				else {
-
-					this.actualizar(Evento.PREGUNTAROTRA, this.crupier.getDatoDeJugador());
-					
-				}
-				
 			default:;
 			
 		}
@@ -137,35 +119,41 @@ public class BlackJack implements Observador {
 				
 	}
 
-	@Override
-	public void actualizar(IMensaje event, JugadorBlackJack objeto) {
-			
-		IVista vista = this.interfaces.get(0);
-			
-		vista.mostrarMensaje(event);
-		
-		switch ((Evento) event) {
-		
-		case JUGADORCARGADO:
-			
-			vista.formularioAgregarJugador();
-
-		default:;
-	
-			}
-			
-	}
-
 	public void actualizar(IMensaje event, DatosDeJugador data) {
 		
 		IVista vista = this.interfaces.get(0);
 		
 		switch ((Evento) event) {
 		
-		case PREGUNTAROTRA:
+			case JUGADORCARGADO:
+
+				vista.mostrarMensaje(event, data);
+				vista.formularioAgregarJugador();
+				
+			case PREGUNTAROTRA:
+				
+				this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+				this.crupier.repartir(vista.siONo(event, data));
+				
+			case BLACKJACK:
+				
+				vista.mostrarMensaje(event, data);
+				
+			case APUESTASETEADA:
 			
-			this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
-			vista.siONo(event, data);
+				DatosDeJugador datazoDos = this.crupier.getApostador();
+				
+				if (datazoDos != null) {
+					
+					vista.mostrarMensaje(event, data);
+					vista.formularioSetApuesta(datazoDos);
+					
+				}
+				else {
+	
+					this.actualizar(Evento.PREGUNTAROTRA, this.crupier.getDatoDeJugador());
+					
+				}
 
 		default:;
 	

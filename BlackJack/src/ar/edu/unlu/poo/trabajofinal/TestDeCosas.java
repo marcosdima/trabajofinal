@@ -11,8 +11,7 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// No esta siguiendo bien el flujo y también validar que no se pase de 21.
-		// Podría replantear lo de getDatos(), que no salte de ahí al MOSTRARMANO.
+		// Seguir Evento.PREGUNTARPRIMERAMANO.
 		
 	}
 

@@ -16,7 +16,7 @@ public interface IVista {
 	
 	public void menuConfiguracion();
 
-	public void mostrarMensaje(IMensaje event);
+	public void mostrarMensaje(IMensaje event, DatosDeJugador data);
 	
 	public void mostrarMano(ArrayList<DatosDeJugador>  datos);
 	

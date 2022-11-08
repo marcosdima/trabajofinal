@@ -8,8 +8,11 @@ public enum Evento implements IMensaje{
 	NOAPUESTA("Perfecto, proseguimos."),
 	APUESTASETEADA("Apuesta seteada!"),
 	TERMINOLAMANO("Se terminó la mano!"),
-	PREGUNTAROTRA(""),
+	PREGUNTAROTRA("Querés otra carta?"),
 	PRIMERAPUESTA(""),
+	BLACKJACK("Que suerte, tenés BlackJack!"),
+	TERMINOTURNO("Tu turno terminó!"),
+	PREGUNTARPRIMERAMANO(""),
 	JUGAR("");
 	
 	String label;
@@ -22,7 +25,8 @@ public enum Evento implements IMensaje{
 	
 	public String getDescripcion() {
 		
-		return this.label;
+		String res = this.label;
+		return res;
 		
 	}
 	
