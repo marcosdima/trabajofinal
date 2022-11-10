@@ -87,4 +87,22 @@ public class JugadorBlackJack extends Jugador{
 		
 	}
 	
+	public boolean primeraMano() {
+		
+		boolean res = false;
+		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (!cartita.esVisible()) {
+				
+				res = true;
+				
+			}
+			
+		}
+		
+		return res;
+		
+	}
+	
 }

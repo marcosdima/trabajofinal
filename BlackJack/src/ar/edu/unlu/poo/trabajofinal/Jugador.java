@@ -66,24 +66,6 @@ public abstract class Jugador extends Persona implements Puntuable{
 		
 	}
 	
-	public boolean primeraMano() {
-		
-		boolean res = false;
-		
-		for (Carta cartita : this.manoActual.getCartas()) {
-			
-			if (!cartita.esVisible()) {
-				
-				res = true;
-				
-			}
-			
-		}
-		
-		return res;
-		
-	}
-	
 	//Estos son de la mano.
 
 	public Mano getManoActual() {
@@ -112,6 +94,7 @@ public abstract class Jugador extends Persona implements Puntuable{
 
 	
 	// Estos dos son de partida.
+	
 	public boolean sigueJugando() {
 		
 		return this.estaJugando;

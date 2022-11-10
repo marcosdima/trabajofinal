@@ -129,6 +129,11 @@ public class BlackJack implements Observador {
 
 				vista.mostrarMensaje(event, data);
 				vista.formularioAgregarJugador();
+			
+			case PREGUNTARPRIMERAMANO:
+				
+				this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+				this.crupier.repartir(vista.siONo(event, data));
 				
 			case PREGUNTAROTRA:
 				
@@ -149,11 +154,10 @@ public class BlackJack implements Observador {
 					vista.formularioSetApuesta(datazoDos);
 					
 				}
-				else {
-	
-					this.actualizar(Evento.PREGUNTAROTRA, this.crupier.getDatoDeJugador());
-					
-				}
+				
+			case TERMINOTURNO:
+				
+				vista.mostrarMensaje(event, data);
 
 		default:;
 	

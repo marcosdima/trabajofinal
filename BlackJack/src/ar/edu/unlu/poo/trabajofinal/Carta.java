@@ -8,7 +8,14 @@ public class Carta{
 	
 	public Carta(Palo palo, ContenidoDeCarta cartita) {
 		
-		this.contenido = cartita;
+		/*
+		 * Constructor de la clase 'Carta'.
+		 * Recibe como parámtro un enumerado 'Palo' y un enumerado 'ContenidoDeCarta'.
+		 * 
+		 * */
+		
+		// Seteo de variables.
+		this.setContenido(cartita);
 		this.setPaloDeCarta(palo);
 		this.setVisibilidad(false);
 		
@@ -46,7 +53,13 @@ public class Carta{
 	
 	public String getDesc() {
 		
-		return this.getLabel() + " de " + this.paloDeCarta;
+		/* Seteo la variable desc para que devuevla el formato:
+		 * 'Label' de 'Palo'
+		 * */
+		
+		String desc = this.getLabel() + " de " + this.paloDeCarta;
+		
+		return desc;
 		
 	}
 	
@@ -55,5 +68,11 @@ public class Carta{
 		return this.contenido;
 		
 	}
+
+	public void setContenido(ContenidoDeCarta contenido) {
+		this.contenido = contenido;
+	}
+	
+	
 	
 }

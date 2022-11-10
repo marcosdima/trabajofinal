@@ -41,20 +41,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	public boolean puedeSeguirJugando(Jugador player) {
-		
-		boolean res = true;
-		
-		if (player.getPuntaje() >= 21) {
-			
-			res = false;
-			
-		}
-		
-		return res;
-		
-	}
-	
 	protected void setMazo() {
 		
 		MazoDeNaipes m = new MazoDeNaipes();
@@ -159,13 +145,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		}
 		
-
-			
-		this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-		this.notificar(Evento.PREGUNTAROTRA, new DatosDeJugador(this.seleccionarJugador()));
-			
-
-			
+		this.repartir(true);
+				
 	}
 	
 	public ArrayList<DatosDeJugador> getDatosJugadores() {
@@ -209,26 +190,28 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	
 	public void repartir(boolean quiereMas) {
 		
-		Jugador contenedorJugador = this.seleccionarJugador();
+		JugadorBlackJack contenedorJugador = this.seleccionarJugador();
 		DatosDeJugador datazo = contenedorJugador.getData();
-		System.out.println();
 		EstadoMano status  = this.checkEstadoJugador(contenedorJugador);
 		boolean terminarTurno = false;
-
+		boolean primeraMano = false;
 		
+		System.out.println(contenedorJugador.getNombre() + contenedorJugador.primeraMano());
+	
 		if (contenedorJugador.primeraMano()) {
 			
 			contenedorJugador.mostrarCartas();
+			primeraMano = true;
 			
 		}
 		
-		if ((contenedorJugador.primeraMano()) && (status == EstadoMano.BLACKJACK)) {
+		if ((primeraMano) && (status == EstadoMano.BLACKJACK)) {
 			
 			this.notificar(Evento.BLACKJACK, datazo);
 			terminarTurno = true;
 			
 		}
-		else if (contenedorJugador.primeraMano()) {
+		else if (primeraMano) {
 			
 			this.notificar(Evento.PREGUNTARPRIMERAMANO, datazo);
 			
@@ -236,6 +219,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		else if (quiereMas) {
 			
 			contenedorJugador.addCarta(this.darCarta());
+			contenedorJugador.mostrarCartas();
 			
 			//Estado post dar carta.
 			status = this.checkEstadoJugador(contenedorJugador);
@@ -262,7 +246,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 			contenedorJugador.yaJugo();
 			this.notificar(Evento.TERMINOTURNO, datazo);
-			this.notificar(Evento.PREGUNTAROTRA, this.seleccionarJugador().getData());
+			this.repartir(true);
 			
 		}
 		
@@ -304,12 +288,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	public Jugador seleccionarJugador() {
+	public JugadorBlackJack seleccionarJugador() {
 		
 		boolean seteado = false;
-		Jugador contenedorJugador = this;
+		JugadorBlackJack contenedorJugador = null;
 		
 		for (JugadorBlackJack player: this.jugadores) {
+			
 			
 			if ((player.todaviaNoJugo()) && (!seteado)) {
 				
@@ -319,14 +304,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}
 			
 		}
-		
-		if (!seteado) {
-			
-			// Lo pongo en null para detectar si no lo carga;
-			contenedorJugador = null;
-			
-		}
-		
+
 		return contenedorJugador;
 		
 	}

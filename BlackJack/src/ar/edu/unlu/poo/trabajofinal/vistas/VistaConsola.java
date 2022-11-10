@@ -134,9 +134,9 @@ public class VistaConsola implements IVista {
 		
 		p.espacio();
 		p.print();
-		p.print("¿Queres otra carta " + data.getNombre() + "?");
+		p.print(data.getNombre());
+		p.print(msj.getDescripcion());
 		res = sc.siONo();
-		
 		return res;
 		
 	}

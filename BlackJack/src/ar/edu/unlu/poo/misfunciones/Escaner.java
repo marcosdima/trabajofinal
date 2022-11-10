@@ -16,7 +16,7 @@ public class Escaner {
 		
 		for (String str : yes) {
 			
-			if (input == str) {
+			if (input.equals(str)) {
 				
 				res = true;
 				

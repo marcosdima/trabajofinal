@@ -11,7 +11,7 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// Seguir Evento.PREGUNTARPRIMERAMANO.
+		// Seguir turno del crupier.
 		
 	}
 
