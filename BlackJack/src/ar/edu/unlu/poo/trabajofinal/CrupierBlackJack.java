@@ -21,6 +21,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	}
 
+	// Rutina que reparte la primera mano.
 	public void repartirPrimeraTanda() {
 
 		for (JugadorBlackJack player : this.getJugadores()) {
@@ -41,21 +42,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	protected void setMazo() {
-		
-		MazoDeNaipes m = new MazoDeNaipes();
-		this.setMazo(m);
-		
-	}
-	
-	public ArrayList<JugadorBlackJack> getJugadores() {
-		return jugadores;
-	}
-
-	public void setJugadores(int n) {
-		this.jugadores = new ArrayList<JugadorBlackJack>(n);
-	}
-
+	// Appendea un jugador al ArrayList de jugadores.
 	public void addJugador(String nombre, int plata) {
 			
 		boolean nombreNulo = (nombre == null);
@@ -95,6 +82,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	// Rutina de fin de mano (No esta terminada, debería detectar también el fin de juego)
 	public void terminarMano() {
 		
 		for (Jugador player : this.jugadores) {
@@ -107,6 +95,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	// Seteo de apuestas.
 	public void setApuestas(int apuestaMinima, int monto) {
 		
 		Apuesta apuesta = new Apuesta(monto);
@@ -149,6 +138,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				
 	}
 	
+	// HAY QUE MODIFICARLO!!!!
+	// Devuelve un arrray list con datos de los jugadores (Incluyendo al crupier).
 	public ArrayList<DatosDeJugador> getDatosJugadores() {
 		
 		DatosDeJugador datos;
@@ -176,6 +167,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	// Proximamente lo voy a sacar, para la interfaz jugador.
 	public DatosDeJugador getDatoDeJugador() {
 		
 		return new DatosDeJugador(this.seleccionarJugador());
@@ -188,6 +180,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	// Este metodo se encarga de repartir la carta a los JugadoresBlackJack.
 	public void repartir(boolean quiereMas) {
 		
 		JugadorBlackJack contenedorJugador = this.seleccionarJugador();
@@ -254,6 +247,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	
 	}
 	
+	// Revisa el estado del jugador y devuelve un enumerado con el resultado.
 	private EstadoMano checkEstadoJugador(Jugador player) {
 		
 		Mano mano = player.getManoActual();
@@ -288,13 +282,16 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+
+	// Devuelve un jugador disponible para jugar.
 	public JugadorBlackJack seleccionarJugador() {
 		
 		boolean seteado = false;
+		
+		// En casi de que no haya jugadores disponibles, retorna null.
 		JugadorBlackJack contenedorJugador = null;
 		
 		for (JugadorBlackJack player: this.jugadores) {
-			
 			
 			if ((player.todaviaNoJugo()) && (!seteado)) {
 				
@@ -309,9 +306,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+
+	// Devuelve un jugador disponible para apostar.
 	public DatosDeJugador getApostador() {
 		
 		boolean seteado = false;
+		// En casi de que hayan apostado todos, retorna null.
 		DatosDeJugador dato = null;
 		
 		for (JugadorBlackJack player : this.jugadores) {
@@ -329,6 +329,15 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	
+/////////////////////////////////
+////// Getters and Setters //////
+/////////////////////////////////
+	
+	public void setJugadores(int n) {
+		this.jugadores = new ArrayList<JugadorBlackJack>(n);
+	}
+
 	public int getPuntaje() {
 		
 		Mano mano = this.getManoActual();
@@ -355,9 +364,21 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
-	//////////////////////////////////
-	// Implementación de Observado //
-	//////////////////////////////////
+	
+	protected void setMazo() {
+		
+		MazoDeNaipes m = new MazoDeNaipes();
+		this.setMazo(m);
+		
+	}
+	
+	public ArrayList<JugadorBlackJack> getJugadores() {
+		return jugadores;
+	}
+
+/////////////////////////////////
+// Implementación de Observado //
+/////////////////////////////////
 	
 	@Override
 	public void agregarObservador(Observador observer) {
@@ -366,6 +387,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	@Override
 	public boolean notificar(IMensaje mensaje, DatosDeJugador data) {
 		
@@ -378,6 +400,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return true;
 		
 	}
+	
 	
 	@Override
 	public boolean notificar(IMensaje mensaje, ArrayList<DatosDeJugador> actuDatos) {
@@ -392,6 +415,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
 	public boolean notificar(IMensaje mensaje) {
 		
 		for (Observador observer: observers) {
