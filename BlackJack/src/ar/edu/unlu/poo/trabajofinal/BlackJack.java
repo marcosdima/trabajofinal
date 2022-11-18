@@ -93,7 +93,7 @@ public class BlackJack implements Observador {
 								
 			case PRIMERAPUESTA:
 				
-				DatosDeJugador datazoUno = this.crupier.getApostador();
+				IJugador datazoUno = this.crupier.getApostador();
 				vista.formularioSetApuesta(datazoUno);
 				
 			default:;
@@ -103,7 +103,7 @@ public class BlackJack implements Observador {
 	}
 	
 	@Override
-	public void actualizar(IMensaje event, ArrayList<DatosDeJugador> objeto) {
+	public void actualizar(IMensaje event, ArrayList<IJugador> objeto) {
 		
 		IVista vista = this.interfaces.get(0);
 			
@@ -119,26 +119,50 @@ public class BlackJack implements Observador {
 				
 	}
 
-	public void actualizar(IMensaje event, DatosDeJugador data) {
+	public void actualizar(IMensaje event, IJugador data) {
 		
 		IVista vista = this.interfaces.get(0);
+		IJugador playerContenedor = null;
+		JugadorBlackJack jugadorBJ = null;
 		
 		switch ((Evento) event) {
 		
 			case JUGADORCARGADO:
 
 				vista.mostrarMensaje(event, data);
-				vista.formularioAgregarJugador();
-			
-			case PREGUNTARPRIMERAMANO:
-				
-				this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
-				this.crupier.repartir(vista.siONo(event, data));
+				vista.formularioAgregarJugador();		
 				
 			case PREGUNTAROTRA:
 				
 				this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
-				this.crupier.repartir(vista.siONo(event, data));
+				jugadorBJ = this.crupier.seleccionarJugador();
+				
+				if (vista.siONo(event, data)) {
+					
+					this.crupier.repartir(jugadorBJ);
+					
+				}
+				else {
+					
+					this.crupier.terminarTurnoJugador(jugadorBJ);
+					
+					jugadorBJ = this.crupier.seleccionarJugador();
+					
+					if (jugadorBJ == null) {
+						
+						this.crupier.repartirCrupier();
+						
+					}
+					else {
+						
+						this.crupier.repartir(jugadorBJ);
+						
+					}
+					
+				}
+				
+				
+					
 				
 			case BLACKJACK:
 				
@@ -146,12 +170,17 @@ public class BlackJack implements Observador {
 				
 			case APUESTASETEADA:
 			
-				DatosDeJugador datazoDos = this.crupier.getApostador();
+				playerContenedor = this.crupier.getApostador();
 				
-				if (datazoDos != null) {
+				if (playerContenedor != null) {
 					
 					vista.mostrarMensaje(event, data);
-					vista.formularioSetApuesta(datazoDos);
+					vista.formularioSetApuesta(playerContenedor);
+					
+				}
+				else {
+					
+					this.crupier.repartir(this.crupier.seleccionarJugador());
 					
 				}
 				

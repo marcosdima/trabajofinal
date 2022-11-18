@@ -3,7 +3,7 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
-import ar.edu.unlu.poo.trabajofinal.DatosDeJugador;
+import ar.edu.unlu.poo.trabajofinal.IJugador;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 
 public interface IVista {
@@ -16,11 +16,11 @@ public interface IVista {
 	
 	public void menuConfiguracion();
 
-	public void mostrarMensaje(IMensaje event, DatosDeJugador data);
+	public void mostrarMensaje(IMensaje event, IJugador data);
 	
-	public void mostrarMano(ArrayList<DatosDeJugador>  datos);
+	public void mostrarMano(ArrayList<IJugador>  datos);
 	
-	public void formularioSetApuesta(DatosDeJugador dato);
+	public void formularioSetApuesta(IJugador dato);
 
-	public boolean siONo(IMensaje msj, DatosDeJugador dato);
+	public boolean siONo(IMensaje msj, IJugador dato);
 }

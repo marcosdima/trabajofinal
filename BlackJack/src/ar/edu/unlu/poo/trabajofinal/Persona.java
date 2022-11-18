@@ -28,4 +28,10 @@ public class Persona {
 		this.dinero = dinero;
 	}
 
+	public void giveDinero(int monto) {
+		
+		this.dinero += monto;
+		
+	}
+	
 }

@@ -1,20 +1,13 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public class Carta{
+public class Carta {
 	
 	private Palo paloDeCarta;
 	private ContenidoDeCarta contenido; 
 	private boolean visible;
 	
 	public Carta(Palo palo, ContenidoDeCarta cartita) {
-		
-		/*
-		 * Constructor de la clase 'Carta'.
-		 * Recibe como parámtro un enumerado 'Palo' y un enumerado 'ContenidoDeCarta'.
-		 * 
-		 * */
-		
-		// Seteo de variables.
+
 		this.setContenido(cartita);
 		this.setPaloDeCarta(palo);
 		this.setVisibilidad(false);

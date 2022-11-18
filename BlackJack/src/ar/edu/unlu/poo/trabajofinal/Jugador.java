@@ -2,9 +2,8 @@ package ar.edu.unlu.poo.trabajofinal;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 
-public abstract class Jugador extends Persona implements Puntuable{
+public abstract class Jugador extends Persona implements Puntuable, IJugador {
 
-	
 	private Mano manoActual;
 	private boolean todaviaNoJugo;
 	private boolean estaJugando;
@@ -53,13 +52,6 @@ public abstract class Jugador extends Persona implements Puntuable{
 		
 	}
 
-	public DatosDeJugador getData() {
-		
-		DatosDeJugador data = new DatosDeJugador(this);
-		return data;
-		
-	}
-
 	public int getNroCartas() {
 		
 		return this.getManoActual().getCartas().size();
@@ -82,10 +74,6 @@ public abstract class Jugador extends Persona implements Puntuable{
 		this.todaviaNoJugo = terminoTurno;
 	}
 
-	public boolean todaviaNoJugo() {
-		return todaviaNoJugo;
-	}
-
 	public void yaJugo() {
 		
 		this.setTodaviaNoJugo(false);
@@ -94,6 +82,16 @@ public abstract class Jugador extends Persona implements Puntuable{
 
 	
 	// Estos dos son de partida.
+
+	public void noSigue() {
+		
+		this.estaJugando = false;
+		
+	}
+
+	/////////////////////////////
+	// Implementación IJugador //
+	/////////////////////////////
 	
 	public boolean sigueJugando() {
 		
@@ -101,10 +99,35 @@ public abstract class Jugador extends Persona implements Puntuable{
 		
 	}
 	
-	public void noSigue() {
+	public String[] getCartas() {
 		
-		this.estaJugando = false;
+		int size = this.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
 		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (cartita.esVisible()) {
+				
+				cartas[contador] = cartita.getDesc();
+				
+			}
+			else {
+				
+				cartas[contador] = "Cubierta";
+				
+			}
+			
+			contador++;
+			
+		}
+		
+		return cartas;
+		
+	}
+	
+	public boolean todaviaNoJugo() {
+		return todaviaNoJugo;
 	}
 
 }

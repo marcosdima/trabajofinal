@@ -3,7 +3,7 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 import ar.edu.unlu.poo.misfunciones.Escaner;
 import ar.edu.unlu.poo.misfunciones.Print;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
-import ar.edu.unlu.poo.trabajofinal.DatosDeJugador;
+import ar.edu.unlu.poo.trabajofinal.IJugador;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Menu;
 import ar.edu.unlu.poo.trabajofinal.commons.OpcionesMenuPrincipal;
@@ -87,7 +87,7 @@ public class VistaConsola implements IVista {
 		
 	}
 
-	public void mostrarMano(ArrayList<DatosDeJugador>  datos) {
+	public void mostrarMano(ArrayList<IJugador>  datos) {
 			
 		p.espacio();
 		this.printJugadores(datos);
@@ -101,7 +101,7 @@ public class VistaConsola implements IVista {
 	}
 
 	@Override
-	public void mostrarMensaje(IMensaje msj, DatosDeJugador data) {
+	public void mostrarMensaje(IMensaje msj, IJugador data) {
 		
 		if (msj.getDescripcion() != "") {
 			
@@ -113,7 +113,7 @@ public class VistaConsola implements IVista {
 
 	}
 
-	public void formularioSetApuesta(DatosDeJugador dato) {
+	public void formularioSetApuesta(IJugador dato) {
 		
 		int monto;
 		
@@ -128,7 +128,7 @@ public class VistaConsola implements IVista {
 	}
 	
 	@Override
-	public boolean siONo(IMensaje msj, DatosDeJugador data) {
+	public boolean siONo(IMensaje msj, IJugador data) {
 		
 		boolean res;
 		
@@ -145,7 +145,7 @@ public class VistaConsola implements IVista {
 	//		Métodos de Consola		//
 	//////////////////////////////////
 	
-	private void printJugadores(ArrayList<DatosDeJugador> datos) {
+	private void printJugadores(ArrayList<IJugador> datos) {
 		
 		int contador = 0;
 		int espacio = 25;
@@ -156,13 +156,13 @@ public class VistaConsola implements IVista {
 
 		
 		
-		for (DatosDeJugador dato : datos) {
+		for (IJugador dato : datos) {
 			
 			if (dato.sigueJugando()) {
 
 				conjuntoNombres[contador] = dato.getNombre();
 				conjuntoCartas.add(dato.getCartas());
-				conjuntoPuntajes[contador] = "Puntaje: " + dato.getPuntaje();
+				conjuntoPuntajes[contador] = "Puntaje: " + String.valueOf(dato.getPuntaje());
 				contador++;
 
 			}

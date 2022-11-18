@@ -27,26 +27,6 @@ public class JugadorBlackJack extends Jugador{
 		this.perdioLaMano = true;
 		
 	}
-	
-	public Apuesta getApuesta() {
-		return apuesta;
-	}
-	
-	public void setApuesta(Apuesta apuesta) {
-		this.apuesta = apuesta;
-	}
-	
-	public void aposto() {
-		
-		this.todaviaNoAposto = false;
-		
-	}
-	
-	public void noAposto() {
-		
-		this.todaviaNoAposto = true;
-		
-	}
 
 	public boolean estadoMano() {
 		
@@ -104,5 +84,31 @@ public class JugadorBlackJack extends Jugador{
 		return res;
 		
 	}
+	
+	
+	////////////////////////////
+	// Funciones con Apuestas //
+	////////////////////////////
+	
+	public Apuesta getApuesta() {
+		return apuesta;
+	}
+	
+	public void setApuesta(Apuesta apuesta) {
+		this.apuesta = apuesta;
+	}
+	
+	public void aposto() {
+		
+		this.todaviaNoAposto = false;
+		
+	}
+	
+	public void noAposto() {
+		
+		this.todaviaNoAposto = true;
+		
+	}
+
 	
 }

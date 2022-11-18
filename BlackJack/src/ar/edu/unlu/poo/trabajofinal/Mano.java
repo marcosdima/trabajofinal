@@ -5,10 +5,12 @@ import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 public class Mano extends ConjuntoDeCartas implements Puntuable {
 	
 	private static final int MAXIMO = 10;
+	private EstadoDeMano estado;
 	
 	public Mano() {
 		
 		super(MAXIMO);
+		this.estado = null;
 		
 	}
 	
@@ -33,4 +35,16 @@ public class Mano extends ConjuntoDeCartas implements Puntuable {
 		
 	}
 
+	
+	public EstadoDeMano getEstado() {
+		return estado;
+	}
+
+	
+	public void setEstado(EstadoDeMano estado) {
+		this.estado = estado;
+	}
+
+	
+	
 }
