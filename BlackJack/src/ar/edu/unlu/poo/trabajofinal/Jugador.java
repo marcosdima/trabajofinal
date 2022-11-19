@@ -119,14 +119,4 @@ public abstract class Jugador extends Persona implements Puntuable, IJugador {
 		
 	}
 	
-	public Comparativo compararManos(IJugador player) {
-		
-		Comparativo comparacion;
-		
-		comparacion = this.getEstadoDeMano().esMejorQue(player.getEstadoDeMano());
-		
-		return comparacion;
-		
-	}
-	
 }

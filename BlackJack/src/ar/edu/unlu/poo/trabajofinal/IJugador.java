@@ -14,6 +14,4 @@ public interface IJugador {
 
 	public EstadoDeMano getEstadoDeMano();
 	
-	public Comparativo compararManos(IJugador player);
-	
 }

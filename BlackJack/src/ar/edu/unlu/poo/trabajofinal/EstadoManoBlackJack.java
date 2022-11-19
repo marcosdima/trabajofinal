@@ -16,89 +16,6 @@ public enum EstadoManoBlackJack implements EstadoDeMano{
 		
 	}
 
-	@Override
-	public Comparativo esMejorQue(EstadoDeMano otraMano) {
-
-		Comparativo res = Comparativo.PEOR;
-		boolean esPeor;
-		
-		switch (this) {
-		
-			case BLACKJACK:
-				
-				if (otraMano != EstadoManoBlackJack.BLACKJACK) {
-					
-					res = Comparativo.MEJOR;
-					
-				}
-				else {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				
-			case MENORA21:
-				
-				esPeor = (otraMano == EstadoManoBlackJack.BLACKJACK) || (otraMano.getPuntos() > this.getPuntos());
-				
-				if (esPeor) {
-					
-					res = Comparativo.PEOR;
-					
-				}
-				else if (otraMano.getPuntos() == this.getPuntos()) {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				else {
-					
-					res = Comparativo.MEJOR;
-					
-				}
-				
-			case MAYORA21:
-				
-				if (otraMano == EstadoManoBlackJack.MAYORA21) {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				else {
-					
-					res = Comparativo.PEOR;
-					
-				}
-				
-			case IGUALA21:
-				
-				esPeor = (otraMano == EstadoManoBlackJack.BLACKJACK);
-				
-				if (esPeor) {
-					
-					res = Comparativo.PEOR;
-					
-				}
-				else if (otraMano == EstadoManoBlackJack.IGUALA21) {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				else {
-					
-					res = Comparativo.MEJOR;
-					
-				}
-				
-				
-		default:
-			break;
-		
-		}
-		
-		return res;
-	}
-
 	public int getPuntos() {
 		return puntos;
 	}
@@ -106,6 +23,5 @@ public enum EstadoManoBlackJack implements EstadoDeMano{
 	public void setPuntos(int puntos) {
 		this.puntos = puntos;
 	}
-
 	
 }
