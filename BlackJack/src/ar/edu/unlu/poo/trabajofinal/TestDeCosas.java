@@ -13,6 +13,7 @@ public class TestDeCosas {
 		
 		// Errores al empezar el turno.
 		// Cuando apueste monto 0 no apuesta.
+		// Revisar el getPuntaje() con los as...
 		
 	}
 

@@ -132,6 +132,7 @@ public class BlackJack implements Observador {
 			case BLACKJACK:
 				
 				vista.mostrarMensaje(event, data);
+				break;
 				
 			case APUESTASETEADA:
 			
@@ -185,8 +186,7 @@ public class BlackJack implements Observador {
 					
 					this.terminarPartida();
 					
-				}
-				
+				}				
 				
 			default:;
 			

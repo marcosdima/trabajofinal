@@ -28,10 +28,20 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		this.barajar();
 		
 		for (JugadorBlackJack player : this.getJugadores()) {
+			
+			if ((player.getNombre().startsWith("21"))) {
 				
-			player.addCarta(this.darCarta());
-			player.addCarta(this.darCarta());
-			player.mostrarCarta();
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
+				player.mostrarCarta();
+			}
+			else {
+			
+				player.addCarta(this.darCarta());
+				player.addCarta(this.darCarta());
+				player.mostrarCarta();
+			
+			}
 				
 		}
 		
@@ -261,7 +271,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		if ((primeraMano) && (estatus == EstadoDeMano.BLACKJACK)) {
 
-			this.notificar(Evento.BLACKJACK, player);
 			terminar = true;
 			
 		}
@@ -290,8 +299,14 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}
 			
 		}
-		
+
 		if (terminar) {
+			
+			if (estatus == EstadoDeMano.BLACKJACK) {
+				
+				this.notificar(Evento.BLACKJACK, player);
+				
+			}
 			
 			this.terminarTurnoJugador(player);
 			
@@ -449,6 +464,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		player.yaJugo();
 		contenedor = this.seleccionarJugador();
+		System.out.println(contenedor);
 		this.notificar(Evento.TERMINOTURNO, player);
 		
 		if (contenedor != null) {
@@ -549,6 +565,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return comparacion;
 		
 	}
+	
 	
 /*
 	 * 
