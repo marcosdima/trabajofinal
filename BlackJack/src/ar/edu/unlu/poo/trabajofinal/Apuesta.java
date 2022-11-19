@@ -26,7 +26,7 @@ public class Apuesta {
 
 	public int getGanancia() {
 		
-		return (this.monto / 2);
+		return (this.monto / 2) + this.getMonto();
 		
 	}
 	

@@ -8,10 +8,12 @@ public interface IJugador {
 	
 	public boolean todaviaNoJugo();
 	
-	public boolean sigueJugando();
-	
 	public int getDinero();
 	
 	public int getPuntaje();
 
+	public EstadoDeMano getEstadoDeMano();
+	
+	public Comparativo compararManos(IJugador player);
+	
 }

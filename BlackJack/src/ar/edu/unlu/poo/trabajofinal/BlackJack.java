@@ -14,14 +14,12 @@ public class BlackJack implements Observador {
 	public static final int MAXIMODEJUGADORES = 4;
 	private static int DINEROBASE = 1000;
 	private static int JUGADORES;
-	private int apuestaMinima;
-	
+
 	public BlackJack() {
 		
 		crupier = new CrupierBlackJack(MAXIMODEJUGADORES);
 		this.crupier.agregarObservador(this);
 		interfaces = new ArrayList<IVista>(2);
-		this.setApuestaMinima(100);
 		BlackJack.JUGADORES = 0;
 		
 	}
@@ -49,28 +47,10 @@ public class BlackJack implements Observador {
 		this.crupier.repartirPrimeraTanda();
 		
 	}
-
-	public void terminarMano() {
-		
-		this.crupier.terminarMano();
-		
-	}
-	
-	public void setApuestaMinima(int montoMinimo) {
-		
-		this.apuestaMinima = montoMinimo;
-		
-	}
-
-	public int getApuestaMinima() {
-		
-		return this.apuestaMinima;
-		
-	}
 	
 	public void apostar(int monto) {
 		
-		this.crupier.setApuestas(this.apuestaMinima, monto);
+		this.crupier.setApuestas(monto);
 		
 	}
 	
@@ -80,27 +60,28 @@ public class BlackJack implements Observador {
 		
 	}
 	
+	public void reiniciarMano() {
+		
+		this.crupier.definirGanadores();
+		this.crupier.reiniciarMano();
+		this.setInicio();
+		
+	}
+	
+	public int getApuestaMinima() {
+		
+		return this.crupier.getApuestaMinima();
+		
+	}
+	
+	private void terminarPartida() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
-	
-	@Override
-	public void actualizar(IMensaje event, Object objeto) {
-		
-		IVista vista = this.interfaces.get(0);
-		
-		switch ((Evento) event) {
-								
-			case PRIMERAPUESTA:
-				
-				IJugador datazoUno = this.crupier.getApostador();
-				vista.formularioSetApuesta(datazoUno);
-				
-			default:;
-			
-		}
-		
-	}
 	
 	@Override
 	public void actualizar(IMensaje event, ArrayList<IJugador> objeto) {
@@ -146,23 +127,7 @@ public class BlackJack implements Observador {
 					
 					this.crupier.terminarTurnoJugador(jugadorBJ);
 					
-					jugadorBJ = this.crupier.seleccionarJugador();
-					
-					if (jugadorBJ == null) {
-						
-						this.crupier.repartirCrupier();
-						
-					}
-					else {
-						
-						this.crupier.repartir(jugadorBJ);
-						
-					}
-					
-				}
-				
-				
-					
+				}	
 				
 			case BLACKJACK:
 				
@@ -193,14 +158,42 @@ public class BlackJack implements Observador {
 			}
 		
 	};
-	
-	// No sé si debería hacerlo así.
+
 	@Override
 	public void actualizar(IMensaje event) {
 		
-		this.actualizar(event, new Object());
+		IVista vista = this.interfaces.get(0);
+		
+		switch ((Evento) event) {
+								
+			case PRIMERAPUESTA:
+
+				vista.formularioSetApuesta(this.crupier.getApostador());
+				
+			case TERMINOLAMANO:
+				
+				this.reiniciarMano();
+				
+				if (this.crupier.seguimosJugando()) {
+					
+					vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);;
+					this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+					vista.formularioSetApuesta(this.crupier.getApostador());
+					
+				}
+				else {
+					
+					this.terminarPartida();
+					
+				}
+				
+				
+			default:;
+			
+		}
 		
 	}
+
 
 	
 }

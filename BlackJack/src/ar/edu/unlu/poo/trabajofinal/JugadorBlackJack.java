@@ -1,6 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public class JugadorBlackJack extends Jugador{
+public class JugadorBlackJack extends Jugador {
 	
 	private Apuesta apuesta;
 	private boolean todaviaNoAposto;
@@ -10,7 +10,7 @@ public class JugadorBlackJack extends Jugador{
 		
 		super(nombre, money);
 		this.setTodaviaNoJugo(true);
-		this.setApuesta(new Apuesta());
+		this.clearApuesta();
 		this.noAposto();
 		this.noPerdioLaMano();
 
@@ -85,7 +85,6 @@ public class JugadorBlackJack extends Jugador{
 		
 	}
 	
-	
 	////////////////////////////
 	// Funciones con Apuestas //
 	////////////////////////////
@@ -95,7 +94,15 @@ public class JugadorBlackJack extends Jugador{
 	}
 	
 	public void setApuesta(Apuesta apuesta) {
-		this.apuesta = apuesta;
+		
+		if (apuesta.getMonto() <= this.getDinero()) {
+			
+			this.giveDinero(-1 * apuesta.getMonto());
+			this.apuesta = apuesta;
+			
+		}
+		
+		
 	}
 	
 	public void aposto() {
@@ -110,5 +117,12 @@ public class JugadorBlackJack extends Jugador{
 		
 	}
 
-	
+	public void clearApuesta() {
+		
+		Apuesta vacio = new Apuesta();
+		
+		this.apuesta = vacio;
+		
+	}
+
 }

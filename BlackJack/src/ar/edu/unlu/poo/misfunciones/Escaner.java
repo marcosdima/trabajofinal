@@ -43,5 +43,5 @@ public class Escaner {
 		return res;
 		
 	}
-	
+
 }

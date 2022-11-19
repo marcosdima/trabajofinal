@@ -11,29 +11,28 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	private ArrayList<JugadorBlackJack> jugadores;
 	private ArrayList<Observador> observers;
+	private int apuestaMinima;
 	
 	public CrupierBlackJack(int nroDeJugadores) {
 	
 		super();
 		this.setJugadores(nroDeJugadores);
 		this.observers = new ArrayList<Observador>();
-		this.barajar();
+		this.setApuestaMinima(100);
 
 	}
 
 	// Rutina que reparte la primera mano.
 	public void repartirPrimeraTanda() {
 
-		for (JugadorBlackJack player : this.getJugadores()) {
-			
-			if (player.sigueJugando()) {
-				
-				player.addCarta(this.darCarta());
-				player.addCarta(this.darCarta());
-				player.mostrarCarta();
-				
-			}
+		this.barajar();
 		
+		for (JugadorBlackJack player : this.getJugadores()) {
+				
+			player.addCarta(this.darCarta());
+			player.addCarta(this.darCarta());
+			player.mostrarCarta();
+				
 		}
 		
 		this.addCarta(this.darCarta());
@@ -82,43 +81,36 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	// Rutina de fin de mano (No esta terminada, debería detectar también el fin de juego)
-	public void terminarMano() {
-		
-		for (Jugador player : this.jugadores) {
-			
-			player.clearMano();
-			
-		}
-		
-		this.clearMano();
-		
-	}
-
 	// Seteo de apuestas.
-	public void setApuestas(int apuestaMinima, int monto) {
+	public void setApuestas(int monto) {
 		
 		Apuesta apuesta = new Apuesta(monto);
 		boolean seteado = false;
 
 		for (JugadorBlackJack player : this.jugadores) { 
 
-			if ((player.todaviaNoAposto()) && (!seteado)) {
+			if (player.getDinero() < this.apuestaMinima) {
+				
+				this.eliminar(player);
+				
+			}
+			else if ((player.todaviaNoAposto()) && (!seteado)) {
 				
 				if (apuesta.getMonto() > player.getDinero()) {
 					
 					seteado = this.notificar(Error.ERRORFALTADEDINERO, player);
 					
 				}
-				else if (monto < apuestaMinima) {
+				else if (monto < this.apuestaMinima) {
 					
 					seteado = this.notificar(Error.ERRORAPUESTA);
 					
 				}
 				else if (monto == 0) {
 					
+					// Podría hacer que si ningún jugador apostó, saltee la mano.
 					player.aposto();
-					player.noSigue();
+					player.yaJugo();
 					seteado = this.notificar(Evento.NOAPUESTA, player);
 					
 				}
@@ -135,23 +127,15 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		
 	}
-	
-	// HAY QUE MODIFICARLO!!!!
+
 	// Devuelve un arrray list con datos de los jugadores (Incluyendo al crupier).
 	public ArrayList<IJugador> getDatosJugadores() {
-		
-		boolean sigue;
+
 		ArrayList<IJugador> datosDeJugadores = new ArrayList<IJugador>(this.jugadores.size() + 1);
 		
 		for (JugadorBlackJack player : this.jugadores) {
-			
-			sigue = player.sigueJugando();
-			
-			if (sigue) {
-				
-				datosDeJugadores.add(player);
-				
-			}
+
+			datosDeJugadores.add(player);
 
 		}
 		
@@ -322,12 +306,11 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public void repartirCrupier() {
 
 		EstadoManoBlackJack estado = this.checkEstadoJugador(this);
-		boolean jugadorLeGana = false;
+		Comparativo comparacion;
 		int contadorDeGanadas = 0;
+		int contadorDeEmpates = 0;
 		int mitad = 0;
 		boolean terminar = false;
-
-		// COREGIR ACA!!!!!!
 		
 		if (this.primeraMano()) {
 			
@@ -340,12 +323,16 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 			for (JugadorBlackJack player : this.getJugadores()) {
 				
-				jugadorLeGana = player.getManoActual().getEstado().esMejorQue(estado);
-				System.out.println(jugadorLeGana);;
+				comparacion = player.compararManos(this);
 				
-				if (!jugadorLeGana) {
+				if (comparacion.pierde()) {
 					
 					contadorDeGanadas++;
+					
+				}
+				else if (comparacion.empate()) {
+					
+					contadorDeEmpates++;
 					
 				}
 				
@@ -373,9 +360,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		if (terminar) {
 			
-			this.definirGanadores();
-			this.reiniciarMano();	
 			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+			this.notificar(Evento.TERMINOLAMANO);
 			
 		}
 		else {
@@ -385,33 +371,55 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		
 	}
-	
-	private void reiniciarMano() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	private void definirGanadores() {
-		
-		// Falta caso Black Jack y empate.
-		
-		boolean ganaJugador = false;
+	// Rutina que prepara a los jugadores para la siguiente mano.
+	protected void reiniciarMano() {
 		
 		for (JugadorBlackJack player : this.jugadores) {
 			
-			// Esto se supone que no hace falta, lo pongo por las dudas.
-			if (player.sigueJugando()) {
-			
-				ganaJugador = player.getManoActual().getEstado().esMejorQue(this.getManoActual().getEstado());
+			if (player.getDinero() >= this.apuestaMinima) {
 				
-				if (ganaJugador) {
-					
-					player.giveDinero(player.getApuesta().getGanancia());
-					
-				}
-			
+				player.clearMano();
+				player.setTodaviaNoJugo(true);
+				player.noAposto();
+				player.clearApuesta();
+				
+			}	
+			else {
+				
+				this.eliminar(player);
+				
 			}
+			
+		}
 		
+		this.clearMano();
+		
+		
+	}
+
+	// Rutina que reparte las ganancias a los jugadores.
+	public void definirGanadores() {
+		
+		// Falta caso Black Jack y empate.
+		
+		Comparativo comparacion;
+		
+		for (JugadorBlackJack player : this.jugadores) {
+			
+			comparacion = player.compararManos(this);
+			
+			if (comparacion.gana()) {
+				
+				player.giveDinero(player.getApuesta().getGanancia());
+				
+			}
+			else if (comparacion.empate()) {
+				
+				player.giveDinero(player.getApuesta().getMonto());
+				
+			}
+			
 		}
 		
 	}
@@ -436,59 +444,45 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	
 	public void terminarTurnoJugador(JugadorBlackJack player) {
 
+		JugadorBlackJack contenedor;
+		
 		player.yaJugo();
+		contenedor = this.seleccionarJugador();
 		this.notificar(Evento.TERMINOTURNO, player);
-
-	}
-	
-/////////////////////////////////
-////// Getters and Setters //////
-/////////////////////////////////
-	
-	public void setJugadores(int n) {
-		this.jugadores = new ArrayList<JugadorBlackJack>(n);
-	}
-
-	public int getPuntaje() {
 		
-		Mano mano = this.getManoActual();
-		int puntos = mano.getPuntaje();
-		ContenidoDeCarta contenido;
-
-		for (Carta cartita : mano.getCartas()) {
+		if (contenedor != null) {
 			
-			if (cartita.esVisible()) {
-		
-				contenido = cartita.getContenido();
-				
-				if ((contenido == ContenidoDeCarta.AS) && (puntos > 21)) {
-					
-					puntos = puntos - 10;
-					
-				}
+			this.repartir(contenedor);
 			
-			}
+		}
+		else {
+			
+			this.repartirCrupier();
 			
 		}
 		
-		return puntos;
-		
-	}
-	
-	protected void setMazo() {
-		
-		MazoDeNaipes m = new MazoDeNaipes();
-		this.setMazo(m);
-		
-	}
-	
-	public ArrayList<JugadorBlackJack> getJugadores() {
-		return jugadores;
-	}
 
-/////////////////////////////////
-// Implementación de Observado //
-/////////////////////////////////
+	}
+	
+	public void eliminar(JugadorBlackJack player) {
+
+		for (JugadorBlackJack p : this.jugadores) {
+			
+			if (player == p) {
+				
+				this.jugadores.remove(player);
+				
+			}
+				
+		}
+
+	}
+	
+/*
+	 * 
+	 - Implementación observado
+	 * 
+*/
 	
 	@Override
 	public void agregarObservador(Observador observer) {
@@ -535,6 +529,80 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	public int nroDeJugadores() {
+		
+		int res = 0;
+		
+		res = this.jugadores.size();
+		
+		return res;
+		
+	}
+	
+	public boolean seguimosJugando() {
+		
+		return (this.nroDeJugadores() > 0);
+		
+	}
+	
+/*
+	 * 
+	 - Getters and Setters 
+	 * 
+*/
+	
+	public void setApuestaMinima(int montoMinimo) {
+		
+		this.apuestaMinima = montoMinimo;
+		
+	}
 
+	public int getApuestaMinima() {
+		
+		return this.apuestaMinima;
+		
+	}
+	
+	public void setJugadores(int n) {
+		this.jugadores = new ArrayList<JugadorBlackJack>(n);
+	}
+
+	public int getPuntaje() {
+		
+		Mano mano = this.getManoActual();
+		int puntos = mano.getPuntaje();
+		ContenidoDeCarta contenido;
+
+		for (Carta cartita : mano.getCartas()) {
+			
+			if (cartita.esVisible()) {
+		
+				contenido = cartita.getContenido();
+				
+				if ((contenido == ContenidoDeCarta.AS) && (puntos > 21)) {
+					
+					puntos = puntos - 10;
+					
+				}
+			
+			}
+			
+		}
+		
+		return puntos;
+		
+	}
+	
+	protected void setMazo() {
+		
+		MazoDeNaipes m = new MazoDeNaipes();
+		this.setMazo(m);
+		
+	}
+	
+	public ArrayList<JugadorBlackJack> getJugadores() {
+		return jugadores;
+	}
 	
 }
+

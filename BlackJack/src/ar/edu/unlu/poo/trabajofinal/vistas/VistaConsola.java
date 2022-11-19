@@ -109,6 +109,12 @@ public class VistaConsola implements IVista {
 			p.print(data.getNombre() + ": ");
 			p.justPrint(msj.getDescripcion());
 			
+			/*
+				p.print();
+				p.print("Press ENTER to continue: ");
+				sc.enter();
+			 */
+			
 		}
 
 	}
@@ -153,25 +159,34 @@ public class VistaConsola implements IVista {
 		String[] conjuntoNombres = new String[size];
 		ArrayList<String[]> conjuntoCartas = new ArrayList<String[]>(size);
 		String[] conjuntoPuntajes = new String[size];
+		String[] dinerillo = new String[size];
 
-		
-		
 		for (IJugador dato : datos) {
 			
-			if (dato.sigueJugando()) {
-
-				conjuntoNombres[contador] = dato.getNombre();
-				conjuntoCartas.add(dato.getCartas());
-				conjuntoPuntajes[contador] = "Puntaje: " + String.valueOf(dato.getPuntaje());
-				contador++;
-
+			conjuntoNombres[contador] = dato.getNombre();
+			conjuntoCartas.add(dato.getCartas());
+			conjuntoPuntajes[contador] = "Puntaje: " + String.valueOf(dato.getPuntaje());
+			
+			// No le agrega el dinero al crupier.
+			if (contador != (size - 1)) {
+				
+				dinerillo[contador] = "Dinero: " + String.valueOf(dato.getDinero());
+				
 			}
+			else {
+				
+				dinerillo[contador] = "";
+				
+			}
+			
+			contador++;
 			
 		}
 		
 		p.printSeguido(conjuntoNombres, espacio);
 		p.printSeguido(conjuntoCartas, espacio);
 		p.printSeguido(conjuntoPuntajes, espacio);
+		p.printSeguido(dinerillo, espacio);
 		
 	}
 

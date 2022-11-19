@@ -6,13 +6,11 @@ public abstract class Jugador extends Persona implements Puntuable, IJugador {
 
 	private Mano manoActual;
 	private boolean todaviaNoJugo;
-	private boolean estaJugando;
 	
 	public Jugador(String nombre, int money) {
 		
 		super(nombre, money);
 		this.setManoActual();
-		this.estaJugando = true;
 		
 	}
 
@@ -80,25 +78,10 @@ public abstract class Jugador extends Persona implements Puntuable, IJugador {
 		
 	}
 
-	
-	// Estos dos son de partida.
-
-	public void noSigue() {
-		
-		this.estaJugando = false;
-		
-	}
-
 	/////////////////////////////
 	// Implementación IJugador //
 	/////////////////////////////
-	
-	public boolean sigueJugando() {
-		
-		return this.estaJugando;
-		
-	}
-	
+
 	public String[] getCartas() {
 		
 		int size = this.getManoActual().getCartas().size();
@@ -130,4 +113,20 @@ public abstract class Jugador extends Persona implements Puntuable, IJugador {
 		return todaviaNoJugo;
 	}
 
+	public EstadoDeMano getEstadoDeMano() {
+		
+		return this.getManoActual().getEstado();
+		
+	}
+	
+	public Comparativo compararManos(IJugador player) {
+		
+		Comparativo comparacion;
+		
+		comparacion = this.getEstadoDeMano().esMejorQue(player.getEstadoDeMano());
+		
+		return comparacion;
+		
+	}
+	
 }
