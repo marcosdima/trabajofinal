@@ -1,7 +1,10 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public interface EstadoDeMano {
-
-	public int getPuntos();
+public enum EstadoDeMano {
 	
+	BLACKJACK,
+	MENORA21, 
+	MAYORA21, 
+	IGUALA21;
+
 }

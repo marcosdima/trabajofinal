@@ -11,8 +11,7 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// Seguir turno del crupier. (CORREGIR)
-		// Sacar sigue jugando, eliminar directamente.
+		// Errores al empezar el turno.
 		// Cuando apueste monto 0 no apuesta.
 		
 	}

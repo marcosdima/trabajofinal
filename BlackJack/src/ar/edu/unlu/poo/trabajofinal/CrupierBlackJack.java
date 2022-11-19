@@ -153,13 +153,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 	
 	// Revisa el estado del jugador y devuelve un enumerado con el resultado.
-	private EstadoManoBlackJack checkEstadoJugador(Jugador player, int puntaje) {
+	private EstadoDeMano checkEstadoJugador(Jugador player, int puntaje) {
 		
 		Mano mano;
 		ArrayList<Carta> cartas;
 		int tam;
 		
-		EstadoManoBlackJack res = null;
+		EstadoDeMano res = null;
 
 		if (player != null) {
 			
@@ -169,26 +169,25 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 			if ((tam == 2) && (puntaje == 21)) {
 				
-				res = EstadoManoBlackJack.BLACKJACK;
+				res = EstadoDeMano.BLACKJACK;
 				
 			}
 			else if (puntaje < 21) {
 				
-				res = EstadoManoBlackJack.MENORA21;
+				res = EstadoDeMano.MENORA21;
 				
 			}
 			else if (puntaje > 21) {
 				
-				res = EstadoManoBlackJack.MAYORA21;
+				res = EstadoDeMano.MAYORA21;
 				
 			}
 			else {
 				
-				res = EstadoManoBlackJack.IGUALA21;
+				res = EstadoDeMano.IGUALA21;
 				
 			}
 			
-			res.setPuntos(puntaje);
 			mano.setEstado(res);
 			
 		}
@@ -245,7 +244,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public void repartir(JugadorBlackJack player) {
 		
 		// Repensar el sistema para repartir, corta.
-		EstadoManoBlackJack estatus;
+		EstadoDeMano estatus;
 		boolean primeraMano = false;
 		boolean terminar = false;
 		Carta cartita;
@@ -258,9 +257,9 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		}
 		
-		estatus = this.checkEstadoJugador(player, this.getPuntaje());
+		estatus = this.checkEstadoJugador(player, player.getPuntaje());
 		
-		if ((primeraMano) && (estatus == EstadoManoBlackJack.BLACKJACK)) {
+		if ((primeraMano) && (estatus == EstadoDeMano.BLACKJACK)) {
 
 			this.notificar(Evento.BLACKJACK, player);
 			terminar = true;
@@ -279,7 +278,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			estatus = this.checkEstadoJugador(player, player.getPuntaje());
 			
-			if (estatus == EstadoManoBlackJack.MENORA21) {
+			if (estatus == EstadoDeMano.MENORA21) {
 
 					this.notificar(Evento.PREGUNTAROTRA, player);
 			
@@ -303,7 +302,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	// Rutina para que se de cartas el crupier.
 	public void repartirCrupier() {
 
-		EstadoManoBlackJack estado;
+		EstadoDeMano estado;
 		Comparativo comparacion;
 		int contadorDeGanadas = 0;
 		// Este contador de empates podría implentarlo en un futuro.
@@ -320,7 +319,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		estado = this.checkEstadoJugador(this, this.getPuntaje());
 		
 		// Si su mano no supera ni iguala los 21, hay que decidir si toma otra carta o termina la mano.
-		if (estado == EstadoManoBlackJack.MENORA21) {
+		if (estado == EstadoDeMano.MENORA21) {
 		
 			for (JugadorBlackJack player : this.getJugadores()) {
 				
@@ -480,95 +479,72 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	}
 	
-	private Comparativo comparador(EstadoDeMano otraMano) {
+	private Comparativo comparador(IJugador player) {
 
-		System.out.println(this.getEstadoDeMano() + " " + otraMano);
+		EstadoDeMano laMano = this.getEstadoDeMano();
+		EstadoDeMano otraMano = player.getEstadoDeMano();
+		Comparativo comparador = Comparativo.PEOR;
 		
-		Comparativo res = Comparativo.PEOR;
-		boolean esPeor;
-		
-		switch ((EstadoManoBlackJack) this.getEstadoDeMano()) {
-		
-			case BLACKJACK:
+		if (laMano == EstadoDeMano.MAYORA21) {
+			
+			comparador = Comparativo.PEOR;
+			
+		}
+		else if (otraMano != EstadoDeMano.MAYORA21) {
+			
+			if (laMano == EstadoDeMano.BLACKJACK) {
 				
-				if (otraMano != EstadoManoBlackJack.BLACKJACK) {
+				if (otraMano == EstadoDeMano.BLACKJACK) {
 					
-					res = Comparativo.MEJOR;
+					comparador = Comparativo.IGUAL;
 					
 				}
 				else {
 					
-					res = Comparativo.IGUAL;
+					comparador = Comparativo.MEJOR;
 					
 				}
 				
-			case MENORA21:
+			}
+			else if (otraMano == EstadoDeMano.BLACKJACK) {
 				
-				esPeor = (otraMano == EstadoManoBlackJack.BLACKJACK) || (otraMano.getPuntos() > this.getEstadoDeMano().getPuntos());
+				comparador = Comparativo.PEOR;
 				
-				if (esPeor) {
-					
-					res = Comparativo.PEOR;
-					
-				}
-				else if (otraMano.getPuntos() == this.getEstadoDeMano().getPuntos()) {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				else {
-					
-					res = Comparativo.MEJOR;
-					
-				}
+			}
+			else if (this.getPuntaje() == player.getPuntaje()) {
 				
-			case MAYORA21:
+				comparador = Comparativo.IGUAL;
 				
-				if (otraMano == EstadoManoBlackJack.MAYORA21) {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				else {
-					
-					res = Comparativo.PEOR;
-					
-				}
+			}
+			else if (this.getPuntaje() < player.getPuntaje()) {
 				
-			case IGUALA21:
+				comparador = Comparativo.PEOR;
 				
-				esPeor = (otraMano == EstadoManoBlackJack.BLACKJACK);
+			}
+			else {
 				
-				if (esPeor) {
-					
-					res = Comparativo.PEOR;
-					
-				}
-				else if (otraMano == EstadoManoBlackJack.IGUALA21) {
-					
-					res = Comparativo.IGUAL;
-					
-				}
-				else {
-					
-					res = Comparativo.MEJOR;
-					
-				}
+				comparador = Comparativo.MEJOR;
 				
-				
-		default:
-			break;
-		
+			}
+			
+		}
+		else {
+			
+			comparador = Comparativo.MEJOR;
+			
 		}
 		
-		return res;
+		System.out.println(comparador);
+	
+		return comparador;
+		
 	}
 	
 	public Comparativo compararManos(IJugador player) {
 		
 		Comparativo comparacion;
 		
-		comparacion = this.comparador(player.getEstadoDeMano());
+		comparacion = this.comparador(player);
 		
 		return comparacion;
 		
