@@ -7,11 +7,13 @@ public interface Observado {
 	
 	// Hago que devulva un booleano para saber si se notificó algo.
 	
-	public boolean notificar(IMensaje mensaje, IJugador data);
+	public boolean notificar(Evento mensaje, IJugador data);
 	
-	public boolean notificar(IMensaje mensaje, ArrayList<IJugador> actuDatos);
+	public boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos);
 	
-	public boolean notificar(IMensaje tagEvento);
+	public boolean notificar(Evento tagEvento);
+	
+	public boolean notificar(SaltoError mensaje, IJugador data);
 	
 	public void agregarObservador(Observador observer);
 

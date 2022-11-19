@@ -1,6 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal.commons;
 
-public enum Error implements IMensaje {
+public enum SaltoError implements IMensaje {
 
 	ERRORMAXJUGADORES("Se alcanzó el máximo de jugadores posibles."),
 	ERRORAPUESTA("La apuesta no iguala o supera la apuesta mínima."),
@@ -9,7 +9,7 @@ public enum Error implements IMensaje {
 	
 	private String descripcion;
 	
-	Error(String error) {
+	SaltoError(String error) {
 		
 		this.descripcion = "Se detectó el siguiente error: " + '\r' + '\n' + this + ": " + error;
 		

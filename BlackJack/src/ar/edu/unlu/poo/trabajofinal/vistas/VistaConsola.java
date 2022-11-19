@@ -35,7 +35,7 @@ public class VistaConsola implements IVista {
 		menu.setOpciones(menuPrincipal);
 		menu.print();
 		
-		eleccion = sc.nextInt();
+		eleccion = sc.nextInt();	
 		
 		if (eleccion == OpcionesMenuPrincipal.JUGAR.getId()) {
 			
@@ -50,6 +50,7 @@ public class VistaConsola implements IVista {
 		else if (eleccion == OpcionesMenuPrincipal.SALIR.getId()) {
 			
 			p.print("Nos re vimos!");
+			System.exit(3);
 			
 		}
 		else {

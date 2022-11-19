@@ -28,7 +28,7 @@ public abstract class Crupier extends Jugador {
 	
 	protected abstract void setMazo();
 	
-	protected abstract void reiniciarMano();
+	protected abstract boolean reiniciarMano();
 	
 	public void darCarta(Jugador player) {
 		

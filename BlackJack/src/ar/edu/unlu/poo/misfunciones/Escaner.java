@@ -30,8 +30,20 @@ public class Escaner {
 
 	public int nextInt() {
 		
-		int res = sc.nextInt();
+		int res = 0;
+		String contenedor = sc.next();
 		
+		try {
+			
+			res = Integer.valueOf(contenedor);
+			
+		}
+		catch(NumberFormatException e) {
+			
+			res = 0;
+			
+		}
+			
 		return res;
 		
 	}

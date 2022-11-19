@@ -5,10 +5,12 @@ import ar.edu.unlu.poo.trabajofinal.IJugador;
 
 public interface Observador {
 	
-	public void actualizar(IMensaje event, ArrayList<IJugador> objeto);
+	public void actualizar(Evento event, ArrayList<IJugador> objeto);
 	
-	public void actualizar(IMensaje event, IJugador objeto);
+	public void actualizar(Evento event, IJugador objeto);
+	
+	public void actualizar(SaltoError event, IJugador objeto);
 
-	public void actualizar(IMensaje event);
+	public void actualizar(Evento event);
 	
 }

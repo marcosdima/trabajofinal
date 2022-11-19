@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
+import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
 
 public class BlackJack implements Observador {
@@ -60,22 +61,9 @@ public class BlackJack implements Observador {
 		
 	}
 	
-	public void reiniciarMano() {
-		
-		this.crupier.definirGanadores();
-		this.crupier.reiniciarMano();
-		this.setInicio();
-		
-	}
-	
 	public int getApuestaMinima() {
 		
 		return this.crupier.getApuestaMinima();
-		
-	}
-	
-	private void terminarPartida() {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -84,7 +72,7 @@ public class BlackJack implements Observador {
 	//////////////////////////////////
 	
 	@Override
-	public void actualizar(IMensaje event, ArrayList<IJugador> objeto) {
+	public void actualizar(Evento event, ArrayList<IJugador> objeto) {
 		
 		IVista vista = this.interfaces.get(0);
 			
@@ -100,7 +88,7 @@ public class BlackJack implements Observador {
 				
 	}
 
-	public void actualizar(IMensaje event, IJugador data) {
+	public void actualizar(Evento event, IJugador data) {
 		
 		IVista vista = this.interfaces.get(0);
 		IJugador playerContenedor = null;
@@ -153,17 +141,24 @@ public class BlackJack implements Observador {
 			case TERMINOTURNO:
 				
 				vista.mostrarMensaje(event, data);
+				break;
+				
+			case SINPLATA:
+				
+				vista.mostrarMensaje(event, data);
 
-		default:;
-	
+		default:
+			
+			;
 			}
 		
 	};
 
 	@Override
-	public void actualizar(IMensaje event) {
+	public void actualizar(Evento event) {
 		
 		IVista vista = this.interfaces.get(0);
+		boolean salir;
 		
 		switch ((Evento) event) {
 								
@@ -172,25 +167,71 @@ public class BlackJack implements Observador {
 				vista.formularioSetApuesta(this.crupier.getApostador());
 				
 			case TERMINOLAMANO:
+			
+				this.crupier.definirGanadores();
+				salir = this.crupier.reiniciarMano();
 				
-				this.reiniciarMano();
-				
-				if (this.crupier.seguimosJugando()) {
+				if (!salir) {
 					
-					vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);;
+					vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
+					this.setInicio();
 					this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
 					vista.formularioSetApuesta(this.crupier.getApostador());
 					
 				}
 				else {
 					
-					this.terminarPartida();
+					this.actualizar(Evento.FINDELJUEGO);
 					
-				}				
+				}	
+				
+			case FINDELJUEGO:
+				
+				vista.mostrarMensaje(event, this.crupier);
+				vista.menuPrincipal();
 				
 			default:;
 			
 		}
+		
+	}
+
+	@Override
+	public void actualizar(SaltoError event, IJugador objeto) {
+		
+		for (IVista vista : this.interfaces) {
+			
+			vista.mostrarMensaje(event, objeto);
+			
+			switch (event) {
+			
+				case ERRORMAXJUGADORES:
+					
+					this.setInicio();
+					
+				case ERRORAPUESTA:
+					
+					vista.formularioSetApuesta(objeto);
+					
+				case NOHAYJUGADORESCARGADOS:
+					
+					vista.formularioAgregarJugador();
+					
+				case ERRORFALTADEDINERO:
+					
+					vista.formularioSetApuesta(objeto);
+			
+			
+			default:
+				break;
+			
+			
+			
+			}
+			
+			
+		}
+		
 		
 	}
 

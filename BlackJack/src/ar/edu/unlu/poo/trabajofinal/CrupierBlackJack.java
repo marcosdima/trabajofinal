@@ -1,9 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.util.ArrayList;
-import ar.edu.unlu.poo.trabajofinal.commons.Error;
+import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
-import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
@@ -35,6 +34,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
 				player.mostrarCarta();
 			}
+			else if ((player.getNombre().toLowerCase().startsWith("pt"))) {
+				
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.DOS));
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.DOS));
+				player.mostrarCarta();
+				
+			}
 			else {
 			
 				player.addCarta(this.darCarta());
@@ -45,8 +51,10 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				
 		}
 		
-		this.addCarta(this.darCarta());
-		this.addCarta(this.darCarta());
+		this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
+		this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
+		//this.addCarta(this.darCarta());
+		//this.addCarta(this.darCarta());
 		this.mostrarCarta();
 		
 	}
@@ -56,37 +64,42 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		boolean nombreNulo = (nombre == null);
 		boolean noHayJugadores = this.jugadores.isEmpty();
-		boolean seAgrego;
+		boolean seguir = false;
+		JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
 		
+
 		if (!nombreNulo) {
 			
-			JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
-			
-			seAgrego = this.jugadores.add(player);
-			
-			if (seAgrego) {
+			if (this.nroDeJugadores() < 5) {
 
-				this.notificar(Evento.JUGADORCARGADO, player);
+				this.jugadores.add(player);
+				this.notificar(Evento.JUGADORCARGADO, this);
 				
 			}
 			else {
 				
-				this.notificar(Error.ERRORMAXJUGADORES, player);
+				seguir = this.notificar(SaltoError.ERRORMAXJUGADORES, this);
 				
 			}
 			
 		}
 		else if (noHayJugadores) {
 			
-			this.notificar(Error.NOHAYJUGADORESCARGADOS);
+			this.notificar(SaltoError.NOHAYJUGADORESCARGADOS, this);
 			
 		}
 		else {
 			
+			seguir = true;
+		
+		}
+		
+		if (seguir) {
+			
 			this.repartirPrimeraTanda();
 			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 			this.notificar(Evento.PRIMERAPUESTA);
-		
+			
 		}
 		
 	}
@@ -108,12 +121,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				
 				if (apuesta.getMonto() > player.getDinero()) {
 					
-					seteado = this.notificar(Error.ERRORFALTADEDINERO, player);
+					seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
 					
 				}
 				else if (monto < this.apuestaMinima) {
 					
-					seteado = this.notificar(Error.ERRORAPUESTA);
+					seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
 					
 				}
 				else if (monto == 0) {
@@ -155,10 +168,15 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return datosDeJugadores;
 		
 	}
-		
+	
+	// Retorna una carta del mazo.
 	public Carta darCarta() {
 		
-		return this.getMazo().agarrarCarta();
+		Carta cartita = this.getMazo().agarrarCarta();
+		
+		cartita.setVisibilidad(false);
+		
+		return cartita;
 		
 	}
 	
@@ -389,7 +407,9 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 
 	// Rutina que prepara a los jugadores para la siguiente mano.
-	protected void reiniciarMano() {
+	protected boolean reiniciarMano() {
+		
+		boolean salir = false;
 		
 		for (JugadorBlackJack player : this.jugadores) {
 			
@@ -403,7 +423,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}	
 			else {
 				
-				this.eliminar(player);
+				this.notificar(Evento.SINPLATA, player);
+				salir = this.eliminar(player);
 				
 			}
 			
@@ -411,6 +432,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		this.clearMano();
 		
+		return salir;
 		
 	}
 
@@ -418,7 +440,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public void definirGanadores() {
 		
 		// Falta caso Black Jack y empate.
-		
+		System.out.println("entro");
 		Comparativo comparacion;
 		
 		for (JugadorBlackJack player : this.jugadores) {
@@ -464,7 +486,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		player.yaJugo();
 		contenedor = this.seleccionarJugador();
-		System.out.println(contenedor);
 		this.notificar(Evento.TERMINOTURNO, player);
 		
 		if (contenedor != null) {
@@ -481,18 +502,31 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	}
 	
-	public void eliminar(JugadorBlackJack player) {
+	public boolean eliminar(JugadorBlackJack player) {
 
-		for (JugadorBlackJack p : this.jugadores) {
+		boolean salir = false;
+		
+		if (this.jugadores.size() == 1) {
 			
-			if (player == p) {
-				
-				this.jugadores.remove(player);
-				
-			}
-				
+			salir = this.notificar(Evento.FINDELJUEGO);
+			
 		}
-
+		else {
+		
+			for (JugadorBlackJack p : this.jugadores) {
+				
+				if (player == p) {
+					
+					this.jugadores.remove(player);
+					
+				}
+					
+			}
+			
+		}
+		
+		return salir;
+		
 	}
 	
 	private Comparativo comparador(IJugador player) {
@@ -549,8 +583,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			comparador = Comparativo.MEJOR;
 			
 		}
-		
-		System.out.println(comparador);
 	
 		return comparador;
 		
@@ -582,7 +614,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 
 	@Override
-	public boolean notificar(IMensaje mensaje, IJugador data) {
+	public boolean notificar(Evento mensaje, IJugador data) {
 		
 		for (Observador observer: observers) {
 			
@@ -595,7 +627,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 	
 	@Override
-	public boolean notificar(IMensaje mensaje, ArrayList<IJugador> actuDatos) {
+	public boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos) {
 		
 		for (Observador observer: observers) {
 			
@@ -607,7 +639,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	public boolean notificar(IMensaje mensaje) {
+	public boolean notificar(Evento mensaje) {
 		
 		for (Observador observer: observers) {
 			
@@ -619,23 +651,20 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	public int nroDeJugadores() {
+	@Override
+	public boolean notificar(SaltoError mensaje, IJugador data) {
 		
-		int res = 0;
+		for (Observador observer: observers) {
+			
+			observer.actualizar(mensaje, data);
+			
+		}
 		
-		res = this.jugadores.size();
-		
-		return res;
-		
-	}
-	
-	public boolean seguimosJugando() {
-		
-		return (this.nroDeJugadores() > 0);
+		return true;
 		
 	}
 	
-	
+
 /*
 	 * 
 	 - Getters and Setters 
@@ -694,6 +723,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	
 	public ArrayList<JugadorBlackJack> getJugadores() {
 		return jugadores;
+	}
+
+
+	public int nroDeJugadores() {
+		
+		int res = 0;
+		
+		res = this.jugadores.size();
+		
+		return res;
+		
 	}
 	
 }

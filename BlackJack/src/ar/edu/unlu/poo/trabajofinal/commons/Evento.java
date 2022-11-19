@@ -13,7 +13,9 @@ public enum Evento implements IMensaje{
 	BLACKJACK("Que suerte, tenés BlackJack!"),
 	TERMINOTURNO("Tu turno terminó!"),
 	FINDEMANO("La Mano se terminó! Sigamos nomás..."),
-	JUGAR("");
+	JUGAR(""),
+	SINPLATA("Te quedaste sin plata!"),
+	FINDELJUEGO("Ya no hay personas en juego! " + '\n' +  "El juego se terminó." + '\n' + "Saludos!");
 	
 	String label;
 	
