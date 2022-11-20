@@ -410,6 +410,9 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	protected boolean reiniciarMano() {
 		
 		boolean salir = false;
+		ArrayList<JugadorBlackJack> eliminados = new ArrayList<JugadorBlackJack>();
+		
+		System.out.println("entro");
 		
 		for (JugadorBlackJack player : this.jugadores) {
 			
@@ -424,11 +427,24 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			else {
 				
 				this.notificar(Evento.SINPLATA, player);
-				salir = this.eliminar(player);
+				eliminados.add(player);
 				
 			}
 			
 		}
+		
+		for (JugadorBlackJack eliminado : eliminados) {
+			
+			if (this.jugadores.size() == 1) {
+				
+				salir = true;
+				
+			}
+			
+			this.eliminar(eliminado);
+			
+		}
+		
 		
 		this.clearMano();
 		
@@ -461,6 +477,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	// Devuelve true si detecta que es la primera mano.
 	public boolean primeraMano() {
 		
 		boolean res = false;
@@ -501,13 +518,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 	}
 	
-	public boolean eliminar(JugadorBlackJack player) {
-
-		boolean salir = false;
+	// Saca un jugador del ArrayList 'jugadores' (Podría dejarlos en un array de perdedores)
+	public void eliminar(JugadorBlackJack player) {
 		
 		if (this.jugadores.size() == 1) {
 			
-			salir = this.notificar(Evento.FINDELJUEGO);
+			this.notificar(Evento.FINDELJUEGO);
 			
 		}
 		else {
@@ -523,8 +539,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}
 			
 		}
-		
-		return salir;
+
 		
 	}
 	

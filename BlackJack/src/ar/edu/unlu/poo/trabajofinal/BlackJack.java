@@ -3,7 +3,6 @@ package ar.edu.unlu.poo.trabajofinal;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
-import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
