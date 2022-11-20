@@ -1,6 +1,5 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.vistas.VistaConsola;
 
 public class TestDeCosas {
@@ -12,7 +11,8 @@ public class TestDeCosas {
 		
 		interfaz.menuPrincipal();
 		
-		// Mirar captura de errores para recrearlos
+		// Mirar captura de errores para recrearlos.
+		// Testear errores.
 		
 	}
 

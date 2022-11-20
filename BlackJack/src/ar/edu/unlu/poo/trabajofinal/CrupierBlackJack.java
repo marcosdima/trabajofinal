@@ -73,7 +73,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			if (this.nroDeJugadores() < 5) {
 
 				this.jugadores.add(player);
-				this.notificar(Evento.JUGADORCARGADO, this);
+				this.notificar(Evento.JUGADORCARGADO, player);
 				
 			}
 			else {
@@ -112,7 +112,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 
 		for (JugadorBlackJack player : this.jugadores) { 
 
-			if (player.getDinero() < this.apuestaMinima) {
+			if ((player.getDinero() < this.apuestaMinima) && (player.todaviaNoAposto())){
 				
 				this.eliminar(player);
 				
@@ -439,8 +439,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	// Rutina que reparte las ganancias a los jugadores.
 	public void definirGanadores() {
 		
-		// Falta caso Black Jack y empate.
-		System.out.println("entro");
+		// Falta caso Black Jack.
 		Comparativo comparacion;
 		
 		for (JugadorBlackJack player : this.jugadores) {
