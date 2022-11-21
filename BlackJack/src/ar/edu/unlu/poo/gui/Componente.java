@@ -5,13 +5,7 @@ import java.awt.Component;
 public abstract class Componente {
 
 	Component componente;
-	
-	public Componente(Component componente) {
 		
-		this.setComponent(componente);
-		
-	}
-	
 	public Component getComponent() {
 		
 		return this.componente;
@@ -23,5 +17,5 @@ public abstract class Componente {
 		this.componente = componente;
 		
 	}
-	
+
 }

@@ -412,8 +412,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		boolean salir = false;
 		ArrayList<JugadorBlackJack> eliminados = new ArrayList<JugadorBlackJack>();
 		
-		System.out.println("entro");
-		
 		for (JugadorBlackJack player : this.jugadores) {
 			
 			if (player.getDinero() >= this.apuestaMinima) {

@@ -50,7 +50,7 @@ public class VistaConsola implements IVista {
 		else if (eleccion == OpcionesMenuPrincipal.SALIR.getId()) {
 			
 			p.print("Nos re vimos!");
-			System.exit(3);
+			System.exit(0);
 			
 		}
 		else {

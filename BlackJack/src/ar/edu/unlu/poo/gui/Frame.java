@@ -1,6 +1,5 @@
 package ar.edu.unlu.poo.gui;
 
-import java.awt.Component;
 import java.awt.LayoutManager;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -17,7 +16,7 @@ public class Frame {
 		this.setPanel();
 		this.setClose();
 		
-		// Por ahora lo voy a dejar así, capaz en un futuro lo repiesno.
+		// Por ahora lo voy a dejar así, capaz en un futuro lo repienso.
 		this.frame.setResizable(false);
 		
 	}
@@ -40,9 +39,9 @@ public class Frame {
 		
 	};
 
-	public void add(Component comp) {
+	public void add(Componente comp) {
 		
-		this.frame.add(comp);
+		this.frame.add(comp.getComponent());
 		
 	}
 	
@@ -60,6 +59,13 @@ public class Frame {
 		
 	}
 	
+	public void addToPrincipal(Componente comp, String cardinal) {
+		
+		this.panelPrincipal.add(comp, cardinal);
+		
+	
+	}
+	
 	// Getters and Setters
 	
 	private void setPanel() {
@@ -68,14 +74,13 @@ public class Frame {
 		this.panelPrincipal = p;
 		
 	}
-
+	
 	private void setVisibilidad(boolean esVisible) {
 		
 		this.frame.setVisible(esVisible);
 		
 	}
 	
-
 	public void setSize(int ancho, int alto) {
 		
 		this.frame.setSize(ancho, alto);
@@ -88,20 +93,15 @@ public class Frame {
 		
 	}
 	
-	
-	public void oculta() {
+	public void oculto() {
 		
 		this.setVisibilidad(false);
 		
 	}
 
-	
-	
 	public int getAncho() {
 		return this.frame.getWidth();
 	}
-
-	
 
 	public int getAlto() {
 		return this.frame.getHeight();

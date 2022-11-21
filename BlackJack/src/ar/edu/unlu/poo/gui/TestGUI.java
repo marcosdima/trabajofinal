@@ -1,20 +1,26 @@
 package ar.edu.unlu.poo.gui;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import ar.edu.unlu.poo.trabajofinal.vistas.PanelAgregarJugador;
+
 public class TestGUI {
 
 	public static void main(String[] args) {
 		
-		Frame coso = new Frame("Carlitos");
+		JFrame f = new JFrame("COso");
 		
-		coso.visible();
+		JPanel p = (JPanel) f.getContentPane();
 		
-		Etiqueta t = new Etiqueta();
-
-		for (int i = 0; i < 10; i++) {
-			
-			coso.add(t.getComponent());
-			t = new Etiqueta();
-		}
+		p.add(new JTextField());
+		
+		f.setVisible(true);
+		
+		PanelAgregarJugador pan = new PanelAgregarJugador();
+		
+		p.add(pan.getComponent());
 
 	}
 

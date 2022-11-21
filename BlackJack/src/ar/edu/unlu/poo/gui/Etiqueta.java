@@ -9,7 +9,6 @@ public class Etiqueta extends Componente {
 	
 	public Etiqueta(String str) {
 		
-		super(null);
 		this.tag = new JLabel();
 		this.setTag(str);
 		this.setComponent(this.tag);
@@ -23,12 +22,36 @@ public class Etiqueta extends Componente {
 		
 	}
 	
+	public static Etiqueta vacio(int espacio) {
+		
+		String empty = "";
+		Etiqueta res;
+		
+		for (int i = 0; i < espacio; i++) {
+			
+			empty += " ";
+			
+		}
+		
+		res = new Etiqueta(empty);
+		
+		return res;
+		
+	}
+	
+	public static Etiqueta vacio() {
+		
+		return Etiqueta.vacio(5);
+		
+	}
+	
 	public JLabel getLabel() {
 		return tag;
 	}
 
 	public void setTag(String tag) {
-		this.tag.setText(tag);
+		this.tag = new JLabel(tag);
+		this.setComponent(this.tag);
 	}
 	
 	public String getString() {
@@ -36,5 +59,5 @@ public class Etiqueta extends Componente {
 		return this.tag.toString();
 		
 	}
-	
+
 }
