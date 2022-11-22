@@ -1,5 +1,7 @@
 package ar.edu.unlu.poo.gui;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 
 public class Etiqueta extends Componente {
@@ -16,6 +18,12 @@ public class Etiqueta extends Componente {
 		
 	}
 
+	public Etiqueta(int str) {
+		
+		this (String.valueOf(str));
+		
+	}
+	
 	public Etiqueta() {
 		
 		this ("Etiqueta " + Etiqueta.nroDeLabels);
@@ -54,9 +62,15 @@ public class Etiqueta extends Componente {
 		this.setComponent(this.tag);
 	}
 	
-	public String getString() {
+	public String getText() {
 		
 		return this.tag.toString();
+		
+	}
+
+	@Override
+	public void evento(ActionListener action) {
+		// TODO Auto-generated method stub
 		
 	}
 

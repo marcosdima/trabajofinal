@@ -15,6 +15,7 @@ public class TestDeCosas {
 		
 		// Mirar captura de errores para recrearlos.
 		// Testear errores.
+		// No se que chota le pasa a la interfaz, pensar como solucionar que no sale del menú principal.
 		
 	}
 

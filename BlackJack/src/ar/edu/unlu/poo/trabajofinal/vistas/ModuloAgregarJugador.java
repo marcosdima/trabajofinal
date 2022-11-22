@@ -1,25 +1,25 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.InputText;
 import ar.edu.unlu.poo.gui.Panel;
 
-public class PanelAgregarJugador extends Panel {
+public class ModuloAgregarJugador extends Panel {
 
-	InputText inputNombre;
-	Boton add;
-	String nombre;
+	private InputText inputNombre;
+	private Boton add;
+	private String id;
 	
-	public PanelAgregarJugador() {
+	public ModuloAgregarJugador(String id) {
 		
 		super();
 		this.setInputNombre();
 		this.setAdd();
 		this.setPanel();
+		this.id = id;
 		
 	}
 
@@ -30,25 +30,6 @@ public class PanelAgregarJugador extends Panel {
 	private void setAdd() {
 		
 		this.add = new Boton("Agregar");
-		this.add.evento(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				String str = inputNombre.getText();
-				
-				if (str.length() < 10) {
-					
-					nombre = str;
-					add.apagar();
-					
-				}
-				
-			}
-			
-			
-			
-		});
 		
 	}
 
@@ -69,9 +50,28 @@ public class PanelAgregarJugador extends Panel {
 		
 	}
 	
-	public String getNombre() {
+	public String getString() {
 		
-		return this.nombre;
+		return this.inputNombre.getText();
+		
+	}
+
+	public void evento(ActionListener act) {
+		
+		this.getAdd().evento(act);
+		
+	}
+
+	public void apagar() {
+		
+		this.getAdd().apagar();
+		this.inputNombre.apagar();
+		
+	}
+	
+	public String getText() {
+		
+		return this.id;
 		
 	}
 	

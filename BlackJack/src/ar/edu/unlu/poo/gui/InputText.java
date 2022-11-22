@@ -32,4 +32,5 @@ public class InputText extends Componente {
 		return this.caja.getText();
 		
 	}
+	
 }

@@ -67,7 +67,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		boolean seguir = false;
 		JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
 		
-
+		System.out.println(nombre);
+		
 		if (!nombreNulo) {
 			
 			if (this.nroDeJugadores() < 5) {

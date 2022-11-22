@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.gui.Boton;
+import ar.edu.unlu.poo.gui.Componente;
 import ar.edu.unlu.poo.gui.Etiqueta;
 import ar.edu.unlu.poo.gui.Frame;
 import ar.edu.unlu.poo.gui.Panel;
+import ar.edu.unlu.poo.misfunciones.Escaner;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
@@ -18,20 +20,22 @@ public class InterfazGrafica implements IVista {
 
 	private BlackJack controlador;
 	private Frame framePrincipal;
-	private Frame frameAgregarJugadores;
-	private Frame frameJuego;
+	
+	private Panel menuPrincipal;
+	private Panel agregarJugadores;
+	private Panel panelJuego;
+	
+	private ArrayList<String> nombres = new ArrayList<String>();;
+	private Boolean flag = false;
 	
 	public InterfazGrafica(BlackJack controlador) {
 		
 		this.setControlador(controlador);
 		this.controlador.addIntefaz(this);
 		
-		this.frameAgregarJugadores = new Frame("Black Jack");
-		this.frameJuego = new Frame("Black Jack");
-		this.framePrincipal = new Frame("Black Jack");
+		this.framePrincipal = new Frame("Black Jack");		
+		this.framePrincipal.visible();
 		
-		this.setFramePrincipal();
-		this.setFrameAgregarJugadores();
 	}
 	
 	@Override
@@ -44,18 +48,53 @@ public class InterfazGrafica implements IVista {
 	@Override
 	public void menuPrincipal() {
 		
-		this.frameAgregarJugadores.oculto();
-		this.frameJuego.oculto();
-		this.framePrincipal.visible();
+		Boton salir = new Boton("Salir");
+		Boton jugar = new Boton("Jugar");
 		
+		Componente[] opciones = {jugar, salir};
+		
+		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones);
+		
+		framecito.getComponente("Jugar").evento(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+
+				framePrincipal.clear();
+				framePrincipal.addToPrincipal(new Etiqueta("s"));
+			
+			}
+
+		});;
+		framecito.getComponente("Salir").evento(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				System.exit(0);
+				
+			}});
+		
+		this.framePrincipal.addToPrincipal(framecito);
+
 	}
 
 	@Override
 	public void formularioAgregarJugador() {
+	
+		String nombre = "";
 		
-		this.frameAgregarJugadores.visible();
-		this.frameJuego.oculto();
-		this.framePrincipal.oculto();
+		if (this.flag) {
+			
+			nombre = this.nombres.get(0);
+			
+			if (this.nombres.size() > 1) {
+				
+				this.nombres.remove(0);
+				
+			}
+			
+			this.controlador.addJugador(nombre);
+			
+		}
 		
 	}
 
@@ -75,10 +114,23 @@ public class InterfazGrafica implements IVista {
 
 	@Override
 	public void mostrarMano(ArrayList<IJugador> datos) {
+				
+		Panel framecito = this.panelJuego;
+		PanelJugador prueba = new PanelJugador(datos.get(0));
+
+		framecito.add(prueba);
 		
-		this.frameAgregarJugadores.oculto();
-		this.frameJuego.visible();
-		this.framePrincipal.oculto();
+		this.framePrincipal.clear();
+
+		this.framePrincipal.addToPrincipal(framecito);
+		
+		this.menuPrincipal.oculto();
+		this.agregarJugadores.oculto();
+
+		Escaner test = new Escaner();
+		test.next();
+		
+		System.exit(0);
 		
 	}
 
@@ -94,119 +146,50 @@ public class InterfazGrafica implements IVista {
 		return false;
 	}
 
-	
-	// Interfaz gráfica.
-	
-	private void setFramePrincipal() {
+	// Metodos de intefazgráfica.
+	private void setAgregarJugadores() {
 		
-		// Esto prepara el frame y le da la forma que quiero.
-		Frame framecito = this.framePrincipal;
-		BorderLayout border = new BorderLayout(200, 50);
-		Panel centro = new Panel();
-		GridLayout gridCentral = new GridLayout(5, 1, 50, 50);
-
-		// Preparación de los botones.
-		Boton botonJugar = new Boton("Jugar");
-		botonJugar.evento(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				
-				formularioAgregarJugador();
-				
-			}
+		int maximo = 5;
+		ModuloAgregarJugador jugador;
+		PanelGrilla agregar;
+		Componente[] modulos = new Componente[maximo];
+		
+		for (int i = 0; i < maximo; i++) {
 			
-		});
-		
-		// NO ESTA IMPLEMENTADO.
-		Boton botonConfiguracion = new Boton("Configuración");
-		botonConfiguracion.evento(new ActionListener() {
+			jugador = new ModuloAgregarJugador(String.valueOf(i));
+			modulos[i] = jugador;
 
-			public void actionPerformed(ActionEvent arg0) {
-				
-				formularioAgregarJugador();
-				
-			}
-			
-		});
-		
-		Boton botonSalir = new Boton("Salir");
-		botonSalir.evento(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				
-				System.exit(0);
-				
-			}
-			
-		});
-		
-		// Apendeo botones.
-		centro.setLayout(gridCentral);
-		centro.add(Etiqueta.vacio());
-		centro.add(botonJugar);
-		centro.add(botonConfiguracion);
-		centro.add(botonSalir);
-		
-		// Agrego el grid al frame principal.
-		framecito.setLayoutPrincipal(border);
-		framecito.addToPrincipal(centro, BorderLayout.CENTER);
-		
-		// Pongo etiquetas vacias para que el centro no ocupe toda la pantalla.
-		framecito.addToPrincipal(Etiqueta.vacio(), BorderLayout.EAST);
-		framecito.addToPrincipal(Etiqueta.vacio(), BorderLayout.WEST);
-		framecito.addToPrincipal(Etiqueta.vacio(), BorderLayout.SOUTH);
-		framecito.addToPrincipal(Etiqueta.vacio(), BorderLayout.NORTH);
-		
-	}
-	
-	private void setFrameAgregarJugadores() {
-		
-		Frame framecito = this.frameAgregarJugadores;
-		Boton seguir = new Boton("Seguir");
-		ArrayList<PanelAgregarJugador> campos = new ArrayList<PanelAgregarJugador>();
-		PanelAgregarJugador jugador;
-
-		framecito.setLayoutPrincipal(new GridLayout(2,3,20,40));
-		
-		for (int i = 0; i < 5; i++) {
-			
-			jugador = new PanelAgregarJugador();
-			campos.add(jugador);
-			framecito.addToPrincipal(jugador);
-			
 		}
 		
-		framecito.addToPrincipal(seguir);
-		seguir.evento(new ActionListener() {
+		agregar = new PanelGrilla(modulos, 2, 3);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				for(PanelAgregarJugador campo : campos) {
-					
-					String nombre = campo.getNombre();
-					boolean seteado = false;
-					
-					if (nombre != null) {
-						
-						System.out.println(campo.getNombre());
-						controlador.addJugador(campo.getNombre());
-						seteado = true;
-						
-					}
-					
-					if (seteado) {
-			
-						controlador.addJugador(null);
-			
-					}
-					
-				}
-				
-			}
-
-		});
+		agregar.visible();
+		
+		this.framePrincipal.addToPrincipal(agregar);
 		
 	}
 	
 }
+
+/*
+ * for (ModuloAgregarJugador campo : campos) {
+			
+			campo.evento(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					
+					String name = campo.getString();
+					
+					nombres.add(name);
+					
+					campo.apagar();
+					
+				}
+				
+			});
+			
+		}
+ * 
+ * 
+ * */

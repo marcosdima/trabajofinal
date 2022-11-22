@@ -1,13 +1,14 @@
 package ar.edu.unlu.poo.gui;
 
+import java.awt.Component;
 import java.awt.LayoutManager;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 public class Frame {
 	
-	protected JFrame frame;
-	protected Panel panelPrincipal;
+	private JFrame frame;
+	private Panel panelPrincipal;
 	
 	public Frame(String titulo, int ancho, int alto) {
 		
@@ -39,14 +40,7 @@ public class Frame {
 		
 	};
 
-	public void add(Componente comp) {
-		
-		this.frame.add(comp.getComponent());
-		
-	}
-	
 	// Funciones con panelPrincipal.
-	
 	public void setLayoutPrincipal(LayoutManager lymg) {
 
 		this.panelPrincipal.setLayout(lymg);
@@ -54,7 +48,7 @@ public class Frame {
 	}
 	
 	public void addToPrincipal(Componente comp) {
-		
+
 		this.panelPrincipal.add(comp);
 		
 	}
@@ -66,8 +60,23 @@ public class Frame {
 	
 	}
 	
-	// Getters and Setters
+	public void clear() {
+		
+		// CONTINUAR.
+		System.out.println("asdasd");
+		
+		/*
+		Component[] componentes = this.panelPrincipal.getPanel().getComponents();
+		
+		for (Component c : componentes) {
+			
+			this.frame.remove(c);
+			
+		}
+		*/
+	}
 	
+	// Getters and Setters
 	private void setPanel() {
 		
 		Panel p = new Panel(this.frame.getContentPane());

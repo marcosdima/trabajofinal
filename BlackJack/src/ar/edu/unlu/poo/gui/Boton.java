@@ -40,4 +40,10 @@ public class Boton extends Componente {
 		
 	}
 	
+	public String getText() {
+		
+		return this.boton.getText();
+		
+	}
+
 }
