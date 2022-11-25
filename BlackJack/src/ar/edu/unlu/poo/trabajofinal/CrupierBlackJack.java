@@ -67,8 +67,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		boolean seguir = false;
 		JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
 		
-		System.out.println(nombre);
-		
 		if (!nombreNulo) {
 			
 			if (this.nroDeJugadores() < 5) {
@@ -106,47 +104,70 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 
 	// Seteo de apuestas.
-	public void setApuestas(int monto) {
+	public void setApuestas(String monto) {
 		
-		Apuesta apuesta = new Apuesta(monto);
+		Apuesta apuesta = null;
+		int montoReal = 0;
 		boolean seteado = false;
-
+		
+		try {
+			
+			montoReal = Integer.valueOf(monto);
+			apuesta = new Apuesta(montoReal);
+			
+		}
+		catch(NumberFormatException e) {
+		
+			montoReal = -1;
+			
+		}
+		
 		for (JugadorBlackJack player : this.jugadores) { 
 
-			if ((player.getDinero() < this.apuestaMinima) && (player.todaviaNoAposto())){
+			if (player.todaviaNoAposto()) {
 				
-				this.eliminar(player);
+				if ((player.getDinero() < this.apuestaMinima)){
+					
+					this.eliminar(player);
+					
+				}
+				else if (montoReal == -1) {
+					
+					this.notificar(SaltoError.APOSTONONUMERO, player);
+					
+				}
+				else if (!seteado) {
+					
+					if (apuesta.getMonto() > player.getDinero()) {
+						
+						seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
+						
+					}
+					else if (montoReal < this.apuestaMinima) {
+						
+						seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
+						
+					}
+					else if (montoReal == 0) {
+						
+						// Podría hacer que si ningún jugador apostó, saltee la mano.
+						player.aposto();
+						player.yaJugo();
+						seteado = this.notificar(Evento.NOAPUESTA, player);
+						
+					}
+					else {
+						
+						player.setApuesta(apuesta);
+						player.aposto();
+						seteado = this.notificar(Evento.APUESTASETEADA, player);
+					
+					}
+	
+				
+				}
 				
 			}
-			else if ((player.todaviaNoAposto()) && (!seteado)) {
-				
-				if (apuesta.getMonto() > player.getDinero()) {
-					
-					seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
-					
-				}
-				else if (monto < this.apuestaMinima) {
-					
-					seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
-					
-				}
-				else if (monto == 0) {
-					
-					// Podría hacer que si ningún jugador apostó, saltee la mano.
-					player.aposto();
-					player.yaJugo();
-					seteado = this.notificar(Evento.NOAPUESTA, player);
-					
-				}
-				else {
-					
-					player.setApuesta(apuesta);
-					player.aposto();
-					seteado = this.notificar(Evento.APUESTASETEADA, player);
-				
-				}		
-				
-			}	
 			
 		}
 		
@@ -396,7 +417,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		if (terminar) {
 			
 			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-			this.notificar(Evento.TERMINOLAMANO);
+			this.notificar(Evento.FINDEMANO);
 			
 		}
 		else {

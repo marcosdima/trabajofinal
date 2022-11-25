@@ -48,7 +48,7 @@ public class BlackJack implements Observador {
 		
 	}
 	
-	public void apostar(int monto) {
+	public void apostar(String monto) {
 		
 		this.crupier.setApuestas(monto);
 		
@@ -165,7 +165,7 @@ public class BlackJack implements Observador {
 
 				vista.formularioSetApuesta(this.crupier.getApostador());
 				
-			case TERMINOLAMANO:
+			case FINDEMANO:
 			
 				this.crupier.definirGanadores();
 				salir = this.crupier.reiniciarMano();
@@ -219,7 +219,10 @@ public class BlackJack implements Observador {
 				case ERRORFALTADEDINERO:
 					
 					vista.formularioSetApuesta(objeto);
-			
+					
+				case APOSTONONUMERO:
+					
+					vista.formularioSetApuesta(objeto);
 			
 			default:
 				break;

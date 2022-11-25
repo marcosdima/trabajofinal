@@ -66,6 +66,10 @@ public class Carta {
 		this.contenido = contenido;
 	}
 	
-	
+	public String getIdentificador() {
+		
+		return (this.getContenido() + "_" + this.getPaloDeCarta());
+		
+	}
 	
 }

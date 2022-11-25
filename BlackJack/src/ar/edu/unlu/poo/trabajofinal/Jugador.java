@@ -109,6 +109,33 @@ public abstract class Jugador extends Persona implements Puntuable, IJugador {
 		
 	}
 	
+	public String[] getIdCartas() {
+		
+		int size = this.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
+		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (cartita.esVisible()) {
+				
+				cartas[contador] = cartita.getIdentificador();
+				
+			}
+			else {
+				
+				cartas[contador] = "CUBIERTA";
+				
+			}
+			
+			contador++;
+			
+		}
+		
+		return cartas;
+		
+	}
+	
 	public boolean todaviaNoJugo() {
 		return todaviaNoJugo;
 	}

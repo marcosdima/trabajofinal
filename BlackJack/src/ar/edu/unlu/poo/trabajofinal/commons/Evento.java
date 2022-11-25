@@ -7,7 +7,6 @@ public enum Evento implements IMensaje{
 	PRIMERAREPARTIDA(""),
 	NOAPUESTA("Perfecto, proseguimos."),
 	APUESTASETEADA("Apuesta seteada!"),
-	TERMINOLAMANO("Se terminó la mano!"),
 	PREGUNTAROTRA("Querés otra carta?"),
 	PRIMERAPUESTA(""),
 	BLACKJACK("Que suerte, tenés BlackJack!"),

@@ -9,27 +9,30 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
+import ar.edu.unlu.poo.gui.Frame;
+import ar.edu.unlu.poo.gui.ImageManager;
+import ar.edu.unlu.poo.gui.Panel;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
+import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 
 public class InterfazGrafica implements IVista {
 
 	private BlackJack controlador;
-	private JFrame frame;
-	private JFrame frameMesa;
-	
+	private Frame frame;
+	private ImageManager imageManager;
 	private ArrayList<String> nombres = new ArrayList<String>();;
 	
 	public InterfazGrafica(BlackJack controlador) {
 		
 		this.setControlador(controlador);
 		this.controlador.addIntefaz(this);
-		this.setFrame();
+		this.frame = new Frame("Black Jack");
+		this.setImageManager("Imagenes/Cartas/", "Default");
 		
 	}
 	
@@ -43,7 +46,7 @@ public class InterfazGrafica implements IVista {
 	@Override
 	public void menuPrincipal() {
 
-		this.getPanelPrincipal().add(this.setMenuPrincipal());
+		this.frame.append(this.setMenuPrincipal());
 	}
 
 	@Override
@@ -67,7 +70,7 @@ public class InterfazGrafica implements IVista {
 		}
 		else {
 					
-			this.getPanelPrincipal().add(this.setAgregarJugadores());
+			this.frame.append(this.setAgregarJugadores());
 			
 		}
 		
@@ -83,7 +86,27 @@ public class InterfazGrafica implements IVista {
 	@Override
 	public void mostrarMensaje(IMensaje msj, IJugador data) {
 		
-		System.out.println(msj);
+		JOptionPane mensaje;
+		
+		if (msj instanceof Evento) {
+			
+			msj = (Evento) msj;
+			
+			if (msj == Evento.FINDEMANO) {
+				
+				mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion(), JOptionPane.OK_OPTION);
+				JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Terminó la mano!", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				
+			}
+			else {
+				
+				System.out.println(msj);
+				
+			}
+			
+		}
+		
+		
 
 	}
 
@@ -92,38 +115,56 @@ public class InterfazGrafica implements IVista {
 		
 		int i = 0;
 		int largo = datos.size() - 1;	
-		JPanel panel = new JPanel();
-		JPanel jugadores = new JPanel();
-		ModuloJugador m = null;
+		Panel panel = new Panel();
+		Panel jugadores = new Panel();
+		Panel crupier = new Panel();
 		GridLayout grid = new GridLayout(2,1);
-		FlowLayout flow = new FlowLayout();
+		GridLayout gridPlayers = new GridLayout(1,5);
+		ModuloJugador auxiliar = null;
 		
 		panel.setLayout(grid);
-		jugadores.setLayout(flow);
+		jugadores.setLayout(gridPlayers);
+		crupier.setLayout(gridPlayers);
 
-		for (i = 0; i < largo; i++) {
+		for (i = 0; i < BlackJack.MAXIMODEJUGADORES; i++) {
 			
-			 m = new ModuloJugador(datos.get(i));
-			 jugadores.add(m);
+			if (i < largo) {
+				
+				auxiliar = new ModuloJugador(datos.get(i), this.getImageManager());
+				jugadores.add(auxiliar);
+				
+			}
+			else {
+				
+				jugadores.addVacio();
+				
+			}
 			
 		}
 		
 		// Crupier.
-		m = new ModuloJugador(datos.get(largo));
+		auxiliar = new ModuloJugador(datos.get(largo), this.getImageManager());
+		
+		crupier.addVacio();
+		crupier.addVacio();
+		crupier.add(auxiliar);
+		crupier.addVacio();
+		crupier.addVacio();
 		
 		panel.add(jugadores);
-		panel.add(m);
+		panel.add(crupier);
 		
-		this.frameMesa.setContentPane(panel);
-		panel.updateUI();
+		this.frame.append(panel);
 
 	}
 
 	@Override
 	public void formularioSetApuesta(IJugador dato) {
 		
-		String nro = JOptionPane.showInputDialog(dato.getNombre() + "Ingrese su apuesta: ");
-		this.controlador.apostar(Integer.valueOf(nro));
+		JOptionPane pane = new JOptionPane("Hola",JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
+		String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta:");	
+		this.controlador.apostar(res);
+	
 		
 	}
 
@@ -141,13 +182,12 @@ public class InterfazGrafica implements IVista {
 			
 		}
 		
-		System.out.println(retorno);
-		
 		return retorno;
 		
 	}
 
 	// Metodos de intefazgráfica.
+	
 	private PanelGrilla setAgregarJugadores() {
 
 		int maximo = 5;
@@ -188,12 +228,6 @@ public class InterfazGrafica implements IVista {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				nombres.add(null);
-				frameMesa = new JFrame("Black Jack");	
-				frameMesa.setSize(1200, 800);
-				frameMesa.setResizable(false);
-				
-				frameMesa.setVisible(true);
-				frame.setVisible(false);
 				formularioAgregarJugador();
 				
 			}
@@ -236,30 +270,13 @@ public class InterfazGrafica implements IVista {
 		
 	}
 
-	private void setMesa(JPanel datos) {
-		
-		this.frameMesa.removeAll();;
-		//this.frameMesa = new JFrame();
-		//this.frameMesa.setSize(1200, 800);
-		this.frameMesa.setVisible(true);
-		this.frameMesa.getContentPane().add(datos);
-		
+	public ImageManager getImageManager() {
+		return this.imageManager;
 	}
-	
-	private void setFrame() {
-	
-		JFrame frame = new JFrame("Black Jack");		
-		frame.setSize(1200, 800);
-		frame.setVisible(true);
-		this.frame = frame;
-	
+
+	public void setImageManager(String source, String folder) {
+		this.imageManager = new ImageManager(source, folder);
 	}
-	
-	private JPanel getPanelPrincipal() {
-		
-		return (JPanel) this.frame.getContentPane();
-		
-	}
-	
+
 }
 

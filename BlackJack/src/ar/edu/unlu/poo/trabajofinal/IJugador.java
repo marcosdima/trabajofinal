@@ -6,6 +6,8 @@ public interface IJugador {
 	
 	public String[] getCartas();
 	
+	public String[] getIdCartas();
+	
 	public boolean todaviaNoJugo();
 	
 	public int getDinero();

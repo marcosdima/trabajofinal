@@ -122,13 +122,13 @@ public class VistaConsola implements IVista {
 
 	public void formularioSetApuesta(IJugador dato) {
 		
-		int monto;
+		String monto;
 		
 		p.espacio();
 		p.print();
 		p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
 		p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
-		monto = sc.nextInt();
+		monto = sc.next();
 		
 		this.controlador.apostar(monto);
 		

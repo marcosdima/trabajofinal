@@ -7,25 +7,27 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ar.edu.unlu.poo.gui.ImageManager;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 
 public class ModuloJugador extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	IJugador jugador;
+	private IJugador jugador;
+	private ImageManager manager;
 	
-	public ModuloJugador(IJugador player) {
+	public ModuloJugador(IJugador player, ImageManager manager) {
 		
 		super();
 		this.jugador = player;
+		this.setManager(manager);
 		this.setFormato();
 		
 		
 	}
 	
 	private void setFormato() {
-		
-		int espacio = 50;
+
 		int espacioCartas = 20;
 
 		JPanel panelNorte = new JPanel();
@@ -33,8 +35,7 @@ public class ModuloJugador extends JPanel {
 		
 		BorderLayout mayor = new BorderLayout();
 		BorderLayout norte = new BorderLayout();
-		//GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
-		GridLayout cartas = new GridLayout(1, this.jugador.getCartas().length, espacioCartas, espacioCartas);
+		GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
 		
 		JButton nombre = new JButton(this.jugador.getNombre());
 		JLabel dinero = new JLabel("Dinero: " + this.jugador.getDinero());
@@ -44,14 +45,17 @@ public class ModuloJugador extends JPanel {
 		panelNorte.setLayout(norte);
 		panelCentro.setLayout(cartas);
 		
+		// Apago el botón por motivos estéticos.
+		nombre.setEnabled(false);
+		
 		// Seteo panel norte
 		panelNorte.add(nombre, BorderLayout.NORTH);
 		panelNorte.add(dinero, BorderLayout.SOUTH);
 		
 		// Seteo panel central
-		for (String cartita : this.jugador.getCartas()) {
+		for (String cartita : this.jugador.getIdCartas()) {
 			
-			panelCentro.add(new JLabel(cartita));
+			panelCentro.add(this.manager.imagen(cartita));
 			
 		}
 		
@@ -62,5 +66,10 @@ public class ModuloJugador extends JPanel {
 		
 	};
 	
+	public void setManager(ImageManager manager) {
+		
+		this.manager = manager;
+		
+	}
 	
 }
