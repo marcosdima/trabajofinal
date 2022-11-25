@@ -3,6 +3,7 @@ package ar.edu.unlu.poo.trabajofinal;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
+import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
@@ -90,15 +91,9 @@ public class BlackJack implements Observador {
 	public void actualizar(Evento event, IJugador data) {
 		
 		IVista vista = this.interfaces.get(0);
-		IJugador playerContenedor = null;
 		JugadorBlackJack jugadorBJ = null;
 		
 		switch ((Evento) event) {
-		
-			case JUGADORCARGADO:
-
-				vista.mostrarMensaje(event, data);
-				vista.formularioAgregarJugador();		
 				
 			case PREGUNTAROTRA:
 				
@@ -115,27 +110,6 @@ public class BlackJack implements Observador {
 					this.crupier.terminarTurnoJugador(jugadorBJ);
 					
 				}	
-				
-			case BLACKJACK:
-				
-				vista.mostrarMensaje(event, data);
-				break;
-				
-			case APUESTASETEADA:
-			
-				playerContenedor = this.crupier.getApostador();
-				
-				if (playerContenedor != null) {
-					
-					vista.mostrarMensaje(event, data);
-					vista.formularioSetApuesta(playerContenedor);
-					
-				}
-				else {
-					
-					this.crupier.repartir(this.crupier.seleccionarJugador());
-					
-				}
 				
 			case TERMINOTURNO:
 				
@@ -237,6 +211,46 @@ public class BlackJack implements Observador {
 		
 	}
 
-
 	
+	@Override
+	public void actualizar(Notificacion event, IJugador data) {
+		
+		IVista vista = this.interfaces.get(0);
+		IJugador playerContenedor = null;
+		
+		switch ((Notificacion) event) {
+		
+			case JUGADORCARGADO:
+		
+				vista.mostrarMensaje(event, data);
+				vista.formularioAgregarJugador();		
+				
+			case BLACKJACK:
+				
+				vista.mostrarMensaje(event, data);
+				break;
+				
+			case APUESTASETEADA:
+			
+				playerContenedor = this.crupier.getApostador();
+				
+				if (playerContenedor != null) {
+					
+					vista.mostrarMensaje(event, data);
+					vista.formularioSetApuesta(playerContenedor);
+					
+				}
+				else {
+					
+					this.crupier.repartir(this.crupier.seleccionarJugador());
+					
+				}
+
+		default:
+			
+			;
+		}
+		
+	}
+
 }

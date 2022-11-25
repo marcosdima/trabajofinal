@@ -8,8 +8,8 @@ public class TestDeCosas {
 	public static void main(String[] args) {
 							
 		BlackJack juego = new BlackJack();
-		//VistaConsola interfaz = new VistaConsola(juego);
-		InterfazGrafica interfaz = new InterfazGrafica(juego);
+		VistaConsola interfaz = new VistaConsola(juego);
+		//InterfazGrafica interfaz = new InterfazGrafica(juego);
 		
 		interfaz.menuPrincipal();
 		

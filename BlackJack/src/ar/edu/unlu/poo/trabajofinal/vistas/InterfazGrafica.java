@@ -19,13 +19,16 @@ import ar.edu.unlu.poo.trabajofinal.BlackJack;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
+import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
+import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 
 public class InterfazGrafica implements IVista {
 
 	private BlackJack controlador;
 	private Frame frame;
 	private ImageManager imageManager;
-	private ArrayList<String> nombres = new ArrayList<String>();;
+	private ArrayList<String> nombres = new ArrayList<String>();
+	private boolean flag = false;
 	
 	public InterfazGrafica(BlackJack controlador) {
 		
@@ -45,8 +48,35 @@ public class InterfazGrafica implements IVista {
 
 	@Override
 	public void menuPrincipal() {
+		
+		JButton salir = new JButton("Salir");
+		JButton jugar = new JButton("Jugar");
+		
+		Component[] opciones = {jugar, salir};
+		
+		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
+		
+		jugar.addActionListener(new ActionListener() {
 
-		this.frame.append(this.setMenuPrincipal());
+			public void actionPerformed(ActionEvent arg0) {
+
+				nombres = new ArrayList<String>();
+				formularioAgregarJugador();
+				
+			}
+
+		});;
+		salir.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				System.exit(0);
+				
+			}});
+		
+		this.frame.add(framecito);
+		framecito.updateUI();
+		
 	}
 
 	@Override
@@ -89,23 +119,27 @@ public class InterfazGrafica implements IVista {
 		JOptionPane mensaje;
 		
 		if (msj instanceof Evento) {
-			
-			msj = (Evento) msj;
-			
-			if (msj == Evento.FINDEMANO) {
 				
-				mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion(), JOptionPane.OK_OPTION);
-				JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Terminó la mano!", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			if ((msj == Evento.FINDELJUEGO) && (!flag)) {
 				
-			}
-			else {
-				
-				System.out.println(msj);
+				mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
+				JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "El juego terminó!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				this.flag = true;
 				
 			}
+
+		}
+		if (msj instanceof SaltoError) {
+			
+			mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
+			JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Error detectado!", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			
 		}
-		
+		if (msj instanceof Notificacion) {
+			
+			System.out.println(msj);
+			
+		}
 		
 
 	}
@@ -174,7 +208,7 @@ public class InterfazGrafica implements IVista {
 		boolean retorno = false;
 		JOptionPane mensaje = new JOptionPane(dato.getNombre() + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
 		// 0 = Si; 1 = No
-		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres otra carta?", "Turno de" + dato.getNombre(), JOptionPane.YES_NO_OPTION, 0);
+		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres otra carta?", "Turno de" + dato.getNombre(), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
 		if (respuesta == 0) {
 			
@@ -236,37 +270,6 @@ public class InterfazGrafica implements IVista {
 		agregar.add(seguir);
 
 		return agregar;
-		
-	}
-	
-	private PanelMenuPrincipal setMenuPrincipal() {
-		
-		JButton salir = new JButton("Salir");
-		JButton jugar = new JButton("Jugar");
-		
-		Component[] opciones = {jugar, salir};
-		
-		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
-		
-		jugar.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-
-				framecito.setVisible(false);;
-				formularioAgregarJugador();
-				
-			}
-
-		});;
-		salir.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				
-				System.exit(0);
-				
-			}});
-		
-		return framecito;
 		
 	}
 

@@ -15,6 +15,8 @@ public interface Observado {
 	
 	public boolean notificar(SaltoError mensaje, IJugador data);
 	
+	public boolean notificar(Notificacion mensaje, IJugador data);
+	
 	public void agregarObservador(Observador observer);
 
 }

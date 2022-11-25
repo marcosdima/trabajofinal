@@ -10,6 +10,8 @@ public interface Observador {
 	public void actualizar(Evento event, IJugador objeto);
 	
 	public void actualizar(SaltoError event, IJugador objeto);
+	
+	public void actualizar(Notificacion event, IJugador objeto);
 
 	public void actualizar(Evento event);
 	

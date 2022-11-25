@@ -2,14 +2,10 @@ package ar.edu.unlu.poo.trabajofinal.commons;
 
 public enum Evento implements IMensaje{
 
-	JUGADORCARGADO("Jugador agregado!"),
 	MOSTRARMANO(""),
 	PRIMERAREPARTIDA(""),
-	NOAPUESTA("Perfecto, proseguimos."),
-	APUESTASETEADA("Apuesta seteada!"),
 	PREGUNTAROTRA("Querés otra carta?"),
 	PRIMERAPUESTA(""),
-	BLACKJACK("Que suerte, tenés BlackJack!"),
 	TERMINOTURNO("Tu turno terminó!"),
 	FINDEMANO("La Mano se terminó! Sigamos nomás..."),
 	JUGAR(""),
