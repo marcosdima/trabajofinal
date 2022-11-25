@@ -1,23 +1,23 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 
-import ar.edu.unlu.poo.gui.Boton;
-import ar.edu.unlu.poo.gui.Componente;
-import ar.edu.unlu.poo.gui.Etiqueta;
-import ar.edu.unlu.poo.gui.Panel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class PanelMenuPrincipal extends PanelMenu {
 	
-	public PanelMenuPrincipal(Componente[] botones, int alto, int lados) {
+	public PanelMenuPrincipal(Component[] botones, int alto, int lados) {
 		
 		super(botones, alto, lados);
 		this.setFormato();
 		
 	}
 	
-	public PanelMenuPrincipal(Componente[] botones) {
+	public PanelMenuPrincipal(Component[] botones) {
 		
 		this (botones, 50, 50);
 		
@@ -26,23 +26,19 @@ public class PanelMenuPrincipal extends PanelMenu {
 	protected void setFormato() {
 		
 		// Esto prepara el frame y le da la forma que quiero.
-		Panel framecito = this;
+		PanelMenuPrincipal framecito = this;
 		
 		BorderLayout border = new BorderLayout(200, 50);
-		Panel centro = new Panel();
-		GridLayout gridCentral = new GridLayout(this.getBotonTags().length + 2, 1, this.getEspacioAlto(), this.getEspacioLados());
-		
-		Boton botonAux;
+		JPanel centro = new JPanel();
+		GridLayout gridCentral = new GridLayout(this.getComponentCount() + 2, 1, this.getEspacioAlto(), this.getEspacioLados());
 
 		// Apendeo botones.
 		centro.setLayout(gridCentral);
-		centro.add(Etiqueta.vacio());
+		centro.add(new JLabel(" "));
 		
-		for (String str : this.getBotonTags()) {
+		for (Component str : this.getComponentes()) {
 			
-			botonAux = new Boton(str);
-			this.getComponentes().add(botonAux);
-			centro.add(botonAux);
+			centro.add(str);
 			
 		}
 
@@ -51,10 +47,10 @@ public class PanelMenuPrincipal extends PanelMenu {
 		framecito.add(centro, BorderLayout.CENTER);
 		
 		// Pongo etiquetas vacias para que el centro no ocupe toda la pantalla.
-		framecito.add(Etiqueta.vacio(), BorderLayout.EAST);
-		framecito.add(Etiqueta.vacio(), BorderLayout.WEST);
-		framecito.add(Etiqueta.vacio(), BorderLayout.SOUTH);
-		framecito.add(Etiqueta.vacio(), BorderLayout.NORTH);
+		framecito.add(new JLabel(" "), BorderLayout.EAST);
+		framecito.add(new JLabel(" "), BorderLayout.WEST);
+		framecito.add(new JLabel(" "), BorderLayout.SOUTH);
+		framecito.add(new JLabel(" "), BorderLayout.NORTH);
 		
 	}
 

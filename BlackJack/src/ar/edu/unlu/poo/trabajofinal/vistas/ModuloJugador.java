@@ -3,15 +3,18 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
-import ar.edu.unlu.poo.gui.Etiqueta;
-import ar.edu.unlu.poo.gui.Panel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 
-public class PanelJugador extends Panel {
+public class ModuloJugador extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	IJugador jugador;
 	
-	public PanelJugador(IJugador player) {
+	public ModuloJugador(IJugador player) {
 		
 		super();
 		this.jugador = player;
@@ -23,19 +26,19 @@ public class PanelJugador extends Panel {
 	private void setFormato() {
 		
 		int espacio = 50;
-		int espacioCartas = 10;
-		
-		Panel panelNorte = new Panel();
-		Panel panelCentro = new Panel();
+		int espacioCartas = 20;
+
+		JPanel panelNorte = new JPanel();
+		JPanel panelCentro = new JPanel();
 		
 		BorderLayout mayor = new BorderLayout();
 		BorderLayout norte = new BorderLayout();
 		//GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
 		GridLayout cartas = new GridLayout(1, this.jugador.getCartas().length, espacioCartas, espacioCartas);
 		
-		Etiqueta nombre = new Etiqueta(this.jugador.getNombre());
-		Etiqueta dinero = new Etiqueta("Dinero: " + this.jugador.getDinero());
-		Etiqueta puntos = new Etiqueta("Puntaje: " + this.jugador.getPuntaje());
+		JButton nombre = new JButton(this.jugador.getNombre());
+		JLabel dinero = new JLabel("Dinero: " + this.jugador.getDinero());
+		JLabel puntos = new JLabel("Puntaje: " + this.jugador.getPuntaje());
 		
 		this.setLayout(mayor);
 		panelNorte.setLayout(norte);
@@ -48,7 +51,7 @@ public class PanelJugador extends Panel {
 		// Seteo panel central
 		for (String cartita : this.jugador.getCartas()) {
 			
-			panelCentro.add(new Etiqueta(cartita));
+			panelCentro.add(new JLabel(cartita));
 			
 		}
 		

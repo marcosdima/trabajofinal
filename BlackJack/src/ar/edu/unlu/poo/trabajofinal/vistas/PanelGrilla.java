@@ -1,15 +1,15 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
+import java.awt.Component;
 import java.awt.GridLayout;
-
-import ar.edu.unlu.poo.gui.Componente;
 
 public class PanelGrilla extends PanelMenu {
 
+	private static final long serialVersionUID = 1L;
 	private int filas;
 	private int columnas;
 	
-	public PanelGrilla(Componente[] botones, int filas, int columnas, int alto, int lados) {
+	public PanelGrilla(Component[] botones, int filas, int columnas, int alto, int lados) {
 		
 		super(botones, alto, lados);
 		this.filas = filas;
@@ -18,19 +18,18 @@ public class PanelGrilla extends PanelMenu {
 		
 	}
 	
-	public PanelGrilla(Componente[] botones, int filas, int columnas) {
+	public PanelGrilla(Component[] botones, int filas, int columnas) {
 		
 		this (botones, filas, columnas, 0, 0);
 		
 	}
 	
-	public PanelGrilla(Componente[] botones) {
+	public PanelGrilla(Component[] botones) {
 		
 		this (botones, 1, 1, 0, 0);
 		
 	}
 
-	
 	@Override
 	protected void setFormato() {
 		
@@ -39,13 +38,12 @@ public class PanelGrilla extends PanelMenu {
 
 		framecito.setLayout(grid);
 		
-		for (Componente comp : this.getComponentes()) {
+		for (Component comp : this.getComponentes()) {
 			
 			framecito.add(comp);
 			
 		}
-		
-		
+	
 	}
 
 }

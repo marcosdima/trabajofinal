@@ -1,78 +1,76 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
 
-import ar.edu.unlu.poo.gui.Boton;
-import ar.edu.unlu.poo.gui.InputText;
-import ar.edu.unlu.poo.gui.Panel;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-public class ModuloAgregarJugador extends Panel {
+public class ModuloAgregarJugador extends JPanel {
 
-	private InputText inputNombre;
-	private Boton add;
-	private String id;
+	private static final long serialVersionUID = 1L;
+	private JTextField inputNombre;
+	private JButton add;
 	
-	public ModuloAgregarJugador(String id) {
+	public ModuloAgregarJugador() {
 		
 		super();
-		this.setInputNombre();
 		this.setAdd();
+		this.setInput();
 		this.setPanel();
-		this.id = id;
-		
-	}
-
-	private void setInputNombre() {
-		this.inputNombre = new InputText("Ingrese un nombre...");
-	}
-	
-	private void setAdd() {
-		
-		this.add = new Boton("Agregar");
 		
 	}
 
 	private void setPanel() {
 		
-		GridLayout grid = new GridLayout(2, 1, 10, 10);
+		ModuloAgregarJugador framecito = this;
+	
+		GridLayout grid = new GridLayout(2, 1, 1, 1);
 		
-		this.getPanel().setLayout(grid);
+		framecito.setLayout(grid);
 		
-		this.getPanel().add(this.inputNombre.getComponent());
-		this.getPanel().add(this.add.getComponent());
+		this.add(this.inputNombre);
+		this.add(this.add);
 		
 	}
 
-	public Boton getAdd() {
+	public void apagar() {
+		
+		this.getAdd().setEnabled(false);
+		this.getInputNombre().setEnabled(false);
+		
+	}
+	
+	private void setAdd() {
+		
+		this.add = new JButton("Agregar");
+		
+	}
+
+	public JButton getAdd() {
 		
 		return this.add;
 		
 	}
 	
+	public JTextField getInputNombre() {
+		return inputNombre;
+	}
+
+	private void setInput() {
+		this.inputNombre = new JTextField("Ingresar nombre...");
+	}
+
 	public String getString() {
 		
 		return this.inputNombre.getText();
 		
 	}
 
-	public void evento(ActionListener act) {
+	public String getText() {
 		
-		this.getAdd().evento(act);
+		return this.getInputNombre().getText();
 		
 	}
 
-	public void apagar() {
-		
-		this.getAdd().apagar();
-		this.inputNombre.apagar();
-		
-	}
-	
-	public String getText() {
-		
-		return this.id;
-		
-	}
-	
 }
