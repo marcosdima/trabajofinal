@@ -1,5 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
@@ -67,6 +68,26 @@ public class BlackJack implements Observador {
 		
 	}
 	
+	public void iniciar() {
+		
+		for (IVista vista : this.interfaces) {
+			
+			if (vista.isActiva()) {
+				
+				vista.menuPrincipal();
+				
+			}
+			
+		}
+		
+	}
+	
+	public void guardar(String tag) throws IOException {
+		
+		this.crupier.guardado(tag);
+		
+	}
+	
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
@@ -74,97 +95,119 @@ public class BlackJack implements Observador {
 	@Override
 	public void actualizar(Evento event, ArrayList<IJugador> objeto) {
 		
-		IVista vista = this.interfaces.get(0);
+		for (IVista vista : this.interfaces) {
 			
-		switch ((Evento) event) {
+			if (vista.isActiva()) {
+				
+				switch ((Evento) event) {
 
-		case MOSTRARMANO:
+				case MOSTRARMANO:
+					
+					vista.mostrarMano(objeto);
+					
+				default:;
 			
-			vista.mostrarMano(objeto);
-			
-		default:;
-	
+				}
+				
+			}
+		
 		}
 				
 	}
 
 	public void actualizar(Evento event, IJugador data) {
 		
-		IVista vista = this.interfaces.get(0);
-		JugadorBlackJack jugadorBJ = null;
+		JugadorBlackJack jugadorBJ;
 		
-		switch ((Evento) event) {
-				
-			case PREGUNTAROTRA:
-				
-				this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
-				jugadorBJ = this.crupier.seleccionarJugador();
-				
-				if (vista.siONo(event, data)) {
-					
-					this.crupier.repartir(jugadorBJ);
-					
-				}
-				else {
-					
-					this.crupier.terminarTurnoJugador(jugadorBJ);
-					
-				}	
-				
-			case TERMINOTURNO:
-				
-				vista.mostrarMensaje(event, data);
-				break;
-				
-			case SINPLATA:
-				
-				vista.mostrarMensaje(event, data);
-
-		default:
+		for (IVista vista : this.interfaces) {
 			
-			;
+			if (vista.isActiva()) {
+				
+				jugadorBJ = null;
+				
+				switch ((Evento) event) {
+				
+				case PREGUNTAROTRA:
+					
+					this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+					jugadorBJ = this.crupier.seleccionarJugador();
+					
+					if (vista.siONo(event, data)) {
+						
+						this.crupier.repartir(jugadorBJ);
+						
+					}
+					else {
+						
+						this.crupier.terminarTurnoJugador(jugadorBJ);
+						
+					}	
+					
+				case TERMINOTURNO:
+					
+					vista.mostrarMensaje(event, data);
+					break;
+					
+				case SINPLATA:
+					
+					vista.mostrarMensaje(event, data);
+
+			default:
+				
+				;
+				}
+				
 			}
+			
+		}
 		
 	};
 
 	@Override
 	public void actualizar(Evento event) {
 		
-		IVista vista = this.interfaces.get(0);
 		boolean salir;
 		
-		switch ((Evento) event) {
-								
-			case PRIMERAPUESTA:
-
-				vista.formularioSetApuesta(this.crupier.getApostador());
-				
-			case FINDEMANO:
+		for (IVista vista : this.interfaces) {
 			
-				this.crupier.definirGanadores();
-				salir = this.crupier.reiniciarMano();
+			if (vista.isActiva()) {
 				
-				if (!salir) {
-					
-					vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
-					this.setInicio();
-					this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+				switch ((Evento) event) {
+				
+				case PRIMERAPUESTA:
+
 					vista.formularioSetApuesta(this.crupier.getApostador());
 					
+				case FINDEMANO:
+				
+					this.crupier.definirGanadores();
+					salir = this.crupier.reiniciarMano();
+					
+					if (!salir) {
+						
+						vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
+						this.setInicio();
+						this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+						vista.formularioSetApuesta(this.crupier.getApostador());
+						
+					}
+					else {
+						
+						this.actualizar(Evento.FINDELJUEGO);
+						
+					}	
+					
+				case FINDELJUEGO:
+					
+					vista.mostrarMensaje(event, this.crupier);
+					vista.menuPrincipal();
+					
+				default:;
+				
 				}
-				else {
-					
-					this.actualizar(Evento.FINDELJUEGO);
-					
-				}	
 				
-			case FINDELJUEGO:
-				
-				vista.mostrarMensaje(event, this.crupier);
-				vista.menuPrincipal();
-				
-			default:;
-			
+			}
+
 		}
 		
 	}
@@ -174,83 +217,91 @@ public class BlackJack implements Observador {
 		
 		for (IVista vista : this.interfaces) {
 			
-			vista.mostrarMensaje(event, objeto);
-			
-			switch (event) {
-			
-				case ERRORMAXJUGADORES:
-					
-					this.setInicio();
-					
-				case ERRORAPUESTA:
-					
-					vista.formularioSetApuesta(objeto);
-					
-				case NOHAYJUGADORESCARGADOS:
-					
-					vista.formularioAgregarJugador();
-					
-				case ERRORFALTADEDINERO:
-					
-					vista.formularioSetApuesta(objeto);
-					
-				case APOSTONONUMERO:
-					
-					vista.formularioSetApuesta(objeto);
-			
-			default:
-				break;
-			
-			
-			
+			if (vista.isActiva()) {
+				
+				vista.mostrarMensaje(event, objeto);
+				
+				switch (event) {
+				
+					case ERRORMAXJUGADORES:
+						
+						this.setInicio();
+						
+					case ERRORAPUESTA:
+						
+						vista.formularioSetApuesta(objeto);
+						
+					case NOHAYJUGADORESCARGADOS:
+						
+						vista.formularioAgregarJugador();
+						
+					case ERRORFALTADEDINERO:
+						
+						vista.formularioSetApuesta(objeto);
+						
+					case APOSTONONUMERO:
+						
+						vista.formularioSetApuesta(objeto);
+				
+				default:
+					break;
+				
+				}
+				
 			}
 			
-			
 		}
-		
-		
-	}
 
+	}
 	
 	@Override
 	public void actualizar(Notificacion event, IJugador data) {
 		
-		IVista vista = this.interfaces.get(0);
-		IJugador playerContenedor = null;
+		IJugador playerContenedor;
 		
-		switch ((Notificacion) event) {
-		
-			case JUGADORCARGADO:
-		
-				vista.mostrarMensaje(event, data);
-				vista.formularioAgregarJugador();		
-				
-			case BLACKJACK:
-				
-				vista.mostrarMensaje(event, data);
-				break;
-				
-			case APUESTASETEADA:
+		for (IVista vista : this.interfaces) {
 			
-				playerContenedor = this.crupier.getApostador();
+			if (vista.isActiva()) {
 				
-				if (playerContenedor != null) {
+				playerContenedor = null;
+				
+				switch ((Notificacion) event) {
+				
+					case JUGADORCARGADO:
+				
+						vista.mostrarMensaje(event, data);
+						vista.formularioAgregarJugador();		
+						
+					case BLACKJACK:
+						
+						vista.mostrarMensaje(event, data);
+						break;
+						
+					case APUESTASETEADA:
 					
-					vista.mostrarMensaje(event, data);
-					vista.formularioSetApuesta(playerContenedor);
+						playerContenedor = this.crupier.getApostador();
+						
+						if (playerContenedor != null) {
+							
+							vista.mostrarMensaje(event, data);
+							vista.formularioSetApuesta(playerContenedor);
+							
+						}
+						else {
+							
+							this.crupier.repartir(this.crupier.seleccionarJugador());
+							
+						}
+	
+					default:
 					
+					;
 				}
-				else {
-					
-					this.crupier.repartir(this.crupier.seleccionarJugador());
-					
-				}
+				
+			}
 
-		default:
-			
-			;
 		}
-		
+
 	}
 
 }

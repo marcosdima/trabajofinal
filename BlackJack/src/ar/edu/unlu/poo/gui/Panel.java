@@ -38,4 +38,10 @@ public class Panel extends JPanel {
 
 	}
 	
+	public void addVacio(String pos) {
+		
+		this.add(new JLabel(), pos);
+		
+	}
+	
 }

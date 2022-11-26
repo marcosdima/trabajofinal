@@ -1,6 +1,9 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
@@ -12,6 +15,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	private ArrayList<JugadorBlackJack> jugadores;
 	private ArrayList<Observador> observers;
 	private int apuestaMinima;
+	private FileManager fileManager = new FileManager();
 	
 	public CrupierBlackJack(int nroDeJugadores) {
 	
@@ -110,6 +114,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		Apuesta apuesta = null;
 		int montoReal = 0;
 		boolean seteado = false;
+		boolean runAway = false;
 		
 		try {
 			
@@ -123,50 +128,65 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 		}
 		
-		for (JugadorBlackJack player : this.jugadores) { 
-
-			// Si ya apostó, pasa al siguiente.
-			if (player.todaviaNoAposto()) {
+		runAway = this.checkInput(monto);
+		
+		if (!runAway) {
+			
+			try {
 				
-				if (montoReal == 0) {
-					
-					// Podría hacer que si ningún jugador apostó, saltee la mano.
-					player.aposto();
-					player.yaJugo();
-					seteado = this.notificar(Notificacion.NOAPUESTA, player);
-					
-				}
-				else if ((player.getDinero() < this.apuestaMinima)){
-					
-					this.eliminar(player);
-					
-				}
-				else if (montoReal == -1) {
-					
-					this.notificar(SaltoError.APOSTONONUMERO, player);
-					
-				}
-				else if (!seteado) {
-					
-					if ((apuesta.getMonto() > player.getDinero()) && (montoReal != 0)) {
+				for (JugadorBlackJack player : this.jugadores) { 
+		
+					// Si ya apostó, pasa al siguiente.
+					if (player.todaviaNoAposto()) {
 						
-						seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
+						if (montoReal == 0) {
+							
+							// Podría hacer que si ningún jugador apostó, saltee la mano.
+							player.aposto();
+							player.yaJugo();
+							seteado = this.notificar(Notificacion.NOAPUESTA, player);
+							
+						}
+						else if ((player.getDinero() < this.apuestaMinima)){
+							
+							this.eliminar(player);
+							
+						}
+						else if (montoReal == -1) {
+							
+							this.notificar(SaltoError.APOSTONONUMERO, player);
+							
+						}
+						else if (!seteado) {
+							
+							if ((apuesta.getMonto() > player.getDinero()) && (montoReal != 0)) {
+								
+								seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
+								
+							}
+							else if (montoReal < this.apuestaMinima) {
+								
+								seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
+								
+							}
+							else {
+								
+								player.setApuesta(apuesta);
+								player.aposto();
+								seteado = this.notificar(Notificacion.APUESTASETEADA, player);
+							
+							}
+			
+						}
 						
 					}
-					else if (montoReal < this.apuestaMinima) {
-						
-						seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
-						
-					}
-					else {
-						
-						player.setApuesta(apuesta);
-						player.aposto();
-						seteado = this.notificar(Notificacion.APUESTASETEADA, player);
-					
-					}
-	
+				
 				}
+				
+			}
+			catch(ConcurrentModificationException e) {
+				
+
 				
 			}
 			
@@ -523,6 +543,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		player.yaJugo();
 		contenedor = this.seleccionarJugador();
+		this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 		this.notificar(Evento.TERMINOTURNO, player);
 		
 		if (contenedor != null) {
@@ -636,6 +657,40 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	public void guardado(String tag) throws IOException {
+		
+		this.fileManager.save(tag, this.getDatosJugadores());
+		
+	}
+	
+	private void eliminarTodo() {
+		
+		this.jugadores.clear();
+		this.clearMano();
+		
+	}
+	
+	// Checkea si lo ingresado en Apuesta es un comando de salida.
+	private boolean checkInput(String input) {
+		
+		boolean respuesta = false;
+		
+		if (input.equals("Salir")) {
+			
+			respuesta = true;
+			this.eliminarTodo();
+			this.notificar(Evento.FINDELJUEGO);
+			
+		}
+		else if (input.equals("Me retiro")) {
+			
+			// Seguir, estaría hacer unas intenciones!
+			
+		}
+		
+		return respuesta;
+		
+	}
 	
 /*
 	 * 
@@ -719,7 +774,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	 - Getters and Setters 
 	 * 
 */
-	
 	
 	public void setApuestaMinima(int montoMinimo) {
 		

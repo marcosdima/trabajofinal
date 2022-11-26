@@ -28,7 +28,7 @@ public class ModuloJugador extends JPanel {
 	
 	private void setFormato() {
 
-		int espacioCartas = 20;
+		int espacioCartas = 10;
 
 		JPanel panelNorte = new JPanel();
 		JPanel panelCentro = new JPanel();

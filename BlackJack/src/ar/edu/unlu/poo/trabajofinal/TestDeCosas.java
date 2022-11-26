@@ -9,13 +9,18 @@ public class TestDeCosas {
 							
 		BlackJack juego = new BlackJack();
 		VistaConsola interfaz = new VistaConsola(juego);
-		//InterfazGrafica interfaz = new InterfazGrafica(juego);
+		InterfazGrafica interfazGrafica = new InterfazGrafica(juego);
 		
-		interfaz.menuPrincipal();
+		//interfaz.setActiva(true);
+		interfazGrafica.setActiva(true);
+		
+		juego.iniciar();
 		
 		// Mirar captura de errores para recrearlos.
 		// Testear errores.
 		// No se que chota le pasa a la interfaz, pensar como solucionar que no sale del menú principal.
+		// NO IMPLEMENTE LAS APUESTAS!
+		// Seguir con comandos!
 		
 	}
 

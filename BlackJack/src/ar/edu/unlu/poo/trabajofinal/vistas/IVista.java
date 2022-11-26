@@ -23,4 +23,10 @@ public interface IVista {
 	public void formularioSetApuesta(IJugador dato);
 
 	public boolean siONo(IMensaje msj, IJugador dato);
+	
+	public void setActiva(boolean actividad);
+	
+	public boolean isActiva();
+
+	
 }

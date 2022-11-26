@@ -9,7 +9,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.Menu;
 import ar.edu.unlu.poo.trabajofinal.commons.OpcionesMenuPrincipal;
 import java.util.ArrayList;
 
-public class VistaConsola implements IVista {
+public class VistaConsola extends Vista {
 	
 	private Print p;
 	private BlackJack controlador;
@@ -19,6 +19,7 @@ public class VistaConsola implements IVista {
 	
 	public VistaConsola(BlackJack controlador) {
 		
+		super();
 		this.setControlador(controlador);
 		this.controlador.addIntefaz(this);
 		p = new Print();

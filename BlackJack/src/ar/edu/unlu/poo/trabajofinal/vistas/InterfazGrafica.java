@@ -1,15 +1,13 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import ar.edu.unlu.poo.gui.Frame;
@@ -22,7 +20,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 
-public class InterfazGrafica implements IVista {
+public class InterfazGrafica extends Vista {
 
 	private BlackJack controlador;
 	private Frame frame;
@@ -32,9 +30,10 @@ public class InterfazGrafica implements IVista {
 	
 	public InterfazGrafica(BlackJack controlador) {
 		
+		super();
 		this.setControlador(controlador);
 		this.controlador.addIntefaz(this);
-		this.frame = new Frame("Black Jack");
+		this.setFrame();
 		this.setImageManager("Imagenes/Cartas/", "Default");
 		
 	}
@@ -51,8 +50,9 @@ public class InterfazGrafica implements IVista {
 		
 		JButton salir = new JButton("Salir");
 		JButton jugar = new JButton("Jugar");
+		JButton save = new JButton("Guardar");
 		
-		Component[] opciones = {jugar, salir};
+		Component[] opciones = {jugar, salir, save};
 		
 		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
 		
@@ -61,6 +61,8 @@ public class InterfazGrafica implements IVista {
 			public void actionPerformed(ActionEvent arg0) {
 
 				nombres = new ArrayList<String>();
+				flag = false;
+				setAgregarJugadores();
 				formularioAgregarJugador();
 				
 			}
@@ -73,6 +75,18 @@ public class InterfazGrafica implements IVista {
 				System.exit(0);
 				
 			}});
+		save.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					salidaForzada();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}});
 		
 		this.frame.add(framecito);
 		framecito.updateUI();
@@ -83,8 +97,7 @@ public class InterfazGrafica implements IVista {
 	public void formularioAgregarJugador() {
 	
 		String nombre = "";
-		
-		// Le saqué el flag.
+
 		if (this.nombres.size() > 0) {
 			
 			nombre = this.nombres.get(0);
@@ -93,17 +106,13 @@ public class InterfazGrafica implements IVista {
 				
 				this.nombres.remove(0);
 				
+				
 			}
-			
+
 			this.controlador.addJugador(nombre);
 			
 		}
-		else {
-					
-			this.frame.append(this.setAgregarJugadores());
-			
-		}
-		
+
 	}
 
 	@Override
@@ -118,30 +127,39 @@ public class InterfazGrafica implements IVista {
 		
 		JOptionPane mensaje;
 		
-		if (msj instanceof Evento) {
-				
-			if ((msj == Evento.FINDELJUEGO) && (!flag)) {
+		if (!flag) {
+			
+			if (msj instanceof Evento) {
+					
+				if ((msj == Evento.FINDELJUEGO)) {
+					
+					mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
+					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "El juego terminó!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					this.flag = true;
+					
+				}
+				else {
+					
+					mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
+					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Evento", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+	
+			}
+			if (msj instanceof SaltoError) {
 				
 				mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
-				JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "El juego terminó!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
-				this.flag = true;
+				JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Error detectado!", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 				
 			}
-
-		}
-		if (msj instanceof SaltoError) {
-			
-			mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
-			JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Error detectado!", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
-			
-		}
-		if (msj instanceof Notificacion) {
-			
-			System.out.println(msj);
+			if (msj instanceof Notificacion) {
+				
+				System.out.println(msj);
+				
+			}
 			
 		}
 		
-
 	}
 
 	@Override
@@ -195,10 +213,13 @@ public class InterfazGrafica implements IVista {
 	@Override
 	public void formularioSetApuesta(IJugador dato) {
 		
-		JOptionPane pane = new JOptionPane("Hola",JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
-		String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta:");	
-		this.controlador.apostar(res);
-	
+		if (!flag) {
+			
+			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
+			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta:", dato.getNombre(), JOptionPane.INFORMATION_MESSAGE);	
+			this.controlador.apostar(res);
+			
+		}
 		
 	}
 
@@ -220,9 +241,33 @@ public class InterfazGrafica implements IVista {
 		
 	}
 
+	public void salidaForzada() throws IOException {
+		
+		JOptionPane mensaje = new JOptionPane("Hola", JOptionPane.YES_NO_OPTION);
+		// 0 = Si; 1 = No
+		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Estas seguro de que quieres salir?", 
+							"Salir", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+		if (respuesta == 0) {
+			
+			respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres guardar tu partida?",
+					"Guardado", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			
+			if (respuesta == 0) {
+				
+				this.controlador.guardar("as");
+				
+			}
+			
+			System.exit(0);
+			
+		}
+
+	}
+	
 	// Metodos de intefazgráfica.
 	
-	private PanelGrilla setAgregarJugadores() {
+	private void setAgregarJugadores() {
 
 		int maximo = 5;
 		ModuloAgregarJugador jugador;
@@ -254,22 +299,26 @@ public class InterfazGrafica implements IVista {
 
 		}
 		
-		agregar = new PanelGrilla(modulos, 2, 3);
+		agregar = new PanelGrilla(modulos, 2, 3, 50, 50);
 		
 		seguir.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				nombres.add(null);
-				formularioAgregarJugador();
-				
+				if (nombres.size() > 0) {
+					
+					nombres.add(null);
+					formularioAgregarJugador();
+					
+				}
+		
 			}
 			
 		});
 		agregar.add(seguir);
 
-		return agregar;
+		this.frame.append(agregar);
 		
 	}
 
@@ -281,5 +330,11 @@ public class InterfazGrafica implements IVista {
 		this.imageManager = new ImageManager(source, folder);
 	}
 
+	public void setFrame() {
+		
+		this.frame = new Frame("Black Jack");
+		
+	}
+	
 }
 
