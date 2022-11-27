@@ -7,6 +7,8 @@ import ar.edu.unlu.poo.trabajofinal.IJugador;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Menu;
 import ar.edu.unlu.poo.trabajofinal.commons.OpcionesMenuPrincipal;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VistaConsola extends Vista {
@@ -149,6 +151,18 @@ public class VistaConsola extends Vista {
 		
 	}
 	
+	@Override
+	public void guardado() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void carga() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	//////////////////////////////////
 	//		Métodos de Consola		//
 	//////////////////////////////////
@@ -191,5 +205,7 @@ public class VistaConsola extends Vista {
 		p.printSeguido(dinerillo, espacio);
 		
 	}
+
+	
 
 }

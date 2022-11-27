@@ -1,15 +1,19 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
+import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.Frame;
 import ar.edu.unlu.poo.gui.ImageManager;
 import ar.edu.unlu.poo.gui.Panel;
@@ -50,9 +54,9 @@ public class InterfazGrafica extends Vista {
 		
 		JButton salir = new JButton("Salir");
 		JButton jugar = new JButton("Jugar");
-		JButton save = new JButton("Guardar");
+		JButton load = new JButton("Cargar");
 		
-		Component[] opciones = {jugar, salir, save};
+		Component[] opciones = {jugar, salir, load};
 		
 		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
 		
@@ -75,12 +79,12 @@ public class InterfazGrafica extends Vista {
 				System.exit(0);
 				
 			}});
-		save.addActionListener(new ActionListener() {
+		load.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				
 				try {
-					salidaForzada();
+					carga();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -125,7 +129,7 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void mostrarMensaje(IMensaje msj, IJugador data) {
 		
-		JOptionPane mensaje;
+		JOptionPane mensaje = null;
 		
 		if (!flag) {
 			
@@ -133,22 +137,19 @@ public class InterfazGrafica extends Vista {
 					
 				if ((msj == Evento.FINDELJUEGO)) {
 					
-					mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
 					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "El juego terminó!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					this.flag = true;
 					
 				}
 				else {
 					
-					mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
-					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Evento", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), data.getNombre(), JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					
 				}
 	
 			}
 			if (msj instanceof SaltoError) {
 				
-				mensaje = new JOptionPane(data.getNombre() + ": " + msj.getDescripcion());
 				JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), "Error detectado!", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 				
 			}
@@ -159,7 +160,7 @@ public class InterfazGrafica extends Vista {
 			}
 			
 		}
-		
+
 	}
 
 	@Override
@@ -227,13 +228,19 @@ public class InterfazGrafica extends Vista {
 	public boolean siONo(IMensaje msj, IJugador dato) {
 		
 		boolean retorno = false;
-		JOptionPane mensaje = new JOptionPane(dato.getNombre() + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
-		// 0 = Si; 1 = No
-		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres otra carta?", "Turno de" + dato.getNombre(), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-
-		if (respuesta == 0) {
+		
+		if (!dato.getNombre().equals("Crupier")) {
 			
-			retorno = true;
+			
+			JOptionPane mensaje = new JOptionPane(dato.getNombre() + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
+			// 0 = Si; 1 = No
+			int respuesta = JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), dato.getNombre(), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+			if (respuesta == 0) {
+				
+				retorno = true;
+				
+			}
 			
 		}
 		
@@ -241,29 +248,99 @@ public class InterfazGrafica extends Vista {
 		
 	}
 
-	public void salidaForzada() throws IOException {
+	public void guardado() throws IOException {
 		
-		JOptionPane mensaje = new JOptionPane("Hola", JOptionPane.YES_NO_OPTION);
-		// 0 = Si; 1 = No
-		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Estas seguro de que quieres salir?", 
-							"Salir", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-
+		JOptionPane mensaje = new JOptionPane();
+		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres guardar tu partida?",
+				"Guardado", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+		
 		if (respuesta == 0) {
 			
-			respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres guardar tu partida?",
-					"Guardado", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			this.controlador.guardar("as");
 			
-			if (respuesta == 0) {
-				
-				this.controlador.guardar("as");
-				
-			}
+		}
+		
+		System.exit(0);
+
+	}
+	
+	@Override
+	public void carga() throws IOException {
+		
+		Frame cargados = new Frame("Carga");
+		BorderLayout border = new BorderLayout(10,100);
+		Panel principal = new Panel();
+		Boton seguir = new Boton("Cargar");
+		JComboBox<String> lista;
+		
+		// Estos son para crear la lista de archivos disponibles.
+		File dir = new File("Files/Save");
+		File[] archivos = dir.listFiles();
+		String[] strs = new String[archivos.length + 1];
+		int contador = 1;
+		
+		strs[0] = "Seleccionar...";
+		
+		for (File archivo : archivos) {
 			
-			System.exit(0);
+			strs[contador] = archivo.getName();
+			contador++;
 			
 		}
 
+		lista = new JComboBox<String>(strs) ;
+		// Hasta aca.
+		
+		seguir.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String eleccion = (String) lista.getSelectedItem();
+				
+				cargados.setVisible(false);
+				frame.setEnabled(true);
+				
+				if (eleccion != strs[0]) {
+					
+					try {
+						// Este flag es por un error en los mensajes.
+						flag = false;
+						controlador.cargar(eleccion);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+					
+				}
+				else {
+					
+					JOptionPane.showConfirmDialog(principal, "Ese archivo no existe!", "Advertencia!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+
+			}});
+	
+		frame.setEnabled(false);
+		
+		cargados.setSize(300, 600);
+		cargados.setVisible(true);
+		
+		principal.setLayout(border);
+
+		principal.add(seguir, BorderLayout.SOUTH);
+		principal.addVacio(BorderLayout.NORTH);
+		principal.add(lista, BorderLayout.CENTER);
+		principal.addVacio(BorderLayout.WEST);
+		principal.addVacio(BorderLayout.EAST);
+		
+		cargados.append(principal);
+		principal.updateUI();
+		
 	}
+	
 	
 	// Metodos de intefazgráfica.
 	
@@ -335,6 +412,7 @@ public class InterfazGrafica extends Vista {
 		this.frame = new Frame("Black Jack");
 		
 	}
-	
+
+
 }
 

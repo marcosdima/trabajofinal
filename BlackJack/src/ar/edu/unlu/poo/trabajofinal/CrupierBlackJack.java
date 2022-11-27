@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
+import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
@@ -33,7 +34,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		for (JugadorBlackJack player : this.getJugadores()) {
 			
-			if ((player.getNombre().startsWith("21"))) {
+			if ((player.getNombre().startsWith("bj"))) {
 				
 				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
 				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
@@ -43,6 +44,14 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				
 				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.DOS));
 				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.DOS));
+				player.mostrarCarta();
+				
+			}
+			else if ((player.getNombre().toLowerCase().startsWith("21"))) {
+				
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.SIETE));
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CUATRO));
 				player.mostrarCarta();
 				
 			}
@@ -657,9 +666,44 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	// Genera los archivos de guardado.
 	public void guardado(String tag) throws IOException {
 		
-		this.fileManager.save(tag, this.getDatosJugadores());
+		ArrayList<String> guardado = new ArrayList<String>();
+		
+		for (IJugador player : this.getDatosJugadores()) {
+			
+			guardado.add(player.getNombre() + "," + (player.getDinero()));
+			
+		}		
+		
+		this.fileManager.save(tag, guardado);
+		
+	}
+	
+	public void cargado(String tag) throws IOException {
+		
+		JugadorBlackJack jugador;
+		ArrayList<String> guardado = this.fileManager.load(tag);
+		String[] array;
+		String nombre = "";
+		int dinero = 0;
+		int largo = guardado.size() - 1;
+		
+		for (int i = 0; i < largo; i++) {
+			
+			array = guardado.get(i).split(",");
+			nombre = array[0].trim();
+			dinero = Integer.valueOf(array[1].trim());
+			
+			jugador = new JugadorBlackJack(nombre, dinero);
+			this.jugadores.add(jugador);
+			
+		}
+		
+		this.repartirPrimeraTanda();
+		this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+		this.notificar(Evento.PRIMERAPUESTA);
 		
 	}
 	
@@ -667,6 +711,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		this.jugadores.clear();
 		this.clearMano();
+		this.notificar(Evento.FINDELJUEGO);
 		
 	}
 	
@@ -674,23 +719,27 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	private boolean checkInput(String input) {
 		
 		boolean respuesta = false;
+		Intencion means = new Intencion();
 		
-		if (input.equals("Salir")) {
+		if (means.out(input)) {
 			
 			respuesta = true;
+			this.notificar(Evento.ADVERTENCIAGUARDADO);
 			this.eliminarTodo();
-			this.notificar(Evento.FINDELJUEGO);
+			
 			
 		}
-		else if (input.equals("Me retiro")) {
+		else if (means.quit(input)) {
 			
-			// Seguir, estaría hacer unas intenciones!
+			this.eliminar((JugadorBlackJack) this.getApostador());
+			this.notificar(Evento.TERMINOTURNO, (JugadorBlackJack) this.getApostador());
 			
 		}
 		
 		return respuesta;
 		
 	}
+
 	
 /*
 	 * 
@@ -769,11 +818,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	
 /*
 	 * 
 	 - Getters and Setters 
 	 * 
 */
+	
 	
 	public void setApuestaMinima(int montoMinimo) {
 		

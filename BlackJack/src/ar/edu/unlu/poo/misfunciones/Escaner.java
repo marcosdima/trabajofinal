@@ -9,20 +9,10 @@ public class Escaner {
 	public boolean siONo() {
 		
 		boolean res = false;
+		Intencion is = new Intencion();
 		
 		String input = this.next().toLowerCase();
-		String[] yes = {"si", "s", "yes", "y", "sisi", "sis", "yyes"};
-		//String[] no = {"no", "n", "nop", "nope", "nono", "nain", "nel"};
-		
-		for (String str : yes) {
-			
-			if (input.equals(str)) {
-				
-				res = true;
-				
-			}
-			
-		}
+		res = is.positive(input);
 		
 		return res;
 		

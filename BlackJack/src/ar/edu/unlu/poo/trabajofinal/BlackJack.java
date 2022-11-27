@@ -88,6 +88,12 @@ public class BlackJack implements Observador {
 		
 	}
 	
+	public void cargar(String tag) throws IOException {
+		
+		this.crupier.cargado(tag);
+		
+	}
+	
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
@@ -187,13 +193,14 @@ public class BlackJack implements Observador {
 						
 						vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
 						this.setInicio();
-						this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
+						vista.mostrarMano(this.crupier.getDatosJugadores());
 						vista.formularioSetApuesta(this.crupier.getApostador());
 						
 					}
 					else {
 						
-						this.actualizar(Evento.FINDELJUEGO);
+						vista.mostrarMensaje(event, this.crupier);
+						vista.menuPrincipal();
 						
 					}	
 					
@@ -201,6 +208,27 @@ public class BlackJack implements Observador {
 					
 					vista.mostrarMensaje(event, this.crupier);
 					vista.menuPrincipal();
+					
+				case ADVERTENCIAGUARDADO:
+					
+					// Aprovecho la variable, en este caso sería guardar.
+					salir = vista.siONo(event, this.crupier);
+					
+					if (salir) {
+						
+						try {
+							vista.guardado();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					else {
+						
+						break;
+						
+					}
 					
 				default:;
 				

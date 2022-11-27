@@ -1,5 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
@@ -27,6 +28,9 @@ public interface IVista {
 	public void setActiva(boolean actividad);
 	
 	public boolean isActiva();
+	
+	public void guardado() throws IOException;
 
+	public void carga() throws IOException;
 	
 }

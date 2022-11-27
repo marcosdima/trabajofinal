@@ -19,6 +19,7 @@ public class Frame extends JFrame {
 		this.setSize(this.ANCHO, this.ALTO);
 		this.setPanelPrincipal();
 		this.getContentPane().add(panelPrincipal);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 	

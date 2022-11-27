@@ -1,5 +1,6 @@
 package ar.edu.unlu.poo.gui;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
@@ -8,6 +9,7 @@ import javax.swing.JPanel;
 public class Panel extends JPanel {
 	
 	public static final int FLOW = 0;
+	public static final int BORDER = 1;
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,6 +29,12 @@ public class Panel extends JPanel {
 			
 			this.setLayout(new FlowLayout());
 		
+		
+		case BORDER: 
+			
+			this.setLayout(new BorderLayout());
+			
+			
 		}
 		
 		
