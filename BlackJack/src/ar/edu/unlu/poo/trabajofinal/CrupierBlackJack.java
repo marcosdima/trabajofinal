@@ -731,6 +731,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		else if (means.quit(input)) {
 			
+			try {
+				this.setRanking(this.getApostador());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.eliminar((JugadorBlackJack) this.getApostador());
 			this.notificar(Evento.TERMINOTURNO, (JugadorBlackJack) this.getApostador());
 			
@@ -739,6 +745,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		return respuesta;
 		
 	}
+	
+
 
 	
 /*
@@ -748,6 +756,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 */
 	
 	
+
 	@Override
 	public void agregarObservador(Observador observer) {
 		
@@ -889,5 +898,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+	private void setRanking(IJugador player) throws IOException {
+		
+		fileManager.addToRanking(player.getNombre(), (player.getDinero() - 1000));
+		
+	}
+
+	public ArrayList<String> getRanking() throws IOException {
+		
+		return this.fileManager.loadRanking();
+		
+	}
+
 }
 

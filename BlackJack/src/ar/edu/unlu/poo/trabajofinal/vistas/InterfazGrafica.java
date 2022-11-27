@@ -2,6 +2,7 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,11 +12,14 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.Frame;
 import ar.edu.unlu.poo.gui.ImageManager;
+import ar.edu.unlu.poo.gui.Label;
 import ar.edu.unlu.poo.gui.Panel;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
@@ -55,8 +59,9 @@ public class InterfazGrafica extends Vista {
 		JButton salir = new JButton("Salir");
 		JButton jugar = new JButton("Jugar");
 		JButton load = new JButton("Cargar");
+		JButton rank = new JButton("Ranking");
 		
-		Component[] opciones = {jugar, salir, load};
+		Component[] opciones = {jugar, salir, load, rank};
 		
 		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
 		
@@ -85,6 +90,18 @@ public class InterfazGrafica extends Vista {
 				
 				try {
 					carga();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}});
+		rank.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					ranking();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -341,6 +358,52 @@ public class InterfazGrafica extends Vista {
 		
 	}
 	
+	@Override
+	public void ranking() throws IOException {
+		
+		Frame cargados = new Frame("Ranking");
+		GridLayout grid = new GridLayout(10,1);
+		ArrayList<String> listaStr = controlador.getRanking();
+		Panel rank = new Panel();
+		JLabel linea = new JLabel();
+		Font fuente = new Font("FreeMono", Font.ITALIC, linea.getFont().getSize() + 2);
+		String[] spliteo = null;
+		String nombre = "";
+		String puntos = "";
+		int contador = 1;
+		
+		cargados.setSize(300, 600);
+		cargados.setVisible(true);
+		rank.setLayout(grid);
+		linea.setFont(fuente);
+		
+		if (!listaStr.isEmpty()) {
+			
+			for (String str : listaStr) {
+				
+				spliteo = str.split(",");
+				nombre = spliteo[0].trim();
+				puntos = spliteo[1].trim();
+				linea.setText((String.valueOf(contador) + ". " + nombre + " - Puntos: " + puntos));;
+				rank.add(linea);
+				contador++;
+
+			}
+			
+			//rank = new PanelMenuPrincipal(componentes);
+			cargados.append(rank);
+			rank.updateUI();
+			
+		}
+		else {
+			
+			JOptionPane.showMessageDialog(cargados, "Actualmente no se encuentrar cargados jugadores en el ranking, "
+					+ "empieza a jugar para ir sumando records!", "No hay ranking!", JOptionPane.INFORMATION_MESSAGE);
+			cargados.setVisible(false);
+			
+		}
+		
+	}
 	
 	// Metodos de intefazgráfica.
 	
@@ -410,8 +473,11 @@ public class InterfazGrafica extends Vista {
 	public void setFrame() {
 		
 		this.frame = new Frame("Black Jack");
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
+
+
 
 
 }

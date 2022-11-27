@@ -32,5 +32,7 @@ public interface IVista {
 	public void guardado() throws IOException;
 
 	public void carga() throws IOException;
+
+	public void ranking() throws IOException;
 	
 }

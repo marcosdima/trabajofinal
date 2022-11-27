@@ -16,23 +16,16 @@ public class Test {
 
 	public static void main(String[] args) throws IOException {
 		
+		Label l = new Label("Que onda?");
+		Boton v = new Boton("sup");
 		
+		Frame f = new Frame("test");
 		
-		FileManager f = new FileManager();
-		ArrayList<String> j = new ArrayList<String>();
-		
-		File n = new File("Files/Save/testPrimero.txt");
-		
-		System.out.println(n.exists());
-		
-		j = f.load("testPrimero");
-		
-		for (String str : j) {
-			
-			System.out.println(str);
-			
-		}
+		f.setVisible(true);
+		l.setSizeFont(100);
+		f.getContentPane().add(l);
 
+		
 	}
 
 }

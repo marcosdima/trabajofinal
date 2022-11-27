@@ -206,6 +206,12 @@ public class VistaConsola extends Vista {
 		
 	}
 
+	@Override
+	public void ranking() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

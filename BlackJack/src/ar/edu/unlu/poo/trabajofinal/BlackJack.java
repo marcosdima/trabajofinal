@@ -94,6 +94,12 @@ public class BlackJack implements Observador {
 		
 	}
 	
+	public ArrayList<String> getRanking() throws IOException {
+		
+		return this.crupier.getRanking();
+		
+	}
+	
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
