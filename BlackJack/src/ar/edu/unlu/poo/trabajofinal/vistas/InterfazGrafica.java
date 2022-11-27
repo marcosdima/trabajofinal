@@ -235,6 +235,13 @@ public class InterfazGrafica extends Vista {
 			
 			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
 			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta:", dato.getNombre(), JOptionPane.INFORMATION_MESSAGE);	
+			
+			if (res == null) {
+				
+				res = "a";
+				
+			}
+			
 			this.controlador.apostar(res);
 			
 		}
@@ -339,8 +346,6 @@ public class InterfazGrafica extends Vista {
 				}
 
 			}});
-	
-		frame.setEnabled(false);
 		
 		cargados.setSize(300, 600);
 		cargados.setVisible(true);
@@ -372,19 +377,20 @@ public class InterfazGrafica extends Vista {
 		String puntos = "";
 		int contador = 1;
 		
-		cargados.setSize(300, 600);
+		cargados.setSize(600, 600);
 		cargados.setVisible(true);
 		rank.setLayout(grid);
 		linea.setFont(fuente);
 		
 		if (!listaStr.isEmpty()) {
 			
-			for (String str : listaStr) {
+			for (int e = (listaStr.size() - 1); e >= 0; e--) {
 				
-				spliteo = str.split(",");
+				spliteo = listaStr.get(e).split(",");
 				nombre = spliteo[0].trim();
 				puntos = spliteo[1].trim();
-				linea.setText((String.valueOf(contador) + ". " + nombre + " - Puntos: " + puntos));;
+				linea = new Label(String.valueOf(contador) + ". " + nombre + " - Puntos: " + puntos);
+				linea.setFont(fuente);
 				rank.add(linea);
 				contador++;
 
@@ -476,9 +482,6 @@ public class InterfazGrafica extends Vista {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
-
-
-
 
 }
 

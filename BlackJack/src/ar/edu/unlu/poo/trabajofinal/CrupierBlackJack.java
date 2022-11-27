@@ -65,11 +65,16 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				
 		}
 		
-		this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
-		this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
-		//this.addCarta(this.darCarta());
-		//this.addCarta(this.darCarta());
-		this.mostrarCarta();
+		//this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
+		//this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
+		if (this.getCartas().length < 2){
+			
+			this.addCarta(this.darCarta());
+			this.addCarta(this.darCarta());
+			this.mostrarCarta();
+			
+		}
+		
 		
 	}
 
@@ -121,6 +126,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public void setApuestas(String monto) {
 		
 		Apuesta apuesta = null;
+		JugadorBlackJack player;
 		int montoReal = 0;
 		boolean seteado = false;
 		boolean runAway = false;
@@ -138,58 +144,55 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		
 		runAway = this.checkInput(monto);
+		player = (JugadorBlackJack) this.getApostador();
 		
-		if (!runAway) {
+		if (!runAway && player != null) {
 			
 			try {
-				
-				for (JugadorBlackJack player : this.jugadores) { 
 		
-					// Si ya apostó, pasa al siguiente.
-					if (player.todaviaNoAposto()) {
+				// Si ya apostó, pasa al siguiente.
+				if (player.todaviaNoAposto()) {
+					
+					if (montoReal == 0) {
 						
-						if (montoReal == 0) {
-							
-							// Podría hacer que si ningún jugador apostó, saltee la mano.
-							player.aposto();
-							player.yaJugo();
-							seteado = this.notificar(Notificacion.NOAPUESTA, player);
-							
-						}
-						else if ((player.getDinero() < this.apuestaMinima)){
-							
-							this.eliminar(player);
-							
-						}
-						else if (montoReal == -1) {
-							
-							this.notificar(SaltoError.APOSTONONUMERO, player);
-							
-						}
-						else if (!seteado) {
-							
-							if ((apuesta.getMonto() > player.getDinero()) && (montoReal != 0)) {
-								
-								seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
-								
-							}
-							else if (montoReal < this.apuestaMinima) {
-								
-								seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
-								
-							}
-							else {
-								
-								player.setApuesta(apuesta);
-								player.aposto();
-								seteado = this.notificar(Notificacion.APUESTASETEADA, player);
-							
-							}
-			
-						}
+						// Podría hacer que si ningún jugador apostó, saltee la mano.
+						player.aposto();
+						player.yaJugo();
+						seteado = this.notificar(Notificacion.NOAPUESTA, player);
 						
 					}
-				
+					else if ((player.getDinero() < this.apuestaMinima)){
+						
+						this.eliminar(player);
+						
+					}
+					else if (montoReal == -1) {
+						
+						this.notificar(SaltoError.APOSTONONUMERO, player);
+						
+					}
+					else if (!seteado) {
+						
+						if ((apuesta.getMonto() > player.getDinero()) && (montoReal != 0)) {
+							
+							seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
+							
+						}
+						else if (montoReal < this.apuestaMinima) {
+							
+							seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
+							
+						}
+						else {
+							
+							player.setApuesta(apuesta);
+							player.aposto();
+							seteado = this.notificar(Notificacion.APUESTASETEADA, player);
+						
+						}
+		
+					}
+						
 				}
 				
 			}
@@ -711,6 +714,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		this.jugadores.clear();
 		this.clearMano();
+		System.out.println(this.getManoActual().getCartas().size());
 		this.notificar(Evento.FINDELJUEGO);
 		
 	}
@@ -720,11 +724,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		boolean respuesta = false;
 		Intencion means = new Intencion();
+		JugadorBlackJack player = (JugadorBlackJack) this.getApostador();
 		
 		if (means.out(input)) {
 			
 			respuesta = true;
-			this.notificar(Evento.ADVERTENCIAGUARDADO);
+			this.notificar(Evento.ADVERTENCIAGUARDADO, player);
 			this.eliminarTodo();
 			
 			
@@ -737,17 +742,15 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.eliminar((JugadorBlackJack) this.getApostador());
-			this.notificar(Evento.TERMINOTURNO, (JugadorBlackJack) this.getApostador());
+			
+			this.notificar(Evento.TERMINOTURNO, player);
+			this.eliminar(player);
 			
 		}
 		
 		return respuesta;
 		
 	}
-	
-
-
 	
 /*
 	 * 
@@ -756,7 +759,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 */
 	
 	
-
 	@Override
 	public void agregarObservador(Observador observer) {
 		

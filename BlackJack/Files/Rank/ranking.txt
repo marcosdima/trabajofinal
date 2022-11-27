@@ -1,0 +1,10 @@
+Ingresar nombre...,500
+Casa,50
+Ingresar nombre...,0
+Ingresar nombre...,0
+Ingresar nombre...,0
+Ingresar nombre...,0
+cas,0
+Ingresar nombre...,0
+Ingresar nombre...,0
+Ingresar nombre...,0

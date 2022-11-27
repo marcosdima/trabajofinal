@@ -2,7 +2,6 @@ package ar.edu.unlu.poo.trabajofinal;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -59,42 +58,108 @@ public class FileManager {
 	public ArrayList<String> load(String tag) throws IOException {
 		
 		return this.carga(SAVE + tag);
-		
-		
+	
 	} 
 	
 	public ArrayList<String> loadRanking() throws IOException {
 		
 		File archivo = new File(this.RANKING);
 		
+		ArrayList<String> retorno;
+		
 		if (!archivo.exists()) {
 			
 			archivo.createNewFile();
 			
 		}
 		
-		return this.carga(this.RANKING);
+		retorno = this.carga(this.RANKING);
+				
+		this.ordenarRanking(retorno);
+		
+		return retorno;
 		
 	}
 
 	public void addToRanking(String nombre, int i) throws IOException {
 		
+		ArrayList<String> actual = this.loadRanking();
 		File archivo = new File(this.RANKING);
-		PrintWriter escritor;
-
+		PrintWriter escritor = new PrintWriter(archivo);
+		String nuevo = nombre + "," + i;
+			
 		if (!archivo.exists()) {
 			
 			archivo.createNewFile();
+	
+		}
+		
+		if (actual.size() == 1) {
 			
+			escritor.println(actual.get(0));
+			escritor.write(nuevo);
+			
+		}
+		else {
+			
+			actual.add(nuevo);
+			this.ordenarRanking(actual);
+			
+			while (actual.size() > 10) {
+				
+				actual.remove(actual.size() - 1);
+				
+			}
+			
+			for (int e = (actual.size() - 1); e >= 0; e--) {
+				
+				escritor.write(actual.get(e) + "\n");
+				
+			}
 			
 		}
 		
-		escritor = new PrintWriter(archivo);
-		escritor.write(nombre + "," + i);
-		
-		
 		escritor.close();
 			
+	}
+
+	// Seguir con esto.
+	private void ordenarRanking(ArrayList<String> lista) throws IOException {
+		
+		int puntos = 0;
+		int puntoAux = 0;
+		int largo = lista.size();
+		String contenedor;
+		String[] linea;
+		String[] lineaAux;
+		
+		for (int i = 0; i < (largo - 1); i++) {
+			
+			linea = lista.get(i).split(",");
+			puntos = Integer.valueOf(linea[1].trim());
+			
+			for (int e = i; e < largo; e++) {
+				
+				lineaAux = lista.get(e).split(",");
+				puntoAux = Integer.valueOf(lineaAux[1].trim());
+				
+				if (puntos > puntoAux) {
+					
+					contenedor = lista.get(i);
+					lista.set(i, lista.get(e));
+					lista.set(e, contenedor);
+					
+				}
+				else {
+					
+					linea = lineaAux;
+					
+				}
+				
+			}
+			
+		}
+	
 	}
 	
 }

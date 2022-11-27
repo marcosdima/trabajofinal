@@ -130,6 +130,7 @@ public class BlackJack implements Observador {
 	public void actualizar(Evento event, IJugador data) {
 		
 		JugadorBlackJack jugadorBJ;
+		boolean guardar = false;
 		
 		for (IVista vista : this.interfaces) {
 			
@@ -163,6 +164,26 @@ public class BlackJack implements Observador {
 				case SINPLATA:
 					
 					vista.mostrarMensaje(event, data);
+					
+				case ADVERTENCIAGUARDADO:
+					
+					guardar = vista.siONo(event, data);
+					
+					if ( guardar) {
+						
+						try {
+							vista.guardado();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					else {
+						
+						break;
+						
+					}
 
 			default:
 				
@@ -214,28 +235,7 @@ public class BlackJack implements Observador {
 					
 					vista.mostrarMensaje(event, this.crupier);
 					vista.menuPrincipal();
-					
-				case ADVERTENCIAGUARDADO:
-					
-					// Aprovecho la variable, en este caso sería guardar.
-					salir = vista.siONo(event, this.crupier);
-					
-					if (salir) {
-						
-						try {
-							vista.guardado();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-					}
-					else {
-						
-						break;
-						
-					}
-					
+								
 				default:;
 				
 				}

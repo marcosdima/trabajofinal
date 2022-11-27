@@ -34,8 +34,8 @@ public abstract class ConjuntoDeCartas {
 	
 	protected void clear() {
 		
-		this.cartas = new ArrayList<Carta>(this.getTam());
-		
+		this.cartas.clear();
+
 	}
 
 	public boolean contains(ContenidoDeCarta carta) {
