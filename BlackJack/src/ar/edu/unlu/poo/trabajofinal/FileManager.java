@@ -107,7 +107,7 @@ public class FileManager {
 			
 			while (actual.size() > 10) {
 				
-				actual.remove(actual.size() - 1);
+				actual.remove(0);
 				
 			}
 			

@@ -234,7 +234,7 @@ public class InterfazGrafica extends Vista {
 		if (!flag) {
 			
 			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
-			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta:", dato.getNombre(), JOptionPane.INFORMATION_MESSAGE);	
+			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta: (Apuesta minima " + this.controlador.getApuestaMinima() + ")", dato.getNombre(), JOptionPane.INFORMATION_MESSAGE);	
 			
 			if (res == null) {
 				
@@ -280,7 +280,9 @@ public class InterfazGrafica extends Vista {
 		
 		if (respuesta == 0) {
 			
-			this.controlador.guardar("as");
+			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
+			String res = JOptionPane.showInputDialog(pane, "Ingrese nombre de guardado:", "Guardar", JOptionPane.INFORMATION_MESSAGE);
+			this.controlador.guardar(res);
 			
 		}
 		
@@ -292,7 +294,7 @@ public class InterfazGrafica extends Vista {
 	public void carga() throws IOException {
 		
 		Frame cargados = new Frame("Carga");
-		BorderLayout border = new BorderLayout(10,100);
+		BorderLayout border = new BorderLayout(10,50);
 		Panel principal = new Panel();
 		Boton seguir = new Boton("Cargar");
 		JComboBox<String> lista;
@@ -347,7 +349,7 @@ public class InterfazGrafica extends Vista {
 
 			}});
 		
-		cargados.setSize(300, 600);
+		cargados.setSize(300, 400);
 		cargados.setVisible(true);
 		
 		principal.setLayout(border);
@@ -408,6 +410,14 @@ public class InterfazGrafica extends Vista {
 			cargados.setVisible(false);
 			
 		}
+		
+	}
+	
+	// Para que no aparezca cada vez que arranca.
+	public void setActiva(boolean activo) {
+
+		super.setActiva(activo);
+		this.frame.setVisible(activo);
 		
 	}
 	

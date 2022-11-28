@@ -1,5 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
+import ar.edu.unlu.poo.gui.Label;
 import ar.edu.unlu.poo.misfunciones.Escaner;
 import ar.edu.unlu.poo.misfunciones.Print;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;
@@ -8,6 +9,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Menu;
 import ar.edu.unlu.poo.trabajofinal.commons.OpcionesMenuPrincipal;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -56,6 +58,28 @@ public class VistaConsola extends Vista {
 			System.exit(0);
 			
 		}
+		else if (eleccion == OpcionesMenuPrincipal.RANKING.getId()) {
+			
+			
+			try {
+				this.ranking();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
+		}
+		else if (eleccion == OpcionesMenuPrincipal.CARGAR.getId()) {
+	
+			try {
+				this.carga();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+}
 		else {
 			
 			p.print("Esa opción no se corresponde con ninguna de las opciones");
@@ -153,13 +177,75 @@ public class VistaConsola extends Vista {
 	
 	@Override
 	public void guardado() throws IOException {
-		// TODO Auto-generated method stub
+		
+		p.espacio();
+		p.print("Ingrese el nombre del archivo de guardado: ");
+		this.controlador.guardar(sc.next());
+		this.menuPrincipal();
 		
 	}
 
 	@Override
 	public void carga() throws IOException {
-		// TODO Auto-generated method stub
+		
+		
+		File dir = new File("Files/Save");
+		File[] archivos = dir.listFiles();
+		String[] strs = new String[archivos.length];
+		int contador = 0;
+		int res = 0;
+		
+		p.espacio();
+		p.printConEspacio("Carga de partida");
+		p.printConEspacio("Seleccione el número de la partida que quiere recuperar");
+		
+		for (File archivo : archivos) {
+			
+			strs[contador] = archivo.getName();
+			p.print(contador + "- " + strs[contador]);
+			contador++;
+			
+		}
+		
+		res = sc.nextInt();
+		
+		if ((res > archivos.length) || (res < 0)){
+			
+			p.printConEspacioAlto("El número no corresponde a una opción existente!");
+			this.menuPrincipal();
+			
+		}
+		else {
+			
+			this.controlador.cargar(strs[res]);
+			
+		}
+		
+	}
+	
+	@Override
+	public void ranking() throws IOException {
+		
+		ArrayList<String> listaStr = this.controlador.getRanking();
+		String[] spliteo;
+		String nombre;
+		String puntos;
+		int contador = 1;
+		
+		p.espacio();
+		p.printConEspacio("RANKING");
+		
+		for (int e = (listaStr.size() - 1); e >= 0; e--) {
+			
+			spliteo = listaStr.get(e).split(",");
+			nombre = spliteo[0].trim();
+			puntos = spliteo[1].trim();
+			p.print(String.valueOf(contador) + ". " + nombre + " - Puntos: " + puntos);
+			contador++;
+
+		}
+		
+		this.menuPrincipal();
 		
 	}
 	
@@ -206,12 +292,5 @@ public class VistaConsola extends Vista {
 		
 	}
 
-	@Override
-	public void ranking() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 
 }

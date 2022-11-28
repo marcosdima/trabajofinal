@@ -52,6 +52,12 @@ public class BlackJack implements Observador {
 	
 	public void apostar(String monto) {
 		
+		if (monto.equals("cambiazo")) {
+			
+			this.cambiarVista();
+			
+		}
+		
 		this.crupier.setApuestas(monto);
 		
 	}
@@ -100,6 +106,13 @@ public class BlackJack implements Observador {
 		
 	}
 	
+	public void cambiarVista() {
+		
+		this.interfaces.get(0).setActiva(!this.interfaces.get(0).getActiva());;
+		this.interfaces.get(1).setActiva(!this.interfaces.get(1).getActiva());;
+		
+	}
+	
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
@@ -142,7 +155,6 @@ public class BlackJack implements Observador {
 				
 				case PREGUNTAROTRA:
 					
-					this.actualizar(Evento.MOSTRARMANO, this.crupier.getDatosJugadores());
 					jugadorBJ = this.crupier.seleccionarJugador();
 					
 					if (vista.siONo(event, data)) {
@@ -164,6 +176,7 @@ public class BlackJack implements Observador {
 				case SINPLATA:
 					
 					vista.mostrarMensaje(event, data);
+					break;
 					
 				case ADVERTENCIAGUARDADO:
 					
@@ -324,6 +337,22 @@ public class BlackJack implements Observador {
 						else {
 							
 							this.crupier.repartir(this.crupier.seleccionarJugador());
+							
+						}
+						
+					case NOAPUESTA:
+						
+						playerContenedor = this.crupier.getApostador();
+						
+						if (playerContenedor != null) {
+							
+							vista.mostrarMensaje(event, data);
+							vista.formularioSetApuesta(playerContenedor);
+							
+						}
+						else {
+							
+							this.actualizar(Evento.FINDEMANO);
 							
 						}
 	

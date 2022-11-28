@@ -15,5 +15,11 @@ public abstract class Vista implements IVista {
 		return activa;
 		
 	};
+	
+	public boolean getActiva() {
+		
+		return this.activa;
+		
+	}
 
 }

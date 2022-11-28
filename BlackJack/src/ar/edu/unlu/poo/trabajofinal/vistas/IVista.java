@@ -35,4 +35,6 @@ public interface IVista {
 
 	public void ranking() throws IOException;
 	
+	public boolean getActiva();
+	
 }

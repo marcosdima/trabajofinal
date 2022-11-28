@@ -3,8 +3,10 @@ package ar.edu.unlu.poo.trabajofinal.commons;
 public enum OpcionesMenuPrincipal implements IOpciones {
 	
 	JUGAR(1, "Jugar"),
-	CONFIGURACION(2, "Configuración"),
-	SALIR(3, "Salir");
+	CARGAR(2, "Cargar partida"),
+	CONFIGURACION(3, "Configuración"),
+	RANKING(4, "Ranking"),
+	SALIR(5, "Salir");
 	
 	private int id;
 	private String label;

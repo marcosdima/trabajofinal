@@ -349,6 +349,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		}
 		else if (primeraMano) {
 			
+			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 			this.notificar(Evento.PREGUNTAROTRA, player);
 			
 		}
@@ -362,7 +363,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			if (estatus == EstadoDeMano.MENORA21) {
 
-					this.notificar(Evento.PREGUNTAROTRA, player);
+				this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+				this.notificar(Evento.PREGUNTAROTRA, player);
 			
 			}
 			else {
@@ -466,7 +468,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		boolean salir = false;
 		ArrayList<JugadorBlackJack> eliminados = new ArrayList<JugadorBlackJack>();
-		
+
 		for (JugadorBlackJack player : this.jugadores) {
 			
 			if (player.getDinero() >= this.apuestaMinima) {
@@ -693,6 +695,8 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		int dinero = 0;
 		int largo = guardado.size() - 1;
 		
+		this.jugadores = new ArrayList<JugadorBlackJack>();
+		
 		for (int i = 0; i < largo; i++) {
 			
 			array = guardado.get(i).split(",");
@@ -745,6 +749,13 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			this.notificar(Evento.TERMINOTURNO, player);
 			this.eliminar(player);
+			
+		}
+		else if (means.esoyam(input)) {
+			
+			player.giveDinero(1000);
+			respuesta = true;
+			this.notificar(Evento.PRIMERAPUESTA);
 			
 		}
 		

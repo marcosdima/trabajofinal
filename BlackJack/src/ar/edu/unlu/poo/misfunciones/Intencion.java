@@ -5,7 +5,9 @@ public class Intencion {
 	private String[] out = {"salir", "exit", "slir", "salida", "ecsit"};
 	private String[] positive = {"si", "s", "yes", "y", "sisi", "sis", "yyes"};
 	private String[] negative = {"no", "n", "nop", "nope", "nono", "nain", "nel"};
-	private String[] quit = {"renuncio", " me retiro", "no juego más", "no juego mas", "quit", "me rindo", "rindo", "rendir"};
+	private String[] quit = {"renuncio", "me retiro", "no juego más", "no juego mas", "quit", "me rindo", "rindo", "rendir"};
+	// Truco pa la plata
+	private String[] esoyam = {"esoyam", "dame plata", "platita", "biyuya", "plata", "una monedita por favor"};
 	
 	private boolean recorrer(String input, String[] array) {
 		
@@ -50,4 +52,10 @@ public class Intencion {
 		
 	}
 	
+	public boolean esoyam(String input) {
+		
+		return this.recorrer(input, this.esoyam);
+		
+	}
+
 }

@@ -11,8 +11,11 @@ public class TestDeCosas {
 		VistaConsola interfaz = new VistaConsola(juego);
 		InterfazGrafica interfazGrafica = new InterfazGrafica(juego);
 		
-		interfaz.setActiva(false);
-		interfazGrafica.setActiva(true);
+		boolean consola = false;
+		boolean grafico = !consola;
+		
+		interfaz.setActiva(consola);
+		interfazGrafica.setActiva(grafico);
 		
 		juego.iniciar();
 		
