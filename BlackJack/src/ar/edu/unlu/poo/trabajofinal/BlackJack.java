@@ -267,6 +267,7 @@ public class BlackJack implements Observador {
 					
 					vista.mostrarMensaje(event, this.crupier);
 					vista.menuPrincipal();
+					break;
 					
 				case HELP:
 					

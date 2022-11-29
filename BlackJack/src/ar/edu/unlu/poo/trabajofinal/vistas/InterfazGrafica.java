@@ -2,7 +2,6 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -20,7 +18,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 
 import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.Frame;
@@ -38,6 +35,7 @@ public class InterfazGrafica extends Vista {
 
 	private BlackJack controlador;
 	private Frame frame;
+	private Frame help;
 	private ImageManager imageManager;
 	private ArrayList<String> nombres = new ArrayList<String>();
 	private boolean flag = false;
@@ -285,6 +283,7 @@ public class InterfazGrafica extends Vista {
 		JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
 		String nombreGuardado = JOptionPane.showInputDialog(pane, "Ingrese nombre de guardado:", "Guardar", JOptionPane.INFORMATION_MESSAGE);
 		this.controlador.guardar(nombreGuardado);
+		this.help.setVisible(false);
 
 
 	}
@@ -422,14 +421,15 @@ public class InterfazGrafica extends Vista {
 	
 	public void help() throws IOException {
 		
-		Frame help = new Frame("Help");
+		this.help.setVisible(true);
+		
 		ArrayList<String> text = this.controlador.getHelp();
 		Label container = new Label();
 		Panel parrafo = new Panel(Panel.BORDER);
 		Panel cuerpo = new Panel(Panel.FLOW);
 			
-		help.setSize(600, 800);
-		help.getContentPane().setLayout(new GridLayout(4,1));
+		this.help.setSize(600, 800);
+		this.help.getContentPane().setLayout(new GridLayout(4,1));
 		
 		
 		for (String line : text) {
@@ -452,7 +452,7 @@ public class InterfazGrafica extends Vista {
 				
 			}
 			
-			help.getContentPane().add(container);
+			this.help.getContentPane().add(container);
 			
 		}
 		
@@ -528,6 +528,8 @@ public class InterfazGrafica extends Vista {
 		
 		this.frame = new Frame("Black Jack");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.help = new Frame("Help");
 		
 	}
 
