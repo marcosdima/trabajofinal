@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.ImageManager;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 
@@ -37,7 +38,7 @@ public class ModuloJugador extends JPanel {
 		BorderLayout norte = new BorderLayout();
 		GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
 		
-		JButton nombre = new JButton(this.jugador.getNombre());
+		Boton nombre = new Boton(this.jugador.getNombre());
 		JLabel dinero = new JLabel("Dinero: " + this.jugador.getDinero());
 		JLabel puntos = new JLabel("Puntaje: " + this.jugador.getPuntaje());
 		

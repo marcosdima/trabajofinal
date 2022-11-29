@@ -1,6 +1,7 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -18,6 +19,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.Frame;
@@ -35,7 +38,6 @@ public class InterfazGrafica extends Vista {
 
 	private BlackJack controlador;
 	private Frame frame;
-	private Frame help;
 	private ImageManager imageManager;
 	private ArrayList<String> nombres = new ArrayList<String>();
 	private boolean flag = false;
@@ -283,8 +285,6 @@ public class InterfazGrafica extends Vista {
 		JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
 		String nombreGuardado = JOptionPane.showInputDialog(pane, "Ingrese nombre de guardado:", "Guardar", JOptionPane.INFORMATION_MESSAGE);
 		this.controlador.guardar(nombreGuardado);
-		this.help.setVisible(false);
-
 
 	}
 	
@@ -421,41 +421,44 @@ public class InterfazGrafica extends Vista {
 	
 	public void help() throws IOException {
 		
-		this.help.setVisible(true);
+		JFrame help = new JFrame("Help");
 		
 		ArrayList<String> text = this.controlador.getHelp();
-		Label container = new Label();
-		Panel parrafo = new Panel(Panel.BORDER);
-		Panel cuerpo = new Panel(Panel.FLOW);
-			
-		this.help.setSize(600, 800);
-		this.help.getContentPane().setLayout(new GridLayout(4,1));
+		Panel panel = new Panel();
 		
+		JTextArea texto = new JTextArea();		
 		
 		for (String line : text) {
 			
 			if (line.startsWith("//")) {
 				
-				container = new Label(line.replaceAll("//", ""), 20, JLabel.CENTER);
-				parrafo.add(container, BorderLayout.NORTH);
-				
+				texto.append(line.replaceAll("//", "") + '\n');
+				texto.append("\n");
+	
 			}
 			else if (line.startsWith(">")) {
 				
-				parrafo = new Panel(Panel.BORDER);
+				texto.append("\n");
 				
 			}
 			else {
 				
-				container = new Label(line.replaceAll("//", ""), 20, JLabel.LEFT);
-				cuerpo.add(container);
-				
+				texto.append(line + '\n');
+
 			}
-			
-			this.help.getContentPane().add(container);
-			
+
 		}
 		
+		texto.setFont(new Font("FreeMono", Font.ITALIC, 20));
+		texto.setEditable(false);
+
+		panel.add(texto);
+		panel.setBackground(new Color(255,255,255));
+		help.getContentPane().add(panel);
+		help.setSize(1200, 600);
+		help.setVisible(true);
+		
+		texto.updateUI();
 		
 	}
 	
@@ -467,7 +470,7 @@ public class InterfazGrafica extends Vista {
 		ModuloAgregarJugador jugador;
 		PanelGrilla agregar;
 		ModuloAgregarJugador[] modulos = new ModuloAgregarJugador[maximo];
-		JButton seguir = new JButton("Seguir");
+		Boton seguir = new Boton("Seguir");
 		
 		for (int i = 0; i < maximo; i++) {
 			
@@ -528,8 +531,7 @@ public class InterfazGrafica extends Vista {
 		
 		this.frame = new Frame("Black Jack");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		this.help = new Frame("Help");
+
 		
 	}
 

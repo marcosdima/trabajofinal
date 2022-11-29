@@ -6,11 +6,13 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ar.edu.unlu.poo.gui.Boton;
+
 public class ModuloAgregarJugador extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField inputNombre;
-	private JButton add;
+	private Boton add;
 	
 	public ModuloAgregarJugador() {
 		
@@ -43,11 +45,11 @@ public class ModuloAgregarJugador extends JPanel {
 	
 	private void setAdd() {
 		
-		this.add = new JButton("Agregar");
+		this.add = new Boton("Agregar");
 		
 	}
 
-	public JButton getAdd() {
+	public Boton getAdd() {
 		
 		return this.add;
 		
