@@ -1,7 +1,6 @@
 package ar.edu.unlu.poo.gui;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 
 import javax.swing.JButton;

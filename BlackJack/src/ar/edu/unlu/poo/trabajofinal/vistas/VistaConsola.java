@@ -1,6 +1,5 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
-import ar.edu.unlu.poo.gui.Label;
 import ar.edu.unlu.poo.misfunciones.Escaner;
 import ar.edu.unlu.poo.misfunciones.Print;
 import ar.edu.unlu.poo.trabajofinal.BlackJack;

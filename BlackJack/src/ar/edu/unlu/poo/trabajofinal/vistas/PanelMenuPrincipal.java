@@ -4,15 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 
-import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ar.edu.unlu.poo.gui.Label;
-import ar.edu.unlu.poo.gui.Panel;
 
 public class PanelMenuPrincipal extends PanelMenu {
 	
+	private static final long serialVersionUID = 1L;
+
 	public PanelMenuPrincipal(Component[] botones, int alto, int lados) {
 		
 		super(botones, alto, lados);

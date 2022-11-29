@@ -2,7 +2,6 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 

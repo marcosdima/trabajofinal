@@ -3,7 +3,7 @@ package ar.edu.unlu.poo.trabajofinal;
 import ar.edu.unlu.poo.trabajofinal.vistas.VistaConsola;
 import ar.edu.unlu.poo.trabajofinal.vistas.InterfazGrafica;
 
-public class TestDeCosas {
+public class BlackJackApp {
 
 	public static void main(String[] args) {
 							
@@ -18,12 +18,6 @@ public class TestDeCosas {
 		interfazGrafica.setActiva(grafico);
 		
 		juego.iniciar();
-		
-		// Mirar captura de errores para recrearlos.
-		// Testear errores.
-		// No se que chota le pasa a la interfaz, pensar como solucionar que no sale del menú principal.
-		// NO IMPLEMENTE LAS APUESTAS!
-		// Seguir con comandos!
 		
 	}
 

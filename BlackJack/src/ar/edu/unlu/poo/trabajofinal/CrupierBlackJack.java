@@ -396,7 +396,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		Comparativo comparacion;
 		int contadorDeGanadas = 0;
 		// Este contador de empates podría implentarlo en un futuro.
-		int contadorDeEmpates = 0;
 		int mitad = 0;
 		boolean terminar = false;
 		
@@ -418,11 +417,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 				if (comparacion.gana()) {
 					
 					contadorDeGanadas++;
-					
-				}
-				else if (comparacion.empate()) {
-					
-					contadorDeEmpates++;
 					
 				}
 				
