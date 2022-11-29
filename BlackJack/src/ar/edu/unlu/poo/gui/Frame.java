@@ -1,6 +1,7 @@
 package ar.edu.unlu.poo.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JFrame;
@@ -47,4 +48,5 @@ public class Frame extends JFrame {
 	}
 	
 
+	
 }

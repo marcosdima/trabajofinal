@@ -1,2 +1,2 @@
-Carlos, 1000
-Pepe, 100
+Carlistos,1000
+Crupier,0

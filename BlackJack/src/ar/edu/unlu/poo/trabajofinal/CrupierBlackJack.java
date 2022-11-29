@@ -732,8 +732,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		if (means.out(input)) {
 			
-			respuesta = true;
-			this.notificar(Evento.ADVERTENCIAGUARDADO, player);
+			respuesta = this.notificar(Evento.ADVERTENCIAGUARDADO, player);
 			this.eliminarTodo();
 			
 			
@@ -754,8 +753,14 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		else if (means.esoyam(input)) {
 			
 			player.giveDinero(1000);
-			respuesta = true;
+			respuesta = this.notificar(Evento.PRIMERAPUESTA);
+			
+		}
+		else if (means.help(input)) {
+			
+			respuesta = this.notificar(Evento.HELP);
 			this.notificar(Evento.PRIMERAPUESTA);
+			
 			
 		}
 		
@@ -920,6 +925,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	public ArrayList<String> getRanking() throws IOException {
 		
 		return this.fileManager.loadRanking();
+		
+	}
+
+	public ArrayList<String> getHelp() throws IOException {
+		
+		return this.fileManager.loadHelp();
 		
 	}
 

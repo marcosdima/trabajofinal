@@ -11,6 +11,7 @@ public class FileManager {
 	
 	private final String RANKING = "Files/Rank/ranking.txt";
 	private final String SAVE = "Files/Save/";
+	private final String HELP = "Files/Help/help.txt";
 	
 	public void save(String tag, ArrayList<String> guardado) throws IOException {
 		
@@ -37,7 +38,7 @@ public class FileManager {
 		BufferedReader reader = new BufferedReader(fr);
 		ArrayList<String> retorno = new ArrayList<String>();
 		String linea = reader.readLine();
-		
+
 		if (archivo.exists()) {
 			
 			while ((linea != null)) {
@@ -81,6 +82,24 @@ public class FileManager {
 		
 	}
 
+	public ArrayList<String> loadHelp() throws IOException {
+		
+		File archivo = new File(this.HELP);
+		
+		ArrayList<String> retorno;
+		
+		if (!archivo.exists()) {
+
+			archivo.createNewFile();
+			
+		}
+		
+		retorno = this.carga(this.HELP);
+
+		return retorno;
+		
+	}
+	
 	public void addToRanking(String nombre, int i) throws IOException {
 		
 		ArrayList<String> actual = this.loadRanking();

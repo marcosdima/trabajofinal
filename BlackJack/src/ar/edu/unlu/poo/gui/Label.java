@@ -9,10 +9,22 @@ public class Label extends JLabel {
 	private static final long serialVersionUID = 1L;
 	private Font fuente;
 
+	public Label (String tag, String fuente, int size, int orden) {
+		
+		super(tag, orden);
+		this.setFuente(fuente, size);
+		
+	}
+	
 	public Label(String tag, String fuente, int size) {
 		
-		super(tag);
-		this.setFuente(fuente, size);
+		this (tag, fuente, size, Label.CENTER);
+		
+	}
+	
+	public Label(String tag, int size, int orden) {
+		// Si le pasas un tag, size y un orden, podes setear su alineamiento.
+		this (tag, "FreeMono", size, orden);
 		
 	}
 	

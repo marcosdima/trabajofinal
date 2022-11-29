@@ -79,7 +79,17 @@ public class VistaConsola extends Vista {
 				e.printStackTrace();
 			}
 	
-}
+		}
+		else if (eleccion == OpcionesMenuPrincipal.HELP.getId()) {
+			
+			try {
+				this.help();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		else {
 			
 			p.print("Esa opción no se corresponde con ninguna de las opciones");
@@ -177,7 +187,7 @@ public class VistaConsola extends Vista {
 	
 	@Override
 	public void guardado() throws IOException {
-		
+			
 		p.espacio();
 		p.print("Ingrese el nombre del archivo de guardado: ");
 		this.controlador.guardar(sc.next());
@@ -249,6 +259,38 @@ public class VistaConsola extends Vista {
 		
 	}
 	
+	@Override
+	public void help() throws IOException {
+		
+		ArrayList<String> texto = this.controlador.getHelp();
+		
+		
+		p.espacio();
+		
+		for (String line : texto) {
+			
+			if (line.startsWith("//")) {
+				
+				p.printConEspacio(line.replaceAll("//", ""));
+				
+			}
+			else if (line.startsWith(">")) {
+				
+				p.print();
+				
+			}
+			else {
+				
+				p.print(line);
+				
+			}
+				
+		}
+		
+		this.menuPrincipal();
+		
+	}
+	
 	//////////////////////////////////
 	//		Métodos de Consola		//
 	//////////////////////////////////
@@ -291,6 +333,5 @@ public class VistaConsola extends Vista {
 		p.printSeguido(dinerillo, espacio);
 		
 	}
-
 
 }

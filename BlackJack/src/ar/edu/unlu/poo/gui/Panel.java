@@ -1,6 +1,7 @@
 package ar.edu.unlu.poo.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
@@ -16,7 +17,7 @@ public class Panel extends JPanel {
 	public Panel() {
 		
 		super();
-		
+
 	}
 	
 	public Panel(int layout) {
@@ -51,5 +52,7 @@ public class Panel extends JPanel {
 		this.add(new JLabel(), pos);
 		
 	}
+	
+
 	
 }

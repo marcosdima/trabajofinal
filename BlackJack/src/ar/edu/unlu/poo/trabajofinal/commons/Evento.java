@@ -10,8 +10,10 @@ public enum Evento implements IMensaje{
 	FINDEMANO("La Mano se terminó! Sigamos nomás..."),
 	JUGAR(""),
 	SINPLATA("Te quedaste sin plata!"),
-	ADVERTENCIAGUARDADO("Si abandona la partida los datos se perderan! Estas seguro de que quieres salir?"),
-	FINDELJUEGO("Ya no hay personas en juego! " + '\n' +  "El juego se terminó." + '\n' + "Saludos!");
+	ADVERTENCIAGUARDADO("Estas seguro de que quieres salir? (Sin guardar, tus datos se perderán)"),
+	GUARDAR("Queres guardar tu partida?"),
+	FINDELJUEGO("Ya no hay personas en juego! " + '\n' +  "El juego se terminó." + '\n' + "Saludos!"),
+	HELP("");
 	
 	String label;
 	

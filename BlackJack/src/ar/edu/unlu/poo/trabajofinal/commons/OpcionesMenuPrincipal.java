@@ -6,6 +6,7 @@ public enum OpcionesMenuPrincipal implements IOpciones {
 	CARGAR(2, "Cargar partida"),
 	CONFIGURACION(3, "Configuración"),
 	RANKING(4, "Ranking"),
+	HELP(6, "Help"),
 	SALIR(5, "Salir");
 	
 	private int id;

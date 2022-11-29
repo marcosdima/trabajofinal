@@ -106,6 +106,13 @@ public class BlackJack implements Observador {
 		
 	}
 	
+	public ArrayList<String> getHelp() throws IOException {
+		
+		return this.crupier.getHelp();
+		
+	}
+	
+	
 	public void cambiarVista() {
 		
 		this.interfaces.get(0).setActiva(!this.interfaces.get(0).getActiva());;
@@ -144,6 +151,7 @@ public class BlackJack implements Observador {
 		
 		JugadorBlackJack jugadorBJ;
 		boolean guardar = false;
+		boolean salir = false;
 		
 		for (IVista vista : this.interfaces) {
 			
@@ -180,15 +188,26 @@ public class BlackJack implements Observador {
 					
 				case ADVERTENCIAGUARDADO:
 					
-					guardar = vista.siONo(event, data);
+					salir = vista.siONo(event, data);
 					
-					if ( guardar) {
+					if (salir) {
+							
+						guardar = vista.siONo(Evento.GUARDAR, data);
 						
-						try {
-							vista.guardado();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if (guardar) {
+							
+							try {
+								vista.guardado();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
+						else {
+							
+							vista.menuPrincipal();
+							
 						}
 						
 					}
@@ -248,6 +267,15 @@ public class BlackJack implements Observador {
 					
 					vista.mostrarMensaje(event, this.crupier);
 					vista.menuPrincipal();
+					
+				case HELP:
+					
+					try {
+						vista.help();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 								
 				default:;
 				

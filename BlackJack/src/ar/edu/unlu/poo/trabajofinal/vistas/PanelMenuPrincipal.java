@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
+import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import ar.edu.unlu.poo.gui.Label;
+import ar.edu.unlu.poo.gui.Panel;
 
 public class PanelMenuPrincipal extends PanelMenu {
 	
@@ -30,11 +33,13 @@ public class PanelMenuPrincipal extends PanelMenu {
 		
 		BorderLayout border = new BorderLayout(200, 50);
 		JPanel centro = new JPanel();
-		GridLayout gridCentral = new GridLayout(this.getComponentCount() + 2, 1, this.getEspacioAlto(), this.getEspacioLados());
+		GridLayout gridCentral = new GridLayout((this.getComponentes().length + 1), 1, this.getEspacioAlto(), this.getEspacioLados());
+		
+		Label title = new Label("Menu Principal");
 
 		// Apendeo botones.
 		centro.setLayout(gridCentral);
-		centro.add(new JLabel(" "));
+		centro.add(title);
 		
 		for (Component str : this.getComponentes()) {
 			

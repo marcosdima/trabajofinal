@@ -2,6 +2,7 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,11 +11,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.Frame;
@@ -43,6 +49,7 @@ public class InterfazGrafica extends Vista {
 		this.controlador.addIntefaz(this);
 		this.setFrame();
 		this.setImageManager("Imagenes/Cartas/", "Default");
+		this.setBarra();
 		
 	}
 	
@@ -56,10 +63,10 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void menuPrincipal() {
 		
-		JButton salir = new JButton("Salir");
-		JButton jugar = new JButton("Jugar");
-		JButton load = new JButton("Cargar");
-		JButton rank = new JButton("Ranking");
+		JButton salir = new Boton("Salir");
+		JButton jugar = new Boton("Jugar");
+		JButton load = new Boton("Cargar");
+		JButton rank = new Boton("Ranking");
 		
 		Component[] opciones = {jugar, salir, load, rank};
 		
@@ -274,19 +281,11 @@ public class InterfazGrafica extends Vista {
 
 	public void guardado() throws IOException {
 		
-		JOptionPane mensaje = new JOptionPane();
-		int respuesta = JOptionPane.showConfirmDialog(mensaje, "Quieres guardar tu partida?",
-				"Guardado", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-		
-		if (respuesta == 0) {
-			
-			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
-			String res = JOptionPane.showInputDialog(pane, "Ingrese nombre de guardado:", "Guardar", JOptionPane.INFORMATION_MESSAGE);
-			this.controlador.guardar(res);
-			
-		}
-		
-		System.exit(0);
+
+		JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
+		String nombreGuardado = JOptionPane.showInputDialog(pane, "Ingrese nombre de guardado:", "Guardar", JOptionPane.INFORMATION_MESSAGE);
+		this.controlador.guardar(nombreGuardado);
+
 
 	}
 	
@@ -421,6 +420,45 @@ public class InterfazGrafica extends Vista {
 		
 	}
 	
+	public void help() throws IOException {
+		
+		Frame help = new Frame("Help");
+		ArrayList<String> text = this.controlador.getHelp();
+		Label container = new Label();
+		Panel parrafo = new Panel(Panel.BORDER);
+		Panel cuerpo = new Panel(Panel.FLOW);
+			
+		help.setSize(600, 800);
+		help.getContentPane().setLayout(new GridLayout(4,1));
+		
+		
+		for (String line : text) {
+			
+			if (line.startsWith("//")) {
+				
+				container = new Label(line.replaceAll("//", ""), 20, JLabel.CENTER);
+				parrafo.add(container, BorderLayout.NORTH);
+				
+			}
+			else if (line.startsWith(">")) {
+				
+				parrafo = new Panel(Panel.BORDER);
+				
+			}
+			else {
+				
+				container = new Label(line.replaceAll("//", ""), 20, JLabel.LEFT);
+				cuerpo.add(container);
+				
+			}
+			
+			help.getContentPane().add(container);
+			
+		}
+		
+		
+	}
+	
 	// Metodos de intefazgráfica.
 	
 	private void setAgregarJugadores() {
@@ -493,5 +531,35 @@ public class InterfazGrafica extends Vista {
 		
 	}
 
+	private void setBarra() {
+		
+		JMenuBar m = new JMenuBar();
+		JMenu help = new JMenu("Help");
+		JMenuItem comandos = new JMenuItem("Comandos");
+		
+		comandos.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					help();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+			
+		});
+		
+		help.add(comandos);
+		m.add(help);
+		this.frame.setJMenuBar(m);
+		
+		
+	}
+	
 }
 
