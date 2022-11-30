@@ -2,13 +2,13 @@
   ##### Trabajo final de POO, 2do cuatrimestre de 2022.
 
 ## Datos
-+ Almuno: Di Matteo Brambilla, Marcos.
++ Alumno: Di Matteo Brambilla, Marcos.
 + Legajo: 166298
   
 ## Juego: Black Jack
 
 ### Ejecución
-Para iniciar el juego hay que ejecutar **'BlackJackApp'**, que se encuentra dentro del paquete **'ar.edu.unlu.trabajofinal'**. Pueden setear manualmente la interfaz de preferencia al manipular el booleano **'consola'**. Si es **'true'** se ejecutará en la consola, con **'false'** la interfaz gr
+Para iniciar el juego hay que ejecutar **'BlackJackApp'**, que se encuentra dentro del paquete **'ar.edu.unlu.poo.trabajofinal'**. Pueden setear manualmente la interfaz de preferencia al manipular el booleano **'consola'**. Si es **'true'** se ejecutará en la consola, con **'false'** la interfaz gr
 
 ### Reglas
 + El objetivo es conseguir una mano con un puntaje lo más cercano a 21. Si te pasas de dicho número, perdés la mano. 
@@ -36,7 +36,7 @@ ranking.
 + 'help': muestra el contenido del archivo 'help.txt'.
 
 ### Nombres especiales
-Para propósitos de testing, hay nombres que presetean un conjunto de cartas al inicio. No es el nombre en sí, sino como empiezan. Si en empieza con:
+Para propósitos de testing, hay nombres que presetean un conjunto de cartas al inicio. No es el nombre en sí, sino como empiezan. Si empieza con:
 + 'bj': BlackJack asegurado para cada mano.
 + '21': Arranca con tres cartas, dando como resultado 21 pts.
 + 'pt': Empieza con un par bajo.
