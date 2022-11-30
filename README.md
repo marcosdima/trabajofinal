@@ -4,5 +4,9 @@
 
 ## Datos
 
-  Almuno: Di Matteo Brambilla, Marcos.
+  Almuno: Di Matteo Brambilla, Marcos. 
   Legajo: 166298
+
+### Créditos
+
+  Imágenes de cartas 
