@@ -18,8 +18,8 @@
 + CABALLERO, REINA y REY: Valen 10.
 + El resto de cartas valen lo mismo que su número.
 
-### Comandos
-Hay una series de comandos que se ingresan dentro de la ventana de seteo de apuesta, dejo adjunto
+### Comandos Principales
+Hay una series de comandos que se ingresan dentro de **la ventana de seteo de apuesta**, dejo adjunto
 los que son necesarios para poder acceder a todas las funciones del juego:
 
 * 'salir': Sale del juego por completo, volviendo al menú principal, dejando la opción de guardar la
@@ -27,6 +27,16 @@ partida.
 * 'renuncio': El jugador que ingresa este comando, sale de la partida, guardando su puntaje en el
 ranking.
 *  '0': Ingresar 0 como monto de apuesta indica que no apostas en esta mano.
+
+### Comandos Secundarios
+* 'esoyam': Le da 1000p al jugador que lo ingresa.
++ 'help': muestra el contenido del archivo 'help.txt'.
+
+### Nombres especiales
+Para propósitos de testing, hay nombres que presetean un conjunto de cartas al inicio. No es el nombre en sí, sino como empiezan. Si en empieza con:
++ 'bj': BlackJack asegurado para cada mano.
++ '21': Arranca con tres cartas, dando como resultado 21 pts.
++ 'pt': Empieza con un par bajo.
 
 
 # Créditos
