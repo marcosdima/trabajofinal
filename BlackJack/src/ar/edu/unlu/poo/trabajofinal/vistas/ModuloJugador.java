@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 
 import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.ImageManager;
@@ -26,7 +27,7 @@ public class ModuloJugador extends JPanel {
 	
 	private void setFormato(IJugador jugador) {
 
-		int espacioCartas = 10;
+		int espacioCartas = 5;
 
 		JPanel panelNorte = new JPanel();
 		JPanel panelCentro = new JPanel();
@@ -35,7 +36,7 @@ public class ModuloJugador extends JPanel {
 		BorderLayout norte = new BorderLayout();
 		GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
 		
-		Boton nombre = new Boton(jugador.getNombre());
+		JButton nombre = new JButton(jugador.getNombre());
 		JLabel dinero = new JLabel("Dinero: " + jugador.getDinero());
 		JLabel puntos = new JLabel("Puntaje: " + jugador.getPuntaje());
 		
