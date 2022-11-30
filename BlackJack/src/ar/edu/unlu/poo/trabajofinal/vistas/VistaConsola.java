@@ -48,7 +48,7 @@ public class VistaConsola extends Vista {
 		}
 		else if (eleccion == OpcionesMenuPrincipal.CONFIGURACION.getId()) {
 			
-			this.menuConfiguracion();
+			this.menuPrincipal();
 			
 		}
 		else if (eleccion == OpcionesMenuPrincipal.SALIR.getId()) {
