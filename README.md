@@ -7,6 +7,9 @@
   
 ## Juego: Black Jack
 
+### Ejecución
+Para iniciar el juego hay que ejecutar **'BlackJackApp'**, que se encuentra dentro del paquete **'ar.edu.unlu.trabajofinal'**. Pueden setear manualmente la interfaz de preferencia al manipular el booleano **'consola'**. Si es **'true'** se ejecutará en la consola, con **'false'** la interfaz gr
+
 ### Reglas
 + El objetivo es conseguir una mano con un puntaje lo más cercano a 21. Si te pasas de dicho número, perdés la mano. 
 + Al principio de cada mano tienes que apostar un monto mínimo. 
