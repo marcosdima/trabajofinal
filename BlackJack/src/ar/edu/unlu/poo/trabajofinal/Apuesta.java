@@ -24,9 +24,22 @@ public class Apuesta {
 		this.monto = apuesta;
 	}
 
-	public int getGanancia() {
+	public int getGanancia(boolean blackjack) {
 		
-		return (this.monto / 2) + this.getMonto();
+		int monto;
+		
+		if (blackjack) {
+			
+			monto = (this.monto) + this.getMonto();
+			
+		}
+		else {
+			
+			monto = (this.monto / 2) + this.getMonto();
+			
+		}
+		
+		return monto;
 		
 	}
 	
