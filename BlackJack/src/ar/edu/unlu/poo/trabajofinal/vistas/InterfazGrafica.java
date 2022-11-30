@@ -202,7 +202,7 @@ public class InterfazGrafica extends Vista {
 		jugadores.setLayout(gridPlayers);
 		crupier.setLayout(gridPlayers);
 
-		for (i = 0; i < BlackJack.MAXIMODEJUGADORES; i++) {
+		for (i = 0; i < (BlackJack.MAXIMODEJUGADORES + 1); i++) {
 			
 			if (i < largo) {
 				
