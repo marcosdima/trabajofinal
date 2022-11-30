@@ -513,7 +513,16 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			
 			if (comparacion.pierde()) {
 				
-				player.giveDinero(player.getApuesta().getGanancia());
+				if (player.getEstadoDeMano() == EstadoDeMano.BLACKJACK) {
+					
+					player.giveDinero(player.getApuesta().getGanancia(true));
+					
+				}
+				else {
+					
+					player.giveDinero(player.getApuesta().getGanancia(false));
+				
+				}
 				
 			}
 			else if (comparacion.empate()) {
