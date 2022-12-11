@@ -9,6 +9,7 @@ public enum SaltoError implements IMensaje {
 	APOSTONONUMERO("La apuesta tiene que ser un número igual o mayor a 0! Si no querés apostar, ingresa cero.");
 	
 	private String descripcion;
+	private String remitente;
 	
 	SaltoError(String error) {
 		
@@ -21,4 +22,16 @@ public enum SaltoError implements IMensaje {
 		return this.descripcion;
 	}
 	
+
+	public void setRemitente(String remitente) {
+		
+		this.remitente = remitente;
+		
+	}
+	
+	@Override
+	public String getRemitente() {
+		// TODO Auto-generated method stub
+		return this.remitente;
+	}
 }

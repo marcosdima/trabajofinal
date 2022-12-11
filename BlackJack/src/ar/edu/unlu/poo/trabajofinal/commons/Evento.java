@@ -15,7 +15,8 @@ public enum Evento implements IMensaje{
 	FINDELJUEGO("Ya no hay personas en juego! " + '\n' +  "El juego se terminó." + '\n' + "Saludos!"),
 	HELP("");
 	
-	String label;
+	private String label;
+	private String remitente;
 	
 	Evento(String label) {
 		
@@ -28,6 +29,18 @@ public enum Evento implements IMensaje{
 		String res = this.label;
 		return res;
 		
+	}
+
+	public void setRemitente(String remitente) {
+		
+		this.remitente = remitente;
+		
+	}
+	
+	@Override
+	public String getRemitente() {
+		// TODO Auto-generated method stub
+		return this.remitente;
 	}
 	
 }

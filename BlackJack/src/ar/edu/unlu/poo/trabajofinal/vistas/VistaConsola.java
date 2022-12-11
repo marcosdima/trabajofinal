@@ -139,17 +139,14 @@ public class VistaConsola extends Vista {
 	}
 
 	@Override
-	public void mostrarMensaje(IMensaje msj, IJugador data) {
+	public void mostrarMensaje(IMensaje msj) {
+		
+		String remitente = msj.getRemitente();
 		
 		if (msj.getDescripcion() != "") {
 			
 			p.espacio();	
-			try {
-				p.print(data.getNombre() + ": ");
-			} catch (RemoteException e) {
-				p.print("Error nombre" + ": ");
-				e.printStackTrace();
-			}
+			p.print(remitente + ": ");
 			p.justPrint(msj.getDescripcion());
 			
 			/*
@@ -162,17 +159,14 @@ public class VistaConsola extends Vista {
 
 	}
 
-	public void formularioSetApuesta(IJugador dato) {
+	public void formularioSetApuesta(String nombre) {
 		
 		String monto;
 		
 		p.espacio();
 		p.print();
-		try {
-			p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
-		} catch (RemoteException e) {
-			p.print("Error nombre" + " " + "ingrese su apuesta: ");
-		}
+		p.print(nombre + " " + "ingrese su apuesta: ");
+
 		p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
 		monto = sc.next();
 		
@@ -181,17 +175,13 @@ public class VistaConsola extends Vista {
 	}
 	
 	@Override
-	public boolean siONo(IMensaje msj, IJugador data) {
+	public boolean siONo(IMensaje msj) {
 		
 		boolean res;
 		
 		p.espacio();
 		p.print();
-		try {
-			p.print(data.getNombre());
-		} catch (RemoteException e) {
-			p.print("Error nombre");
-		}
+		p.print(msj.getRemitente());
 		p.print(msj.getDescripcion());
 		res = sc.siONo();
 		return res;

@@ -4,4 +4,8 @@ public interface IMensaje {
 
 	public String getDescripcion();
 	
+	public String getRemitente();
+	
+	public void setRemitente(String remitente);
+	
 }

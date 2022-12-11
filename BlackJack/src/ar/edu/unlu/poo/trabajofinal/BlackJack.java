@@ -5,25 +5,24 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
+import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
-import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public class BlackJack implements Observador {
+public class BlackJack implements IControladorRemoto {
 	
 	private CrupierBlackJack crupier;
 	private ArrayList<IVista> interfaces;
 	private static int DINEROBASE = 1000;
 	public static final int MAXIMODEJUGADORES = 4;
-	private static int JUGADORES;
 
 	public BlackJack() {
 		
 		crupier = new CrupierBlackJack();
-		this.crupier.agregarObservador(this);
 		interfaces = new ArrayList<IVista>(2);
-		BlackJack.JUGADORES = 0;
 		
 	}
 	
@@ -34,12 +33,6 @@ public class BlackJack implements Observador {
 	}
 	
 	public void addJugador(String nombre) {
-		
-		if (nombre == "") {
-			
-			nombre = "Player " + BlackJack.JUGADORES;
-			
-		}
 
 		try {
 			this.crupier.addJugador(nombre, BlackJack.DINEROBASE);
@@ -156,318 +149,221 @@ public class BlackJack implements Observador {
 	//////////////////////////////////
 	// Implementación de Observador //
 	//////////////////////////////////
-	
+
 	@Override
-	public void actualizar(Evento event, ArrayList<IJugador> objeto) {
-		
-		for (IVista vista : this.interfaces) {
-			
-			if (vista.isActiva()) {
-				
-				switch ((Evento) event) {
-
-				case MOSTRARMANO:
-					
-					vista.mostrarMano(objeto);
-					
-				default:;
-			
-				}
-				
-			}
-		
-		}
-				
-	}
-
-	public void actualizar(Evento event, IJugador data) {
+	public void actualizar(IObservableRemoto arg0, Object event) throws RemoteException {
+	
+		IMensaje mensaje = (IMensaje) event;
+		SaltoError error = null;
+		Evento evento = null;
 		
 		JugadorBlackJack jugadorBJ;
 		boolean guardar = false;
 		boolean salir = false;
 		
-		for (IVista vista : this.interfaces) {
+		if (event instanceof Notificacion) {
 			
-			if (vista.isActiva()) {
+			for (IVista vista : this.interfaces) {
 				
-				jugadorBJ = null;
+				vista.mostrarMensaje(mensaje);
 				
-				switch ((Evento) event) {
+			}
+			
+		}
+		else if (event instanceof Evento) {
+			
+			evento = (Evento) event;
+			
+			for (IVista vista : this.interfaces) {
 				
-				case PREGUNTAROTRA:
+				if (vista.isActiva()) {
 					
-					try {
-						jugadorBJ = this.crupier.seleccionarJugador();
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					vista.mostrarMano(this.getDatosJugadores());
 					
-					if (vista.siONo(event, data)) {
-						
-						this.crupier.repartir(jugadorBJ);
-						
-					}
-					else {
+					jugadorBJ = null;
+					
+					switch ((Evento) event) {
+					
+					case PREGUNTAROTRA:
 						
 						try {
-							this.crupier.terminarTurnoJugador(jugadorBJ);
-						} catch (RemoteException e) {
+							jugadorBJ = this.crupier.seleccionarJugador();
+						} catch (RemoteException e1) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							e1.printStackTrace();
 						}
 						
-					}	
-					
-				case TERMINOTURNO:
-					
-					vista.mostrarMensaje(event, data);
-					break;
-					
-				case SINPLATA:
-					
-					vista.mostrarMensaje(event, data);
-					break;
-					
-				case ADVERTENCIAGUARDADO:
-					
-					salir = vista.siONo(event, data);
-					
-					if (salir) {
+						if (vista.siONo(evento)) {
 							
-						guardar = vista.siONo(Evento.GUARDAR, data);
-						
-						if (guardar) {
+							this.crupier.repartir(jugadorBJ);
+							
+						}
+						else {
 							
 							try {
-								vista.guardado();
-							} catch (IOException e) {
+								this.crupier.terminarTurnoJugador(jugadorBJ);
+							} catch (RemoteException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
+							}
+							
+						}	
+						
+					case TERMINOTURNO:
+						
+						vista.mostrarMensaje(evento);
+						break;
+						
+					case SINPLATA:
+						
+						vista.mostrarMensaje(evento);
+						break;
+						
+					case ADVERTENCIAGUARDADO:
+						
+						salir = vista.siONo(evento);
+						
+						if (salir) {
+								
+							guardar = vista.siONo(Evento.GUARDAR);
+							
+							if (guardar) {
+								
+								try {
+									vista.guardado();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							}
+							else {
+								
+								vista.menuPrincipal();
+								
 							}
 							
 						}
 						else {
 							
-							vista.menuPrincipal();
+							break;
 							
 						}
 						
-					}
-					else {
-						
-						break;
-						
-					}
-
-			default:
-				
-				;
-				}
-				
-			}
-			
-		}
-		
-	};
-
-	@Override
-	public void actualizar(Evento event) {
-		
-		boolean salir = false;
-		
-		for (IVista vista : this.interfaces) {
-			
-			if (vista.isActiva()) {
-				
-				switch ((Evento) event) {
-				
-				case PRIMERAPUESTA:
-
-					try {
-						vista.formularioSetApuesta(this.crupier.getApostador());
-					} catch (RemoteException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					
-				case FINDEMANO:
-				
-					try {
-						salir = this.crupier.reiniciarMano();
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-					if (!salir) {
-						
-						vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
-						this.setInicio();
-			
-						vista.mostrarMano(this.getDatosJugadores());
+					case PRIMERAPUESTA:
 
 						try {
-							vista.formularioSetApuesta(this.crupier.getApostador());
-						} catch (RemoteException e) {
+							vista.formularioSetApuesta(this.crupier.getApostador().getNombre());
+						} catch (RemoteException e2) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							e2.printStackTrace();
 						}
 						
-					}
-					else {
-						
-						vista.mostrarMensaje(event, this.crupier);
-						vista.menuPrincipal();
-						
-					}	
+					case FINDEMANO:
 					
-				case FINDELJUEGO:
-					
-					vista.mostrarMensaje(event, this.crupier);
-					vista.menuPrincipal();
-					break;
-					
-				case HELP:
-					
-					try {
-						vista.help();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-								
-				default:;
-				
-				}
-				
-			}
-
-		}
-		
-	}
-
-	@Override
-	public void actualizar(SaltoError event, IJugador objeto) {
-		
-		for (IVista vista : this.interfaces) {
-			
-			if (vista.isActiva()) {
-				
-				vista.mostrarMensaje(event, objeto);
-				
-				switch (event) {
-				
-					case ERRORMAXJUGADORES:
-						
-						this.setInicio();
-						
-					case ERRORAPUESTA:
-						
-						vista.formularioSetApuesta(objeto);
-						
-					case NOHAYJUGADORESCARGADOS:
-						
-						vista.formularioAgregarJugador();
-						
-					case ERRORFALTADEDINERO:
-						
-						vista.formularioSetApuesta(objeto);
-						
-					case APOSTONONUMERO:
-						
-						vista.formularioSetApuesta(objeto);
-				
-				default:
-					break;
-				
-				}
-				
-			}
-			
-		}
-
-	}
-	
-	@Override
-	public void actualizar(Notificacion event, IJugador data) {
-		
-		IJugador playerContenedor;
-		
-		for (IVista vista : this.interfaces) {
-			
-			if (vista.isActiva()) {
-				
-				playerContenedor = null;
-				
-				switch ((Notificacion) event) {
-				
-					case JUGADORCARGADO:
-				
-						vista.mostrarMensaje(event, data);
-						vista.formularioAgregarJugador();		
-						
-					case BLACKJACK:
-						
-						vista.mostrarMensaje(event, data);
-						break;
-						
-					case APUESTASETEADA:
-					
-					try {
-						playerContenedor = this.crupier.getApostador();
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-						
-						if (playerContenedor != null) {
-							
-							vista.mostrarMensaje(event, data);
-							vista.formularioSetApuesta(playerContenedor);
-							
+						try {
+							salir = this.crupier.reiniciarMano();
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-						else {
+						
+						if (!salir) {
 							
+							vista.mostrarMensaje(Evento.FINDEMANO);
+							this.setInicio();
+				
+							vista.mostrarMano(this.getDatosJugadores());
+
 							try {
-								this.crupier.repartir(this.crupier.seleccionarJugador());
+								vista.formularioSetApuesta(this.crupier.getApostador().getNombre());
 							} catch (RemoteException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							
 						}
+						else {
+							
+							vista.mostrarMensaje(evento);
+							vista.menuPrincipal();
+							
+						}	
 						
-					case NOAPUESTA:
+					case FINDELJUEGO:
+						
+						vista.mostrarMensaje(evento);
+						vista.menuPrincipal();
+						break;
+						
+					case HELP:
 						
 						try {
-							playerContenedor = this.crupier.getApostador();
-						} catch (RemoteException e) {
+							vista.help();
+						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						if (playerContenedor != null) {
-							
-							vista.mostrarMensaje(event, data);
-							vista.formularioSetApuesta(playerContenedor);
-							
-						}
-						else {
-							
-							this.actualizar(Evento.FINDEMANO);
-							
-						}
-	
-					default:
+
+				default:;
+					}
 					
-					;
 				}
 				
 			}
-
+			
 		}
+		else if (event instanceof SaltoError) {
+			
+			error = (SaltoError) event;
+			
+			for (IVista vista : this.interfaces) {
+				
+				if (vista.isActiva()) {
+					
+					vista.mostrarMensaje(evento);
+					
+					switch (error) {
+					
+						case ERRORMAXJUGADORES:
+							
+							this.setInicio();
+							
+						case ERRORAPUESTA:
+							
+							vista.formularioSetApuesta(mensaje.getRemitente());
+							
+						case NOHAYJUGADORESCARGADOS:
+							
+							vista.formularioAgregarJugador();
+							
+						case ERRORFALTADEDINERO:
+							
+							vista.formularioSetApuesta(mensaje.getRemitente());
+							
+						case APOSTONONUMERO:
+							
+							vista.formularioSetApuesta(mensaje.getRemitente());
+					
+					default:
+						break;
+					
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 
+	@Override
+	public <T extends IObservableRemoto> void setModeloRemoto(T arg0) throws RemoteException {
+		
+		this.crupier = (CrupierBlackJack) arg0;
+		
 	}
 
 }

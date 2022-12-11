@@ -151,16 +151,10 @@ public class InterfazGrafica extends Vista {
 	}
 
 	@Override
-	public void mostrarMensaje(IMensaje msj, IJugador data) {
+	public void mostrarMensaje(IMensaje msj) {
 		
 		JOptionPane mensaje = null;
-		String nombre;
-		try {
-			nombre = data.getNombre();
-		} catch (RemoteException e) {
-			nombre = "Error nombre";
-			e.printStackTrace();
-		}
+		String remitente = msj.getRemitente();
 		
 		if (!flag) {
 			
@@ -174,7 +168,7 @@ public class InterfazGrafica extends Vista {
 				}
 				else {
 					
-					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), nombre, JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), remitente, JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					
 				}
 	
@@ -243,15 +237,7 @@ public class InterfazGrafica extends Vista {
 	}
 
 	@Override
-	public void formularioSetApuesta(IJugador dato) {
-		
-		String nombre;
-		try {
-			nombre = dato.getNombre();
-		} catch (RemoteException e) {
-			nombre = "Error nombre";
-			e.printStackTrace();
-		}
+	public void formularioSetApuesta(String nombre) {
 		
 		if (!flag) {
 			
@@ -271,24 +257,15 @@ public class InterfazGrafica extends Vista {
 	}
 
 	@Override
-	public boolean siONo(IMensaje msj, IJugador dato) {
-		
-		String nombre;
-		try {
-			nombre = dato.getNombre();
-		} catch (RemoteException e) {
-			nombre = "Error nombre";
-			e.printStackTrace();
-		}
+	public boolean siONo(IMensaje msj) {
 		
 		boolean retorno = false;
 		
-		if (!nombre.equals("Crupier")) {
+		if (!msj.getRemitente().equals("Crupier")) {
 			
-			
-			JOptionPane mensaje = new JOptionPane(nombre + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
+			JOptionPane mensaje = new JOptionPane(msj.getRemitente() + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
 			// 0 = Si; 1 = No
-			int respuesta = JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), nombre, JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			int respuesta = JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), msj.getRemitente(), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
 			if (respuesta == 0) {
 				

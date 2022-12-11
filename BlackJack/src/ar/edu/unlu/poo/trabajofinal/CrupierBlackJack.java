@@ -4,19 +4,19 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Queue;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
+import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
-import ar.edu.unlu.poo.trabajofinal.commons.Observado;
-import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
-public class CrupierBlackJack extends ObservableRemoto implements Observado, IPersona, IJugador {
+public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJugador, IObservableRemoto {
 
 	private ArrayList<JugadorBlackJack> jugadores;
-	private ArrayList<Observador> observers;
+	private Queue<JugadorBlackJack> enEspera;
 	private int apuestaMinima;
 	private FileManager fileManager = new FileManager();
 	private Mazo mazo;
@@ -26,7 +26,6 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	public CrupierBlackJack() {
 
 		this.setJugadores();
-		this.observers = new ArrayList<Observador>();
 		this.setApuestaMinima(100);
 		this.setMazo();
 		this.setManoActual();
@@ -34,6 +33,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 
 	// Rutina que reparte la primera mano.
+	@Override
 	public void repartirPrimeraTanda() throws RemoteException {
 
 		this.barajar();
@@ -85,60 +85,42 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 
 	// Appendea un jugador al ArrayList de jugadores.
+	@Override
 	public void addJugador(String nombre, int plata) throws RemoteException {
 			
-		boolean nombreNulo = (nombre == null);
-		boolean noHayJugadores = this.jugadores.isEmpty();
-		boolean seguir = false;
-		JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
+		JugadorBlackJack player;
 		
-		if (!nombreNulo) {
+		if (nombre == "") {
 			
-			if (this.nroDeJugadores() < 5) {
-
-				this.jugadores.add(player);
-				this.notificar(Notificacion.JUGADORCARGADO, player);
-				
-			}
-			else {
-				
-				seguir = this.notificar(SaltoError.ERRORMAXJUGADORES, this);
-				
-			}
+			nombre = "Player " + this.jugadores.size();
 			
 		}
-		else if (noHayJugadores) {
-			
-			this.notificar(SaltoError.NOHAYJUGADORESCARGADOS, this);
-			
+
+		player = new JugadorBlackJack(nombre, plata);	
+		
+		if (this.nroDeJugadores() < 5) {
+
+			this.enEspera.add(player);
+			this.notificarObservadores(Notificacion.JUGADORCARGADO, player);
+				
 		}
 		else {
-			
-			seguir = true;
-		
+				
+			this.notificarObservadores(SaltoError.ERRORMAXJUGADORES, this);
+				
 		}
-		
-		if (seguir) {
-			
-			try {
-				this.repartirPrimeraTanda();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-			this.notificar(Evento.PRIMERAPUESTA);
-			
-		}
+
 		
 	}
 
 	// Seteo de apuestas.
+	@Override
 	public void setApuestas(String monto) throws RemoteException {
 		
 		Apuesta apuesta = null;
 		JugadorBlackJack player;
 		int montoReal = 0;
+		int montoNulo = -1;
 		boolean seteado = false;
 		boolean runAway = false;
 		
@@ -169,7 +151,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 						// Podría hacer que si ningún jugador apostó, saltee la mano.
 						player.aposto();
 						player.yaJugo();
-						seteado = this.notificar(Notificacion.NOAPUESTA, player);
+						seteado = this.notificarObservadores(Notificacion.NOAPUESTA, player);
 						
 					}
 					else if ((player.getDinero() < this.apuestaMinima)){
@@ -182,28 +164,28 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 						}
 						
 					}
-					else if (montoReal == -1) {
+					else if (montoReal == montoNulo) {
 						
-						this.notificar(SaltoError.APOSTONONUMERO, player);
+						this.notificarObservadores(SaltoError.APOSTONONUMERO, player);
 						
 					}
 					else if (!seteado) {
 						
 						if ((apuesta.getMonto() > player.getDinero()) && (montoReal != 0)) {
 							
-							seteado = this.notificar(SaltoError.ERRORFALTADEDINERO, player);
+							seteado = this.notificarObservadores(SaltoError.ERRORFALTADEDINERO, player);
 							
 						}
 						else if (montoReal < this.apuestaMinima) {
 							
-							seteado = this.notificar(SaltoError.ERRORAPUESTA, player);
+							seteado = this.notificarObservadores(SaltoError.ERRORAPUESTA, player);
 							
 						}
 						else {
 							
 							player.setApuesta(apuesta);
 							player.aposto();
-							seteado = this.notificar(Notificacion.APUESTASETEADA, player);
+							seteado = this.notificarObservadores(Notificacion.APUESTASETEADA, player);
 						
 						}
 		
@@ -223,6 +205,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 
 	// Devuelve un arrray list con datos de los jugadores (Incluyendo al crupier).
+	@Override
 	public ArrayList<IJugador> getDatosJugadores() throws RemoteException {
 
 		ArrayList<IJugador> datosDeJugadores = new ArrayList<IJugador>(this.jugadores.size() + 1);
@@ -241,6 +224,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 	
 	// Retorna una carta del mazo.
+	@Override
 	public Carta darCarta() throws RemoteException {
 		
 		Carta cartita = this.getMazo().agarrarCarta();
@@ -301,6 +285,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 
 	// Devuelve un jugador disponible para jugar.
+	@Override
 	public JugadorBlackJack seleccionarJugador() throws RemoteException {
 		
 		boolean seteado = false;
@@ -324,6 +309,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 	
 	// Devuelve un jugador disponible para apostar.
+	@Override
 	public IJugador getApostador() throws RemoteException {
 		
 		boolean seteado = false;
@@ -345,6 +331,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 	
 	// Este metodo se encarga de repartir la carta a los JugadoresBlackJack.
+	@Override
 	public void repartir(JugadorBlackJack player) {
 		
 		// Repensar el sistema para repartir, corta.
@@ -370,14 +357,8 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		}
 		else if (primeraMano) {
 			
-			try {
-				this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			this.notificar(Evento.PREGUNTAROTRA, player);
+			this.notificarObservadores(Evento.MOSTRARMANO);
+			this.notificarObservadores(Evento.PREGUNTAROTRA, player);
 			
 		}
 		else {
@@ -395,13 +376,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 			
 			if (estatus == EstadoDeMano.MENORA21) {
 
-				try {
-					this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				this.notificar(Evento.PREGUNTAROTRA, player);
+				this.notificarObservadores(Evento.PREGUNTAROTRA, player);
 			
 			}
 			else {
@@ -416,7 +391,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 			
 			if (estatus == EstadoDeMano.BLACKJACK) {
 				
-				this.notificar(Notificacion.BLACKJACK, player);
+				this.notificarObservadores(Notificacion.BLACKJACK, player);
 				
 			}
 			
@@ -487,9 +462,8 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 		if (terminar) {
 			
-			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 			this.definirGanadores();
-			this.notificar(Evento.FINDEMANO);
+			this.notificarObservadores(Evento.FINDEMANO);
 			
 		}
 		else {
@@ -501,6 +475,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 
 	// Rutina que prepara a los jugadores para la siguiente mano.
+	@Override
 	public boolean reiniciarMano() throws RemoteException {
 		
 		boolean salir = false;
@@ -518,7 +493,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 			}	
 			else {
 				
-				this.notificar(Evento.SINPLATA, player);
+				this.notificarObservadores(Evento.SINPLATA, player);
 				eliminados.add(player);
 				
 			}
@@ -601,14 +576,14 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 	
+	@Override
 	public void terminarTurnoJugador(JugadorBlackJack player) throws RemoteException {
 
 		JugadorBlackJack contenedor;
 		
 		player.yaJugo();
 		contenedor = this.seleccionarJugador();
-		this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-		this.notificar(Evento.TERMINOTURNO, player);
+		this.notificarObservadores(Evento.TERMINOTURNO, player);
 		
 		if (contenedor != null) {
 			
@@ -630,6 +605,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 	
 	// Saca un jugador del ArrayList 'jugadores' (Podría dejarlos en un array de perdedores)
+	@Override
 	public void eliminar(JugadorBlackJack player) throws RemoteException {
 		
 		if (this.jugadores.size() == 1) {
@@ -637,7 +613,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 			// Atado con alambre.
 			this.jugadores.remove(player);
 			this.clearMano();
-			this.notificar(Evento.FINDELJUEGO);
+			this.notificarObservadores(Evento.FINDELJUEGO);
 			
 		}
 		else {
@@ -732,6 +708,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	}
 	
 	// Genera los archivos de guardado.
+	@Override
 	public void guardado(String tag) throws IOException {
 		
 		ArrayList<String> guardado = new ArrayList<String>();
@@ -746,6 +723,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 	
+	@Override
 	public void cargado(String tag) throws IOException {
 		
 		JugadorBlackJack jugador;
@@ -769,8 +747,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		}
 		
 		this.repartirPrimeraTanda();
-		this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
-		this.notificar(Evento.PRIMERAPUESTA);
+		this.notificarObservadores(Evento.PRIMERAPUESTA);
 		
 	}
 	
@@ -783,8 +760,8 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(this.manoActual.getCartas().size());
-		this.notificar(Evento.FINDELJUEGO);
+		
+		this.notificarObservadores(Evento.FINDELJUEGO);
 		
 	}
 	
@@ -804,7 +781,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 		if (means.out(input)) {
 			
-			respuesta = this.notificar(Evento.ADVERTENCIAGUARDADO, player);
+			respuesta = this.notificarObservadores(Evento.ADVERTENCIAGUARDADO, player);
 			this.eliminarTodo();
 			
 			
@@ -818,7 +795,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 				e.printStackTrace();
 			}
 			
-			this.notificar(Evento.TERMINOTURNO, player);
+			this.notificarObservadores(Evento.TERMINOTURNO, player);
 			try {
 				this.eliminar(player);
 			} catch (RemoteException e) {
@@ -830,13 +807,15 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		else if (means.esoyam(input)) {
 			
 			player.giveDinero(1000);
-			respuesta = this.notificar(Evento.PRIMERAPUESTA);
+			this.notificarObservadores(Evento.PRIMERAPUESTA);
+			respuesta = true;
 			
 		}
 		else if (means.help(input)) {
 			
-			respuesta = this.notificar(Evento.HELP);
-			this.notificar(Evento.PRIMERAPUESTA);
+			this.notificarObservadores(Evento.HELP);
+			respuesta = true;
+			this.notificarObservadores(Evento.PRIMERAPUESTA);
 			
 			
 		}
@@ -851,83 +830,29 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 	 * 
 */
 	
+	@Override
 	public void notificarObservadores(Object arg) {
 		
 		
 		
 	}
-	
-	@Override
-	public void agregarObservador(Observador observer) {
-		
-		this.observers.add(observer);
-		
-	}
 
-	@Override
-	public boolean notificar(Evento mensaje, IJugador data) {
+	public boolean notificarObservadores(IMensaje event, IJugador player) {
 		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, data);
-			
+		try {
+			event.setRemitente(player.getNombre());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		return true;
-		
-	}
-	
-	@Override
-	public boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos) {
-		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, actuDatos);
-			
-		}
+		this.notificarObservadores(event);
 		
 		return true;
 		
 	}
 
-	public boolean notificar(Evento mensaje) {
-		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje);
-			
-		}
-		
-		return true;
-		
-	}
-
-	@Override
-	public boolean notificar(SaltoError mensaje, IJugador data) {
-		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, data);
-			
-		}
-		
-		return true;
-		
-	}
 	
-	public boolean notificar(Notificacion mensaje, IJugador data) {
-		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, data);
-			
-		}
-		
-		return true;
-		
-	}
-	
-
 	//////////////////////////////////////////////////
 	// Implementación  que tuve que agregar por RMI //
 	//////////////////////////////////////////////////
@@ -950,11 +875,13 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		return mazo;
 	}
 
+	@Override
 	public int getDinero() throws RemoteException {
 	
 		return 0;
 	}
 
+	@Override
 	public String getNombre() throws RemoteException {
 		
 		return "Crupier";
@@ -962,6 +889,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 
 	// - JUGADOR - //
 	
+	@Override
 	public String[] getCartas() throws RemoteException {
 		
 		int size = this.manoActual.getCartas().size();
@@ -989,6 +917,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 	
+	@Override
 	public String[] getIdCartas() {
 		
 		int size = this.manoActual.getCartas().size();
@@ -1016,28 +945,33 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 	
+	@Override
 	public boolean todaviaNoJugo() throws RemoteException {
 		return todaviaNoJugo;
 	}
 
+	@Override
 	public EstadoDeMano getEstadoDeMano() throws RemoteException {
 		
 		return this.manoActual.getEstado();
 		
 	}
 	
+	@Override
 	public void mostrarCarta(int pos) throws RemoteException {
 		
 		this.manoActual.getCartas().get(pos).setVisibilidad(true);
 		
 	}
 	
+	@Override
 	public void mostrarCarta() throws RemoteException {
 		
 		this.mostrarCarta(0);
 		
 	}
 	
+	@Override
 	public void mostrarCartas() throws RemoteException {
 		
 		for (Carta carta : this.manoActual.getCartas()) {
@@ -1048,18 +982,21 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 
+	@Override
 	public int getNroCartas() throws RemoteException {
 		
 		return this.manoActual.getCartas().size();
 		
 	}
 	
+	@Override
 	public void addCarta(Carta carta) throws RemoteException {
 		
 		this.manoActual.addCarta(carta);
 		
 	}
 	
+	@Override
 	public void clearMano() throws RemoteException {
 		
 		this.manoActual.clear();
@@ -1076,6 +1013,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 
+	@Override
 	public int getApuestaMinima() throws RemoteException {
 		
 		return this.apuestaMinima;
@@ -1086,6 +1024,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		this.jugadores = new ArrayList<JugadorBlackJack>();
 	}
 
+	@Override
 	public int getPuntaje() throws RemoteException {
 		
 		Mano mano = this.manoActual;
@@ -1139,18 +1078,21 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IPe
 		
 	}
 
+	@Override
 	public ArrayList<String> getRanking() throws IOException, RemoteException {
 		
 		return this.fileManager.loadRanking();
 		
 	}
 
+	@Override
 	public ArrayList<String> getHelp() throws IOException, RemoteException {
 		
 		return this.fileManager.loadHelp();
 		
 	}
 
+	@Override
 	public Mano getManoActual() throws RemoteException {
 		return manoActual;
 	}

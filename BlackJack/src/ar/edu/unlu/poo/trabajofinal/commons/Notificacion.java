@@ -7,7 +7,8 @@ public enum Notificacion implements IMensaje {
 	APUESTASETEADA("Apuesta seteada!"),
 	BLACKJACK("Que suerte, tenés BlackJack!");
 	
-	String label;
+	private String label;
+	private String remitente = "unknown";
 	
 	Notificacion(String label) {
 		
@@ -21,5 +22,21 @@ public enum Notificacion implements IMensaje {
 		return res;
 		
 	}
+	
+	public void setRemitente(String remitente) {
+		
+		this.remitente = remitente;
+		
+	}
 
+	
+	@Override
+	public String getRemitente() {
+		
+		return this.remitente;
+		
+	}
+
+	
+	
 }

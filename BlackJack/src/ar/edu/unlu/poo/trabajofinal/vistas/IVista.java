@@ -17,13 +17,13 @@ public interface IVista {
 	
 	public void menuConfiguracion();
 
-	public void mostrarMensaje(IMensaje event, IJugador data);
+	public void mostrarMensaje(IMensaje event);
 	
 	public void mostrarMano(ArrayList<IJugador>  datos);
 	
-	public void formularioSetApuesta(IJugador dato);
+	public void formularioSetApuesta(String nombre);
 
-	public boolean siONo(IMensaje msj, IJugador dato);
+	public boolean siONo(IMensaje msj);
 	
 	public void setActiva(boolean actividad);
 	
