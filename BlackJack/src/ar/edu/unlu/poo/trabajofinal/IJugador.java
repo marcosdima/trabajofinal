@@ -1,21 +1,23 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import java.rmi.RemoteException;
+
 public interface IJugador {
 	
-	public String getNombre();
+	public String getNombre() throws RemoteException;
 	
-	public String[] getCartas();
+	public String[] getCartas() throws RemoteException;
 	
-	public String[] getIdCartas();
+	public String[] getIdCartas() throws RemoteException;
 	
-	public boolean todaviaNoJugo();
+	public boolean todaviaNoJugo() throws RemoteException;
 	
-	public int getDinero();
+	public int getDinero() throws RemoteException;
 	
-	public int getPuntaje();
+	public int getPuntaje() throws RemoteException;
 
-	public EstadoDeMano getEstadoDeMano();
+	public EstadoDeMano getEstadoDeMano() throws RemoteException;
 	
-	public Mano getManoActual();
+	public Mano getManoActual() throws RemoteException;
 	
 }

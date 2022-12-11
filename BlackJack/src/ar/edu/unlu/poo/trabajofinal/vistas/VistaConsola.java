@@ -10,6 +10,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.OpcionesMenuPrincipal;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class VistaConsola extends Vista {
@@ -143,7 +144,12 @@ public class VistaConsola extends Vista {
 		if (msj.getDescripcion() != "") {
 			
 			p.espacio();	
-			p.print(data.getNombre() + ": ");
+			try {
+				p.print(data.getNombre() + ": ");
+			} catch (RemoteException e) {
+				p.print("Error nombre" + ": ");
+				e.printStackTrace();
+			}
 			p.justPrint(msj.getDescripcion());
 			
 			/*
@@ -162,7 +168,11 @@ public class VistaConsola extends Vista {
 		
 		p.espacio();
 		p.print();
-		p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
+		try {
+			p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
+		} catch (RemoteException e) {
+			p.print("Error nombre" + " " + "ingrese su apuesta: ");
+		}
 		p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
 		monto = sc.next();
 		
@@ -177,7 +187,11 @@ public class VistaConsola extends Vista {
 		
 		p.espacio();
 		p.print();
-		p.print(data.getNombre());
+		try {
+			p.print(data.getNombre());
+		} catch (RemoteException e) {
+			p.print("Error nombre");
+		}
 		p.print(msj.getDescripcion());
 		res = sc.siONo();
 		return res;
@@ -306,14 +320,36 @@ public class VistaConsola extends Vista {
 
 		for (IJugador dato : datos) {
 			
-			conjuntoNombres[contador] = dato.getNombre();
-			conjuntoCartas.add(dato.getCartas());
-			conjuntoPuntajes[contador] = "Puntaje: " + String.valueOf(dato.getPuntaje());
+			try {
+				conjuntoNombres[contador] = dato.getNombre();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				conjuntoNombres[contador] = "Error nombre";
+			}
+			
+			try {
+				conjuntoCartas.add(dato.getCartas());
+			} catch (RemoteException e1) {
+				conjuntoCartas.add(null);
+				e1.printStackTrace();
+			}
+			
+			try {
+				conjuntoPuntajes[contador] = "Puntaje: " + String.valueOf(dato.getPuntaje());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				conjuntoPuntajes[contador] = "Remote exception";
+			}
 			
 			// No le agrega el dinero al crupier.
 			if (contador != (size - 1)) {
 				
-				dinerillo[contador] = "Dinero: " + String.valueOf(dato.getDinero());
+				try {
+					dinerillo[contador] = "Dinero: " + String.valueOf(dato.getDinero());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					dinerillo[contador] = "Error Dinero";
+				}
 				
 			}
 			else {

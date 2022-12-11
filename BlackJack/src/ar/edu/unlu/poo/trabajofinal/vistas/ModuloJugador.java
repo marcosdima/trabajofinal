@@ -2,12 +2,12 @@ package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.rmi.RemoteException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.ImageManager;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 
@@ -36,9 +36,28 @@ public class ModuloJugador extends JPanel {
 		BorderLayout norte = new BorderLayout();
 		GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
 		
-		JButton nombre = new JButton(jugador.getNombre());
-		JLabel dinero = new JLabel("Dinero: " + jugador.getDinero());
-		JLabel puntos = new JLabel("Puntaje: " + jugador.getPuntaje());
+		JButton nombre;
+		try {
+			nombre = new JButton(jugador.getNombre());
+		} catch (RemoteException e1) {
+			nombre = new JButton("Error nombre");
+		}
+		
+		JLabel dinero;
+		try {
+			dinero = new JLabel("Dinero: " + jugador.getDinero());
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			dinero = new JLabel("Error dinero");
+		}
+		
+		JLabel puntos;
+		try {
+			puntos = new JLabel("Puntaje: " + jugador.getPuntaje());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			puntos = new JLabel("Error en jugador.getPuntaje()");
+		}
 		
 		this.setLayout(mayor);
 		panelNorte.setLayout(norte);
@@ -52,10 +71,15 @@ public class ModuloJugador extends JPanel {
 		panelNorte.add(dinero, BorderLayout.SOUTH);
 		
 		// Seteo panel central
-		for (String cartita : jugador.getIdCartas()) {
-			
-			panelCentro.add(this.manager.imagen(cartita));
-			
+		try {
+			for (String cartita : jugador.getIdCartas()) {
+				
+				panelCentro.add(this.manager.imagen(cartita));
+				
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		// Appendeo

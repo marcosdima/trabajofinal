@@ -1,17 +1,19 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
+import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
-public class CrupierBlackJack implements Observado, IPersona, IJugador {
+public class CrupierBlackJack extends ObservableRemoto implements Observado, IPersona, IJugador {
 
 	private ArrayList<JugadorBlackJack> jugadores;
 	private ArrayList<Observador> observers;
@@ -21,9 +23,9 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	private Mano manoActual;
 	private boolean todaviaNoJugo;
 	
-	public CrupierBlackJack(int nroDeJugadores) {
+	public CrupierBlackJack() {
 
-		this.setJugadores(nroDeJugadores);
+		this.setJugadores();
 		this.observers = new ArrayList<Observador>();
 		this.setApuestaMinima(100);
 		this.setMazo();
@@ -32,7 +34,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Rutina que reparte la primera mano.
-	public void repartirPrimeraTanda() {
+	public void repartirPrimeraTanda() throws RemoteException {
 
 		this.barajar();
 		
@@ -83,7 +85,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Appendea un jugador al ArrayList de jugadores.
-	public void addJugador(String nombre, int plata) {
+	public void addJugador(String nombre, int plata) throws RemoteException {
 			
 		boolean nombreNulo = (nombre == null);
 		boolean noHayJugadores = this.jugadores.isEmpty();
@@ -118,7 +120,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 		if (seguir) {
 			
-			this.repartirPrimeraTanda();
+			try {
+				this.repartirPrimeraTanda();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 			this.notificar(Evento.PRIMERAPUESTA);
 			
@@ -127,7 +134,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Seteo de apuestas.
-	public void setApuestas(String monto) {
+	public void setApuestas(String monto) throws RemoteException {
 		
 		Apuesta apuesta = null;
 		JugadorBlackJack player;
@@ -167,7 +174,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 					}
 					else if ((player.getDinero() < this.apuestaMinima)){
 						
-						this.eliminar(player);
+						try {
+							this.eliminar(player);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 					}
 					else if (montoReal == -1) {
@@ -211,7 +223,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Devuelve un arrray list con datos de los jugadores (Incluyendo al crupier).
-	public ArrayList<IJugador> getDatosJugadores() {
+	public ArrayList<IJugador> getDatosJugadores() throws RemoteException {
 
 		ArrayList<IJugador> datosDeJugadores = new ArrayList<IJugador>(this.jugadores.size() + 1);
 		
@@ -229,7 +241,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 	
 	// Retorna una carta del mazo.
-	public Carta darCarta() {
+	public Carta darCarta() throws RemoteException {
 		
 		Carta cartita = this.getMazo().agarrarCarta();
 		
@@ -242,7 +254,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	// Revisa el estado del jugador y devuelve un enumerado con el resultado.
 	private EstadoDeMano checkEstadoJugador(IJugador player, int puntaje) {
 		
-		Mano mano;
+		Mano mano = null;
 		ArrayList<Carta> cartas;
 		int tam;
 		
@@ -250,7 +262,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 
 		if (player != null) {
 			
-			mano = player.getManoActual();
+			try {
+				mano = player.getManoActual();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			
 			cartas = mano.getCartas();
 			tam = cartas.size();
 
@@ -284,7 +301,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Devuelve un jugador disponible para jugar.
-	public JugadorBlackJack seleccionarJugador() {
+	public JugadorBlackJack seleccionarJugador() throws RemoteException {
 		
 		boolean seteado = false;
 		
@@ -307,7 +324,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 	
 	// Devuelve un jugador disponible para apostar.
-	public IJugador getApostador() {
+	public IJugador getApostador() throws RemoteException {
 		
 		boolean seteado = false;
 		IJugador contenedor = null;
@@ -331,10 +348,10 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	public void repartir(JugadorBlackJack player) {
 		
 		// Repensar el sistema para repartir, corta.
-		EstadoDeMano estatus;
+		EstadoDeMano estatus = null;
 		boolean primeraMano = false;
 		boolean terminar = false;
-		Carta cartita;
+		Carta cartita = null;
 		
 		// Si es la primera mano, muestra sus cartas y pone en true la variable 'primeraMano'.
 		if (player.primeraMano()) {
@@ -353,13 +370,24 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		}
 		else if (primeraMano) {
 			
-			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+			try {
+				this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			this.notificar(Evento.PREGUNTAROTRA, player);
 			
 		}
 		else {
 			
-			cartita = this.darCarta();
+			try {
+				cartita = this.darCarta();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			player.addCarta(cartita);
 			player.mostrarCartas();
 			
@@ -367,7 +395,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 			
 			if (estatus == EstadoDeMano.MENORA21) {
 
-				this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+				try {
+					this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				this.notificar(Evento.PREGUNTAROTRA, player);
 			
 			}
@@ -387,14 +420,19 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 				
 			}
 			
-			this.terminarTurnoJugador(player);
+			try {
+				this.terminarTurnoJugador(player);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 			
 	}
 	
 	// Rutina para que se de cartas el crupier.
-	public void repartirCrupier() {
+	private void repartirCrupier() throws RemoteException {
 
 		EstadoDeMano estado;
 		Comparativo comparacion;
@@ -450,6 +488,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		if (terminar) {
 			
 			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
+			this.definirGanadores();
 			this.notificar(Evento.FINDEMANO);
 			
 		}
@@ -462,7 +501,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Rutina que prepara a los jugadores para la siguiente mano.
-	protected boolean reiniciarMano() {
+	public boolean reiniciarMano() throws RemoteException {
 		
 		boolean salir = false;
 		ArrayList<JugadorBlackJack> eliminados = new ArrayList<JugadorBlackJack>();
@@ -494,7 +533,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 				
 			}
 			
-			this.eliminar(eliminado);
+			try {
+				this.eliminar(eliminado);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		
@@ -506,9 +550,8 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Rutina que reparte las ganancias a los jugadores.
-	public void definirGanadores() {
+	private void definirGanadores() {
 		
-		// Falta caso Black Jack.
 		Comparativo comparacion;
 		
 		for (JugadorBlackJack player : this.jugadores) {
@@ -540,11 +583,11 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 
 	// Devuelve true si detecta que es la primera mano.
-	public boolean primeraMano() {
+	private boolean primeraMano() {
 		
 		boolean res = false;
 		
-		for (Carta cartita : this.getManoActual().getCartas()) {
+		for (Carta cartita : this.manoActual.getCartas()) {
 			
 			if (!cartita.esVisible()) {
 				
@@ -558,7 +601,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 	
-	public void terminarTurnoJugador(JugadorBlackJack player) {
+	public void terminarTurnoJugador(JugadorBlackJack player) throws RemoteException {
 
 		JugadorBlackJack contenedor;
 		
@@ -574,7 +617,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		}
 		else {
 			
-			this.repartirCrupier();
+			try {
+				this.repartirCrupier();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		
@@ -582,7 +630,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	}
 	
 	// Saca un jugador del ArrayList 'jugadores' (Podría dejarlos en un array de perdedores)
-	public void eliminar(JugadorBlackJack player) {
+	public void eliminar(JugadorBlackJack player) throws RemoteException {
 		
 		if (this.jugadores.size() == 1) {
 			
@@ -609,7 +657,7 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 	
-	private Comparativo comparador(IJugador player) {
+	private Comparativo comparador(IJugador player) throws RemoteException {
 
 		EstadoDeMano laMano = this.getEstadoDeMano();
 		EstadoDeMano otraMano = player.getEstadoDeMano();
@@ -668,11 +716,16 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 	
-	public Comparativo compararManos(IJugador player) {
+	private Comparativo compararManos(IJugador player) {
 		
-		Comparativo comparacion;
+		Comparativo comparacion = null;
 		
-		comparacion = this.comparador(player);
+		try {
+			comparacion = this.comparador(player);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return comparacion;
 		
@@ -724,8 +777,13 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	private void eliminarTodo() {
 		
 		this.jugadores.clear();
-		this.clearMano();
-		System.out.println(this.getManoActual().getCartas().size());
+		try {
+			this.clearMano();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(this.manoActual.getCartas().size());
 		this.notificar(Evento.FINDELJUEGO);
 		
 	}
@@ -735,7 +793,14 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 		boolean respuesta = false;
 		Intencion means = new Intencion();
-		JugadorBlackJack player = (JugadorBlackJack) this.getApostador();
+		JugadorBlackJack player = null;
+		
+		try {
+			player = (JugadorBlackJack) this.getApostador();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		if (means.out(input)) {
 			
@@ -754,7 +819,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 			}
 			
 			this.notificar(Evento.TERMINOTURNO, player);
-			this.eliminar(player);
+			try {
+				this.eliminar(player);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		else if (means.esoyam(input)) {
@@ -780,6 +850,12 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	 - Implementación observado
 	 * 
 */
+	
+	public void notificarObservadores(Object arg) {
+		
+		
+		
+	}
 	
 	@Override
 	public void agregarObservador(Observador observer) {
@@ -858,48 +934,41 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	
 	// - Crupier - //
 	
-	public void barajar() {
+	private void barajar() {
 		
 		this.mazo.barajar();
 		
 	};
 	
-	public void setMazo(Mazo mazo) {
+	private void setMazo(Mazo mazo) {
 		
 		this.mazo = mazo;
 		
 	}
-	
-	public void darCarta(Jugador player) {
-		
-		Carta cartita = this.mazo.agarrarCarta();
-		player.addCarta(cartita);
-		
-	}
 
-	public Mazo getMazo() {
+	private Mazo getMazo() {
 		return mazo;
 	}
 
-	public int getDinero() {
+	public int getDinero() throws RemoteException {
 	
 		return 0;
 	}
 
-	public String getNombre() {
+	public String getNombre() throws RemoteException {
 		
 		return "Crupier";
 	}
 
 	// - JUGADOR - //
 	
-	public String[] getCartas() {
+	public String[] getCartas() throws RemoteException {
 		
-		int size = this.getManoActual().getCartas().size();
+		int size = this.manoActual.getCartas().size();
 		int contador = 0;
 		String[] cartas = new String[size];
 		
-		for (Carta cartita : this.getManoActual().getCartas()) {
+		for (Carta cartita : this.manoActual.getCartas()) {
 			
 			if (cartita.esVisible()) {
 				
@@ -922,11 +991,11 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 	
 	public String[] getIdCartas() {
 		
-		int size = this.getManoActual().getCartas().size();
+		int size = this.manoActual.getCartas().size();
 		int contador = 0;
 		String[] cartas = new String[size];
 		
-		for (Carta cartita : this.getManoActual().getCartas()) {
+		for (Carta cartita : this.manoActual.getCartas()) {
 			
 			if (cartita.esVisible()) {
 				
@@ -947,29 +1016,29 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 	
-	public boolean todaviaNoJugo() {
+	public boolean todaviaNoJugo() throws RemoteException {
 		return todaviaNoJugo;
 	}
 
-	public EstadoDeMano getEstadoDeMano() {
+	public EstadoDeMano getEstadoDeMano() throws RemoteException {
 		
-		return this.getManoActual().getEstado();
-		
-	}
-	
-	public void mostrarCarta(int pos) {
-		
-		this.getManoActual().getCartas().get(pos).setVisibilidad(true);
+		return this.manoActual.getEstado();
 		
 	}
 	
-	public void mostrarCarta() {
+	public void mostrarCarta(int pos) throws RemoteException {
+		
+		this.manoActual.getCartas().get(pos).setVisibilidad(true);
+		
+	}
+	
+	public void mostrarCarta() throws RemoteException {
 		
 		this.mostrarCarta(0);
 		
 	}
 	
-	public void mostrarCartas() {
+	public void mostrarCartas() throws RemoteException {
 		
 		for (Carta carta : this.manoActual.getCartas()) {
 			
@@ -979,48 +1048,47 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 
-	public int getNroCartas() {
+	public int getNroCartas() throws RemoteException {
 		
-		return this.getManoActual().getCartas().size();
-		
-	}
-	
-	public void addCarta(Carta carta) {
-		
-		this.getManoActual().addCarta(carta);
+		return this.manoActual.getCartas().size();
 		
 	}
 	
-	public void clearMano() {
+	public void addCarta(Carta carta) throws RemoteException {
 		
-		this.getManoActual().clear();
-	
+		this.manoActual.addCarta(carta);
+		
 	}
 	
+	public void clearMano() throws RemoteException {
+		
+		this.manoActual.clear();
+	
+	}
 	
 	/////////////////////////
 	// Getters and Setters //
 	/////////////////////////
 	
-	public void setApuestaMinima(int montoMinimo) {
+	private void setApuestaMinima(int montoMinimo) {
 		
 		this.apuestaMinima = montoMinimo;
 		
 	}
 
-	public int getApuestaMinima() {
+	public int getApuestaMinima() throws RemoteException {
 		
 		return this.apuestaMinima;
 		
 	}
 	
-	public void setJugadores(int n) {
-		this.jugadores = new ArrayList<JugadorBlackJack>(n);
+	private void setJugadores() {
+		this.jugadores = new ArrayList<JugadorBlackJack>();
 	}
 
-	public int getPuntaje() {
+	public int getPuntaje() throws RemoteException {
 		
-		Mano mano = this.getManoActual();
+		Mano mano = this.manoActual;
 		int puntos = mano.getPuntaje();
 		ContenidoDeCarta contenido;
 
@@ -1044,18 +1112,18 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 	
-	protected void setMazo() {
+	private void setMazo() {
 		
 		MazoDeNaipes m = new MazoDeNaipes();
 		this.setMazo(m);
 		
 	}
 	
-	public ArrayList<JugadorBlackJack> getJugadores() {
+	private ArrayList<JugadorBlackJack> getJugadores() {
 		return jugadores;
 	}
 
-	public int nroDeJugadores() {
+	private int nroDeJugadores() {
 		
 		int res = 0;
 		
@@ -1071,23 +1139,23 @@ public class CrupierBlackJack implements Observado, IPersona, IJugador {
 		
 	}
 
-	public ArrayList<String> getRanking() throws IOException {
+	public ArrayList<String> getRanking() throws IOException, RemoteException {
 		
 		return this.fileManager.loadRanking();
 		
 	}
 
-	public ArrayList<String> getHelp() throws IOException {
+	public ArrayList<String> getHelp() throws IOException, RemoteException {
 		
 		return this.fileManager.loadHelp();
 		
 	}
 
-	public Mano getManoActual() {
+	public Mano getManoActual() throws RemoteException {
 		return manoActual;
 	}
 
-	public void setManoActual() {
+	private void setManoActual() {
 		this.manoActual = new Mano();
 	}
 

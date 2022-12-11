@@ -1,6 +1,7 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
@@ -13,13 +14,13 @@ public class BlackJack implements Observador {
 	
 	private CrupierBlackJack crupier;
 	private ArrayList<IVista> interfaces;
-	public static final int MAXIMODEJUGADORES = 4;
 	private static int DINEROBASE = 1000;
+	public static final int MAXIMODEJUGADORES = 4;
 	private static int JUGADORES;
 
 	public BlackJack() {
 		
-		crupier = new CrupierBlackJack(MAXIMODEJUGADORES);
+		crupier = new CrupierBlackJack();
 		this.crupier.agregarObservador(this);
 		interfaces = new ArrayList<IVista>(2);
 		BlackJack.JUGADORES = 0;
@@ -40,13 +41,23 @@ public class BlackJack implements Observador {
 			
 		}
 
-		this.crupier.addJugador(nombre, BlackJack.DINEROBASE);
+		try {
+			this.crupier.addJugador(nombre, BlackJack.DINEROBASE);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
 	public void setInicio() {
 		
-		this.crupier.repartirPrimeraTanda();
+		try {
+			this.crupier.repartirPrimeraTanda();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -58,19 +69,42 @@ public class BlackJack implements Observador {
 			
 		}
 		
-		this.crupier.setApuestas(monto);
+		try {
+			this.crupier.setApuestas(monto);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
-	public void getDatosJugadores() {
+	public ArrayList<IJugador> getDatosJugadores() {
 
-		this.crupier.getDatosJugadores();
+		ArrayList<IJugador> plys = null;
+		
+		try {
+			plys = this.crupier.getDatosJugadores();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return plys;
 		
 	}
 	
 	public int getApuestaMinima() {
 		
-		return this.crupier.getApuestaMinima();
+		int apuestaMinima;
+		
+		try {
+			apuestaMinima = this.crupier.getApuestaMinima();
+		} catch (RemoteException e) {
+			apuestaMinima = 0;
+			e.printStackTrace();
+		}
+		
+		return apuestaMinima;
 		
 	}
 	
@@ -111,7 +145,6 @@ public class BlackJack implements Observador {
 		return this.crupier.getHelp();
 		
 	}
-	
 	
 	public void cambiarVista() {
 		
@@ -163,7 +196,12 @@ public class BlackJack implements Observador {
 				
 				case PREGUNTAROTRA:
 					
-					jugadorBJ = this.crupier.seleccionarJugador();
+					try {
+						jugadorBJ = this.crupier.seleccionarJugador();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 					if (vista.siONo(event, data)) {
 						
@@ -172,7 +210,12 @@ public class BlackJack implements Observador {
 					}
 					else {
 						
-						this.crupier.terminarTurnoJugador(jugadorBJ);
+						try {
+							this.crupier.terminarTurnoJugador(jugadorBJ);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 					}	
 					
@@ -231,7 +274,7 @@ public class BlackJack implements Observador {
 	@Override
 	public void actualizar(Evento event) {
 		
-		boolean salir;
+		boolean salir = false;
 		
 		for (IVista vista : this.interfaces) {
 			
@@ -241,19 +284,35 @@ public class BlackJack implements Observador {
 				
 				case PRIMERAPUESTA:
 
-					vista.formularioSetApuesta(this.crupier.getApostador());
+					try {
+						vista.formularioSetApuesta(this.crupier.getApostador());
+					} catch (RemoteException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					
 				case FINDEMANO:
 				
-					this.crupier.definirGanadores();
-					salir = this.crupier.reiniciarMano();
+					try {
+						salir = this.crupier.reiniciarMano();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 					if (!salir) {
 						
 						vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
 						this.setInicio();
-						vista.mostrarMano(this.crupier.getDatosJugadores());
-						vista.formularioSetApuesta(this.crupier.getApostador());
+			
+						vista.mostrarMano(this.getDatosJugadores());
+
+						try {
+							vista.formularioSetApuesta(this.crupier.getApostador());
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 					}
 					else {
@@ -355,7 +414,12 @@ public class BlackJack implements Observador {
 						
 					case APUESTASETEADA:
 					
+					try {
 						playerContenedor = this.crupier.getApostador();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 						
 						if (playerContenedor != null) {
 							
@@ -365,13 +429,23 @@ public class BlackJack implements Observador {
 						}
 						else {
 							
-							this.crupier.repartir(this.crupier.seleccionarJugador());
+							try {
+								this.crupier.repartir(this.crupier.seleccionarJugador());
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							
 						}
 						
 					case NOAPUESTA:
 						
-						playerContenedor = this.crupier.getApostador();
+						try {
+							playerContenedor = this.crupier.getApostador();
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 						if (playerContenedor != null) {
 							

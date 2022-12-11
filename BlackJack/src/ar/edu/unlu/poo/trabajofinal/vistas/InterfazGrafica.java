@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -153,6 +154,13 @@ public class InterfazGrafica extends Vista {
 	public void mostrarMensaje(IMensaje msj, IJugador data) {
 		
 		JOptionPane mensaje = null;
+		String nombre;
+		try {
+			nombre = data.getNombre();
+		} catch (RemoteException e) {
+			nombre = "Error nombre";
+			e.printStackTrace();
+		}
 		
 		if (!flag) {
 			
@@ -166,7 +174,7 @@ public class InterfazGrafica extends Vista {
 				}
 				else {
 					
-					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), data.getNombre(), JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), nombre, JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					
 				}
 	
@@ -237,10 +245,18 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void formularioSetApuesta(IJugador dato) {
 		
+		String nombre;
+		try {
+			nombre = dato.getNombre();
+		} catch (RemoteException e) {
+			nombre = "Error nombre";
+			e.printStackTrace();
+		}
+		
 		if (!flag) {
 			
 			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
-			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta: (Apuesta minima " + this.controlador.getApuestaMinima() + ")", dato.getNombre(), JOptionPane.INFORMATION_MESSAGE);	
+			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta: (Apuesta minima " + this.controlador.getApuestaMinima() + ")", nombre, JOptionPane.INFORMATION_MESSAGE);	
 			
 			if (res == null) {
 				
@@ -257,14 +273,22 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public boolean siONo(IMensaje msj, IJugador dato) {
 		
+		String nombre;
+		try {
+			nombre = dato.getNombre();
+		} catch (RemoteException e) {
+			nombre = "Error nombre";
+			e.printStackTrace();
+		}
+		
 		boolean retorno = false;
 		
-		if (!dato.getNombre().equals("Crupier")) {
+		if (!nombre.equals("Crupier")) {
 			
 			
-			JOptionPane mensaje = new JOptionPane(dato.getNombre() + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
+			JOptionPane mensaje = new JOptionPane(nombre + ": " + msj.getDescripcion(), JOptionPane.YES_NO_OPTION);
 			// 0 = Si; 1 = No
-			int respuesta = JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), dato.getNombre(), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			int respuesta = JOptionPane.showConfirmDialog(mensaje, msj.getDescripcion(), nombre, JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
 			if (respuesta == 0) {
 				
