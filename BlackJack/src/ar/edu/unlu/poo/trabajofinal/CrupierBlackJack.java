@@ -11,19 +11,23 @@ import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
-public class CrupierBlackJack extends Crupier implements Observado {
+public class CrupierBlackJack implements Observado, IPersona, IJugador {
 
 	private ArrayList<JugadorBlackJack> jugadores;
 	private ArrayList<Observador> observers;
 	private int apuestaMinima;
 	private FileManager fileManager = new FileManager();
+	private Mazo mazo;
+	private Mano manoActual;
+	private boolean todaviaNoJugo;
 	
 	public CrupierBlackJack(int nroDeJugadores) {
-	
-		super();
+
 		this.setJugadores(nroDeJugadores);
 		this.observers = new ArrayList<Observador>();
 		this.setApuestaMinima(100);
+		this.setMazo();
+		this.setManoActual();
 
 	}
 
@@ -236,7 +240,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 	
 	// Revisa el estado del jugador y devuelve un enumerado con el resultado.
-	private EstadoDeMano checkEstadoJugador(Jugador player, int puntaje) {
+	private EstadoDeMano checkEstadoJugador(IJugador player, int puntaje) {
 		
 		Mano mano;
 		ArrayList<Carta> cartas;
@@ -777,7 +781,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	 * 
 */
 	
-	
 	@Override
 	public void agregarObservador(Observador observer) {
 		
@@ -848,13 +851,156 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 	
+
+	//////////////////////////////////////////////////
+	// Implementación  que tuve que agregar por RMI //
+	//////////////////////////////////////////////////
 	
-/*
-	 * 
-	 - Getters and Setters 
-	 * 
-*/
+	// - Crupier - //
 	
+	public void barajar() {
+		
+		this.mazo.barajar();
+		
+	};
+	
+	public void setMazo(Mazo mazo) {
+		
+		this.mazo = mazo;
+		
+	}
+	
+	public void darCarta(Jugador player) {
+		
+		Carta cartita = this.mazo.agarrarCarta();
+		player.addCarta(cartita);
+		
+	}
+
+	public Mazo getMazo() {
+		return mazo;
+	}
+
+	public int getDinero() {
+	
+		return 0;
+	}
+
+	public String getNombre() {
+		
+		return "Crupier";
+	}
+
+	// - JUGADOR - //
+	
+	public String[] getCartas() {
+		
+		int size = this.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
+		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (cartita.esVisible()) {
+				
+				cartas[contador] = cartita.getDesc();
+				
+			}
+			else {
+				
+				cartas[contador] = "Cubierta";
+				
+			}
+			
+			contador++;
+			
+		}
+		
+		return cartas;
+		
+	}
+	
+	public String[] getIdCartas() {
+		
+		int size = this.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
+		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (cartita.esVisible()) {
+				
+				cartas[contador] = cartita.getIdentificador();
+				
+			}
+			else {
+				
+				cartas[contador] = "CUBIERTA";
+				
+			}
+			
+			contador++;
+			
+		}
+		
+		return cartas;
+		
+	}
+	
+	public boolean todaviaNoJugo() {
+		return todaviaNoJugo;
+	}
+
+	public EstadoDeMano getEstadoDeMano() {
+		
+		return this.getManoActual().getEstado();
+		
+	}
+	
+	public void mostrarCarta(int pos) {
+		
+		this.getManoActual().getCartas().get(pos).setVisibilidad(true);
+		
+	}
+	
+	public void mostrarCarta() {
+		
+		this.mostrarCarta(0);
+		
+	}
+	
+	public void mostrarCartas() {
+		
+		for (Carta carta : this.manoActual.getCartas()) {
+			
+			carta.setVisibilidad(true);
+			
+		}
+		
+	}
+
+	public int getNroCartas() {
+		
+		return this.getManoActual().getCartas().size();
+		
+	}
+	
+	public void addCarta(Carta carta) {
+		
+		this.getManoActual().addCarta(carta);
+		
+	}
+	
+	public void clearMano() {
+		
+		this.getManoActual().clear();
+	
+	}
+	
+	
+	/////////////////////////
+	// Getters and Setters //
+	/////////////////////////
 	
 	public void setApuestaMinima(int montoMinimo) {
 		
@@ -935,6 +1081,14 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		return this.fileManager.loadHelp();
 		
+	}
+
+	public Mano getManoActual() {
+		return manoActual;
+	}
+
+	public void setManoActual() {
+		this.manoActual = new Mano();
 	}
 
 }

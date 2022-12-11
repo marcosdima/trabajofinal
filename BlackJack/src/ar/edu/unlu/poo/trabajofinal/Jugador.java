@@ -2,14 +2,17 @@ package ar.edu.unlu.poo.trabajofinal;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 
-public abstract class Jugador extends Persona implements Puntuable, IJugador {
+public abstract class Jugador implements Puntuable, IJugador, IPersona {
 
 	private Mano manoActual;
 	private boolean todaviaNoJugo;
+	private String nombre;
+	private int dinero;
 	
 	public Jugador(String nombre, int money) {
 		
-		super(nombre, money);
+		this.setNombre(nombre);
+		this.setDinero(money);
 		this.setManoActual();
 		
 	}
@@ -78,10 +81,34 @@ public abstract class Jugador extends Persona implements Puntuable, IJugador {
 		
 	}
 
+	public void setNombre(String nombre) {
+		
+		this.nombre = nombre;
+		
+	}
+	
+	public int getDinero() {
+		return dinero;
+	}
+
+	public void setDinero(int dinero) {
+		this.dinero = dinero;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public void giveDinero(int monto) {
+		
+		this.dinero += monto;
+		
+	}
+	
 	/////////////////////////////
 	// Implementación IJugador //
 	/////////////////////////////
-
+	
 	public String[] getCartas() {
 		
 		int size = this.getManoActual().getCartas().size();
