@@ -14,14 +14,22 @@ import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 public class BlackJack implements IControladorRemoto {
 	
-	private CrupierBlackJack crupier;
+	private ICrupier crupier;
 	private ArrayList<IVista> interfaces;
 	private static int DINEROBASE = 1000;
 	public static final int MAXIMODEJUGADORES = 4;
 
+	public <T extends IObservableRemoto> BlackJack(T modelo) {
+		try {
+			this.setModeloRemoto(modelo);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public BlackJack() {
 		
-		crupier = new CrupierBlackJack();
 		interfaces = new ArrayList<IVista>(2);
 		
 	}
@@ -358,11 +366,10 @@ public class BlackJack implements IControladorRemoto {
 		
 	}
 	
-
 	@Override
 	public <T extends IObservableRemoto> void setModeloRemoto(T arg0) throws RemoteException {
 		
-		this.crupier = (CrupierBlackJack) arg0;
+		this.crupier = (ICrupier) arg0;
 		
 	}
 

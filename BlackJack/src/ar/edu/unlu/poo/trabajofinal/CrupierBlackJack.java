@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
@@ -13,7 +14,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 
-public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJugador, IObservableRemoto {
+public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJugador, ICrupier {
 
 	private ArrayList<JugadorBlackJack> jugadores;
 	private Queue<JugadorBlackJack> enEspera;
@@ -29,6 +30,8 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 		this.setApuestaMinima(100);
 		this.setMazo();
 		this.setManoActual();
+		
+		this.enEspera = new LinkedList<JugadorBlackJack>();
 
 	}
 
@@ -98,7 +101,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 
 		player = new JugadorBlackJack(nombre, plata);	
 		
-		if (this.nroDeJugadores() < 5) {
+		if (this.jugadores.isEmpty()) {
+			
+			this.jugadores.add(player);
+			this.notificarObservadores(Evento.PRIMERAPUESTA);
+			
+		}
+		else if (this.nroDeJugadores() < 5) {
 
 			this.enEspera.add(player);
 			this.notificarObservadores(Notificacion.JUGADORCARGADO, player);
@@ -332,7 +341,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 	
 	// Este metodo se encarga de repartir la carta a los JugadoresBlackJack.
 	@Override
-	public void repartir(JugadorBlackJack player) {
+	public void repartir(JugadorBlackJack player)  throws RemoteException {
 		
 		// Repensar el sistema para repartir, corta.
 		EstadoDeMano estatus = null;
@@ -357,7 +366,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 		}
 		else if (primeraMano) {
 			
-			this.notificarObservadores(Evento.MOSTRARMANO);
+			this.notificarObservadores(Evento.MOSTRARMANO, this);
 			this.notificarObservadores(Evento.PREGUNTAROTRA, player);
 			
 		}
@@ -751,7 +760,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 		
 	}
 	
-	private void eliminarTodo() {
+	private void eliminarTodo()  throws RemoteException {
 		
 		this.jugadores.clear();
 		try {
@@ -761,12 +770,12 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 			e.printStackTrace();
 		}
 		
-		this.notificarObservadores(Evento.FINDELJUEGO);
+		this.notificarObservadores(Evento.FINDELJUEGO, this);
 		
 	}
 	
 	// Checkea si lo ingresado en Apuesta es un comando de salida.
-	private boolean checkInput(String input) {
+	private boolean checkInput(String input) throws RemoteException {
 		
 		boolean respuesta = false;
 		Intencion means = new Intencion();
@@ -807,15 +816,15 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 		else if (means.esoyam(input)) {
 			
 			player.giveDinero(1000);
-			this.notificarObservadores(Evento.PRIMERAPUESTA);
+			this.notificarObservadores(Evento.PRIMERAPUESTA, this);
 			respuesta = true;
 			
 		}
 		else if (means.help(input)) {
 			
-			this.notificarObservadores(Evento.HELP);
+			this.notificarObservadores(Evento.HELP, this);
 			respuesta = true;
-			this.notificarObservadores(Evento.PRIMERAPUESTA);
+			this.notificarObservadores(Evento.PRIMERAPUESTA, this);
 			
 			
 		}
@@ -829,15 +838,9 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 	 - Implementación observado
 	 * 
 */
-	
-	@Override
-	public void notificarObservadores(Object arg) {
-		
-		
-		
-	}
 
-	public boolean notificarObservadores(IMensaje event, IJugador player) {
+	@Override
+	public boolean notificarObservadores(IMensaje event, IJugador player) throws RemoteException {
 		
 		try {
 			event.setRemitente(player.getNombre());
@@ -846,13 +849,17 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 			e.printStackTrace();
 		}
 		
-		this.notificarObservadores(event);
+		try {
+			this.notificarObservadores(event);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return true;
 		
 	}
 
-	
 	//////////////////////////////////////////////////
 	// Implementación  que tuve que agregar por RMI //
 	//////////////////////////////////////////////////
@@ -918,7 +925,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IPersona, IJug
 	}
 	
 	@Override
-	public String[] getIdCartas() {
+	public String[] getIdCartas() throws RemoteException {
 		
 		int size = this.manoActual.getCartas().size();
 		int contador = 0;

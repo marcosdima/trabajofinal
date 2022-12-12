@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -39,7 +38,7 @@ public class InterfazGrafica extends Vista {
 	private BlackJack controlador;
 	private Frame frame;
 	private ImageManager imageManager;
-	private ArrayList<String> nombres = new ArrayList<String>();
+	//private ArrayList<String> nombres = new ArrayList<String>();
 	private boolean flag = false;
 	
 	public InterfazGrafica(BlackJack controlador) {
@@ -68,7 +67,7 @@ public class InterfazGrafica extends Vista {
 		JButton load = new Boton("Cargar");
 		JButton rank = new Boton("Ranking");
 		
-		Component[] opciones = {jugar, salir, load, rank};
+		Component[] opciones = {jugar, load, rank, salir};
 		
 		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
 		
@@ -76,9 +75,8 @@ public class InterfazGrafica extends Vista {
 
 			public void actionPerformed(ActionEvent arg0) {
 
-				nombres = new ArrayList<String>();
+				//nombres = new ArrayList<String>();
 				flag = false;
-				setAgregarJugadores();
 				formularioAgregarJugador();
 				
 			}
@@ -124,22 +122,8 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void formularioAgregarJugador() {
 	
-		String nombre = "";
-
-		if (this.nombres.size() > 0) {
-			
-			nombre = this.nombres.get(0);
-			
-			if (this.nombres.size() > 1) {
-				
-				this.nombres.remove(0);
-				
-				
-			}
-
-			this.controlador.addJugador(nombre);
-			
-		}
+		String nombre = JOptionPane.showInputDialog("Formulario de ingreso", "Ingrese su nombre...");
+		this.controlador.addJugador(nombre);
 
 	}
 
@@ -464,6 +448,7 @@ public class InterfazGrafica extends Vista {
 	
 	// Metodos de intefazgráfica.
 	
+	/*
 	private void setAgregarJugadores() {
 
 		int maximo = 5;
@@ -518,7 +503,8 @@ public class InterfazGrafica extends Vista {
 		this.frame.append(agregar);
 		
 	}
-
+	*/
+	
 	public ImageManager getImageManager() {
 		return this.imageManager;
 	}

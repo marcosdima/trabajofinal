@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface IObservableRemoto {
+import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+
+public interface ICrupier extends IObservableRemoto {
 
 	// Rutina que reparte la primera mano.
 	void repartirPrimeraTanda() throws RemoteException;
@@ -28,7 +31,7 @@ public interface IObservableRemoto {
 	IJugador getApostador() throws RemoteException;
 
 	// Este metodo se encarga de repartir la carta a los JugadoresBlackJack.
-	void repartir(JugadorBlackJack player);
+	void repartir(JugadorBlackJack player)  throws RemoteException;
 
 	// Rutina que prepara a los jugadores para la siguiente mano.
 	boolean reiniciarMano() throws RemoteException;
@@ -43,7 +46,7 @@ public interface IObservableRemoto {
 
 	void cargado(String tag) throws IOException;
 
-	void notificarObservadores(Object arg);
+	boolean notificarObservadores(IMensaje event, IJugador player) throws RemoteException;
 
 	int getDinero() throws RemoteException;
 
@@ -51,7 +54,7 @@ public interface IObservableRemoto {
 
 	String[] getCartas() throws RemoteException;
 
-	String[] getIdCartas();
+	String[] getIdCartas() throws RemoteException;
 
 	boolean todaviaNoJugo() throws RemoteException;
 
