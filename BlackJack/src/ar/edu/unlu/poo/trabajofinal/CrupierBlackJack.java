@@ -50,9 +50,9 @@ public class CrupierBlackJack extends Crupier implements Observado {
 			}
 			else if ((player.getNombre().toLowerCase().startsWith("21"))) {
 				
-				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.SIETE));
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.NUEVE));
 				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
-				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CUATRO));
+				player.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.DOS));
 				player.mostrarCarta();
 				
 			}
@@ -722,7 +722,6 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 		this.jugadores.clear();
 		this.clearMano();
-		System.out.println(this.getManoActual().getCartas().size());
 		this.notificar(Evento.FINDELJUEGO);
 		
 	}

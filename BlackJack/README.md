@@ -44,6 +44,6 @@ Para propósitos de testing, hay nombres que presetean un conjunto de cartas al 
 
 # Créditos
 
-  [Imágenes de cartas 'Default'](https://yaomon.itch.io/playing-cards) 
+  [Imágenes de cartas 'Default'](https://yaomon.itch.io/playing-cards)
   [Imágenes de castas 'Simple' y 'Simple shiny'](https://gamesupply.itch.io/frenchcard)
 

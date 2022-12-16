@@ -257,13 +257,11 @@ public class InterfazGrafica extends Vista {
 		lineaApuesta.add(label);
 		
 		// Modificación de monto de dinero inicial.
-				// Modificación de monto de dinero inicial.
 		plataInicial.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				
-				Integer monto = Integer.valueOf(JOptionPane.showInputDialog("Ingrese nuevo monto inicial: ", "1000"));
-				controlador.setDineroBase(monto);
+				Integer monto = Integer.valueOf(JOptionPane.showInputDialog("Ingrese nuevo monto inicial: ", controlador.getDineroBase()));
 				
 				if (monto <= 0) {
 					
@@ -280,7 +278,7 @@ public class InterfazGrafica extends Vista {
 					
 				}
 				
-				controlador.setApuestaMinima(monto);
+				controlador.setDineroBase(monto);
 				menuConfiguracion();
 				
 			}});

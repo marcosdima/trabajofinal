@@ -231,7 +231,7 @@ public class BlackJack implements Observador {
 					}
 					else {
 						
-						break;
+						vista.formularioSetApuesta(data);;
 						
 					}
 
