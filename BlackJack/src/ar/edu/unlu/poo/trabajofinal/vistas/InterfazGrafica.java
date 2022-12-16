@@ -151,16 +151,11 @@ public class InterfazGrafica extends Vista {
 
 	}
 
-	@Override
 	public void menuConfiguracion() {
 		
 		JButton cambiarSkin = new Boton("Cambiar imagen de cartas");
 		JButton apuestaMinima = new Boton("Apuesta minima");
 		JButton plataInicial = new Boton("Plata Inicial");
-		
-		Component[] opciones = {cambiarSkin, apuestaMinima, plataInicial};
-		
-		PanelGrilla menu = new PanelGrilla(opciones, 3, 1, 50, 50);
 		
 		Panel main = new Panel();
 		main.setLayout(new BorderLayout(100, 100));
@@ -182,16 +177,12 @@ public class InterfazGrafica extends Vista {
 		});
 
 		// Cambio de skin de carta
+		JLabel as = this.imageManager.imagenCarta("AS_CORAZON");
+		JLabel cubierta = this.imageManager.imagenCarta("CUBIERTA");
 		cambiarSkin.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 
-				Frame cargados = new Frame("Apariencia");
-				BorderLayout border = new BorderLayout(10,50);
-				Panel principal = new Panel();
-				Boton seguir = new Boton("Cargar");
-				JComboBox<String> lista;
-				
 				// Estos son para crear la lista de archivos disponibles.
 				File dir = new File("Imagenes/Cartas");
 				File[] archivos = dir.listFiles();
@@ -205,40 +196,32 @@ public class InterfazGrafica extends Vista {
 					
 				}
 
-				lista = new JComboBox<String>(strs) ;
-				// Hasta aca.
+				String choose = (String) JOptionPane.showInputDialog(
+						null, 
+						"Seleccione un estilo", "Cartas", 
+						JOptionPane.QUESTION_MESSAGE, 
+						null,
+						strs,
+						strs[0]
+				);
 				
-				seguir.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						
-						String eleccion = (String) lista.getSelectedItem();
-						
-						cargados.setVisible(false);
-						frame.setEnabled(true);
-						
-						imageManager.setFolderCarta(eleccion);
-
-					}});
-				
-				cargados.setSize(300, 400);
-				cargados.setVisible(true);
-				
-				principal.setLayout(border);
-
-				principal.add(seguir, BorderLayout.SOUTH);
-				principal.addVacio(BorderLayout.NORTH);
-				principal.add(lista, BorderLayout.CENTER);
-				principal.addVacio(BorderLayout.WEST);
-				principal.addVacio(BorderLayout.EAST);
-				
-				cargados.append(principal);
-				principal.updateUI();
-				
+				if (choose != null) {
+					
+					imageManager.setFolderCarta(choose);
+					menuConfiguracion();
+					
+					
+				}
+					
 			}
 
-		});;
+		});
+		
+		Panel lineaSkin = new Panel();
+		lineaSkin.setLayout(new GridLayout(1,3,20,20));
+		lineaSkin.add(cambiarSkin);
+		lineaSkin.add(as);
+		lineaSkin.add(cubierta);
 		
 		// Modificación de apuesta minima.
 		apuestaMinima.addActionListener(new ActionListener() {
@@ -246,11 +229,35 @@ public class InterfazGrafica extends Vista {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				Integer monto = Integer.valueOf(JOptionPane.showInputDialog("Ingrese nueva apuesta mínima: ", "100"));
+				
+				if (monto < 0) {
+					
+					monto = 0;
+					
+				}
+				else {
+					
+					if (monto > controlador.getDineroBase()) {
+						
+						controlador.setDineroBase(monto);
+						
+					}
+					
+				}
+				
 				controlador.setApuestaMinima(monto);
+				menuConfiguracion();
 
 			}});
+		Label label = new Label("Apuesta mínima: " + this.controlador.getApuestaMinima(), "FreeMono", 30);
+		
+		Panel lineaApuesta = new Panel();
+		lineaApuesta.setLayout(new GridLayout(1,2,30,30));
+		lineaApuesta.add(apuestaMinima);
+		lineaApuesta.add(label);
 		
 		// Modificación de monto de dinero inicial.
+				// Modificación de monto de dinero inicial.
 		plataInicial.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -258,8 +265,35 @@ public class InterfazGrafica extends Vista {
 				Integer monto = Integer.valueOf(JOptionPane.showInputDialog("Ingrese nuevo monto inicial: ", "1000"));
 				controlador.setDineroBase(monto);
 				
+				if (monto <= 0) {
+					
+					monto = controlador.getDineroBase();
+					
+				}
+				else {
+					
+					if (monto < controlador.getApuestaMinima()) {
+						
+						controlador.setApuestaMinima(monto);
+						
+					}
+					
+				}
+				
+				controlador.setApuestaMinima(monto);
+				menuConfiguracion();
+				
 			}});
-
+		Label labelPlata = new Label("Monto inicial: " + this.controlador.getDineroBase(), "FreeMono", 30);
+		
+		Panel lineaPlata = new Panel();
+		lineaPlata.setLayout(new GridLayout(1,2,30,30));
+		lineaPlata.add(plataInicial);
+		lineaPlata.add(labelPlata);
+		
+		Component[] opciones = {lineaSkin, lineaApuesta, lineaPlata};
+		PanelGrilla menu = new PanelGrilla(opciones, 3, 1, 50, 50);
+		
 		main.add(retorno, BorderLayout.SOUTH);
 		main.addVacio(BorderLayout.NORTH);
 		main.add(menu, BorderLayout.CENTER);

@@ -6,5 +6,5 @@ Carlistos,900
 Ingresar nombre...,500
 Ingresar nombre...,95
 Casa,50
-Ingresar nombre...,0
+Marcos,0
 Ingresar nombre...,0

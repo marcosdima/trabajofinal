@@ -139,24 +139,21 @@ public class VistaConsola extends Vista {
 			res = sc.nextInt();
 			
 			
-			if (res <= 0) {
+			if (res < 0) {
 				
-				p.printConEspacioAlto("El monto inicial no puede ser menor o igula a 0!");
+				res = 0;
 				
 			}
-			else {
+
+			if (res > this.controlador.getDineroBase()) {
 				
-				if (res > this.controlador.getDineroBase()) {
-					
-					this.controlador.setDineroBase(res);
-					p.printConEspacioAlto("(Se modificó el monto mínimo para que no sea menor que la apuesta mínima)");
-					
-				}
-				
-				this.controlador.setApuestaMinima(res);
+				this.controlador.setDineroBase(res);
+				p.printConEspacioAlto("(Se modificó el monto mínimo para que no sea menor que la apuesta mínima)");
 				
 			}
 			
+			this.controlador.setApuestaMinima(res);
+		
 			this.menuConfiguracion();
 			
 		}
