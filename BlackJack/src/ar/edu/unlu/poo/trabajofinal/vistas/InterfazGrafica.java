@@ -47,11 +47,11 @@ public class InterfazGrafica extends Vista {
 		this.setControlador(controlador);
 		this.controlador.addIntefaz(this);
 		this.setFrame();
-		this.setImageManager("Imagenes/Cartas/", "Default");
+		this.setImageManager("Default");
 		this.setBarra();
 		
 	}
-	
+
 	@Override
 	public void setControlador(BlackJack controlador) {
 		
@@ -66,11 +66,12 @@ public class InterfazGrafica extends Vista {
 		JButton jugar = new Boton("Jugar");
 		JButton load = new Boton("Cargar");
 		JButton rank = new Boton("Ranking");
+		JButton configuracion = new Boton("Configuracion");
 		
-		Component[] opciones = {jugar, salir, load, rank};
+		Component[] opciones = {jugar, load, rank, configuracion, salir};
 		
 		PanelMenuPrincipal framecito = new PanelMenuPrincipal(opciones, 10, 10);
-		
+				
 		jugar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -104,7 +105,7 @@ public class InterfazGrafica extends Vista {
 			}});
 		rank.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent arg0) {
 				
 				try {
 					ranking();
@@ -112,6 +113,14 @@ public class InterfazGrafica extends Vista {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+			}});
+		configuracion.addActionListener(new ActionListener() {
+
+	public void actionPerformed(ActionEvent arg0) {
+				
+				menuConfiguracion();
+				framecito.setVisible(false);
 				
 			}});
 		
@@ -145,7 +154,121 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void menuConfiguracion() {
 		
+		JButton cambiarSkin = new Boton("Cambiar imagen de cartas");
+		JButton apuestaMinima = new Boton("Apuesta minima");
+		JButton plataInicial = new Boton("Plata Inicial");
 		
+		Component[] opciones = {cambiarSkin, apuestaMinima, plataInicial};
+		
+		PanelGrilla menu = new PanelGrilla(opciones, 3, 1, 50, 50);
+		
+		Panel main = new Panel();
+		main.setLayout(new BorderLayout(100, 100));
+		
+		// Botón de retorno
+		Boton retorno = new Boton("");
+		retorno.setIcon(this.imageManager.imagen("Iconos/return", 50, 50));	
+		retorno.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				main.setVisible(false);
+				menuPrincipal();
+				
+			}
+			
+			
+		});
+
+		// Cambio de skin de carta
+		cambiarSkin.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+
+				Frame cargados = new Frame("Apariencia");
+				BorderLayout border = new BorderLayout(10,50);
+				Panel principal = new Panel();
+				Boton seguir = new Boton("Cargar");
+				JComboBox<String> lista;
+				
+				// Estos son para crear la lista de archivos disponibles.
+				File dir = new File("Imagenes/Cartas");
+				File[] archivos = dir.listFiles();
+				String[] strs = new String[archivos.length];
+				int contador = 0;				
+				
+				for (File archivo : archivos) {
+
+					strs[contador] = archivo.getName();
+					contador++;
+					
+				}
+
+				lista = new JComboBox<String>(strs) ;
+				// Hasta aca.
+				
+				seguir.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						
+						String eleccion = (String) lista.getSelectedItem();
+						
+						cargados.setVisible(false);
+						frame.setEnabled(true);
+						
+						imageManager.setFolderCarta(eleccion);
+
+					}});
+				
+				cargados.setSize(300, 400);
+				cargados.setVisible(true);
+				
+				principal.setLayout(border);
+
+				principal.add(seguir, BorderLayout.SOUTH);
+				principal.addVacio(BorderLayout.NORTH);
+				principal.add(lista, BorderLayout.CENTER);
+				principal.addVacio(BorderLayout.WEST);
+				principal.addVacio(BorderLayout.EAST);
+				
+				cargados.append(principal);
+				principal.updateUI();
+				
+			}
+
+		});;
+		
+		// Modificación de apuesta minima.
+		apuestaMinima.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Integer monto = Integer.valueOf(JOptionPane.showInputDialog("Ingrese nueva apuesta mínima: ", "100"));
+				controlador.setApuestaMinima(monto);
+
+			}});
+		
+		// Modificación de monto de dinero inicial.
+		plataInicial.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Integer monto = Integer.valueOf(JOptionPane.showInputDialog("Ingrese nuevo monto inicial: ", "1000"));
+				controlador.setDineroBase(monto);
+				
+			}});
+
+		main.add(retorno, BorderLayout.SOUTH);
+		main.addVacio(BorderLayout.NORTH);
+		main.add(menu, BorderLayout.CENTER);
+		main.addVacio(BorderLayout.EAST);
+		main.addVacio(BorderLayout.WEST);
+			
+	
+		this.frame.append(main);	
+		menu.updateUI();
 		
 	}
 
@@ -195,7 +318,7 @@ public class InterfazGrafica extends Vista {
 		Panel jugadores = new Panel();
 		Panel crupier = new Panel();
 		GridLayout grid = new GridLayout(2,1);
-		GridLayout gridPlayers = new GridLayout(1,5);
+		GridLayout gridPlayers = new GridLayout(1,5, 10, 10);
 		ModuloJugador auxiliar = null;
 		
 		panel.setLayout(grid);
@@ -237,6 +360,7 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void formularioSetApuesta(IJugador dato) {
 		
+
 		if (!flag) {
 			
 			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
@@ -290,12 +414,6 @@ public class InterfazGrafica extends Vista {
 	@Override
 	public void carga() throws IOException {
 		
-		Frame cargados = new Frame("Carga");
-		BorderLayout border = new BorderLayout(10,50);
-		Panel principal = new Panel();
-		Boton seguir = new Boton("Cargar");
-		JComboBox<String> lista;
-		
 		// Estos son para crear la lista de archivos disponibles.
 		File dir = new File("Files/Save");
 		File[] archivos = dir.listFiles();
@@ -311,54 +429,27 @@ public class InterfazGrafica extends Vista {
 			
 		}
 
-		lista = new JComboBox<String>(strs) ;
-		// Hasta aca.
+		String choose = (String) JOptionPane.showInputDialog(
+				null, 
+				"Seleccione una partida", "archivos", 
+				JOptionPane.QUESTION_MESSAGE, 
+				null,
+				strs,
+				strs[0]
+		);
 		
-		seguir.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				String eleccion = (String) lista.getSelectedItem();
-				
-				cargados.setVisible(false);
-				frame.setEnabled(true);
-				
-				if (eleccion != strs[0]) {
-					
-					try {
-						// Este flag es por un error en los mensajes.
-						flag = false;
-						controlador.cargar(eleccion);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					
-					
-				}
-				else {
-					
-					JOptionPane.showConfirmDialog(principal, "Ese archivo no existe!", "Advertencia!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
-					
-				}
-
-			}});
-		
-		cargados.setSize(300, 400);
-		cargados.setVisible(true);
-		
-		principal.setLayout(border);
-
-		principal.add(seguir, BorderLayout.SOUTH);
-		principal.addVacio(BorderLayout.NORTH);
-		principal.add(lista, BorderLayout.CENTER);
-		principal.addVacio(BorderLayout.WEST);
-		principal.addVacio(BorderLayout.EAST);
-		
-		cargados.append(principal);
-		principal.updateUI();
+		if (choose != null) {
+			
+			try {
+				// Este flag es por un error en los mensajes.
+				flag = false;
+				controlador.cargar(choose);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
 	}
 	
@@ -512,7 +603,30 @@ public class InterfazGrafica extends Vista {
 			}
 			
 		});
-		agregar.add(seguir);
+		
+		// Botón de retorno
+		Boton retorno = new Boton("");
+		retorno.setIcon(this.imageManager.imagen("Iconos/return", 50, 50));	
+		retorno.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				agregar.setVisible(false);
+				menuPrincipal();
+				
+			}
+			
+			
+		});
+
+		Panel botones = new Panel();
+		botones.setLayout(new GridLayout(2,1,30,30));
+		botones.add(seguir);
+		botones.add(retorno);
+		
+		agregar.add(botones);
+
 
 		this.frame.append(agregar);
 		
@@ -522,8 +636,8 @@ public class InterfazGrafica extends Vista {
 		return this.imageManager;
 	}
 
-	public void setImageManager(String source, String folder) {
-		this.imageManager = new ImageManager(source, folder);
+	public void setImageManager(String source) {
+		this.imageManager = new ImageManager("Imagenes", source);
 	}
 
 	public void setFrame() {
@@ -538,7 +652,7 @@ public class InterfazGrafica extends Vista {
 		
 		JMenuBar m = new JMenuBar();
 		JMenu help = new JMenu("Help");
-		JMenuItem comandos = new JMenuItem("Comandos");
+		JMenuItem comandos = new JMenuItem("Notas");
 		
 		comandos.addActionListener(new ActionListener() {
 
@@ -563,6 +677,6 @@ public class InterfazGrafica extends Vista {
 		
 		
 	}
-	
+
 }
 

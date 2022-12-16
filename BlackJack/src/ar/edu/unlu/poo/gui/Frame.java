@@ -9,7 +9,7 @@ public class Frame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private final int ANCHO = 1200;
-	private final int ALTO = 800;
+	private final int ALTO = 900;
 	private Panel panelPrincipal;
 	
 	public Frame(String titulo) {
@@ -23,7 +23,6 @@ public class Frame extends JFrame {
 	}
 	
 	public void append(Component comp) {
-		
 		
 		this.getContentPane().removeAll();
 		this.setPanelPrincipal();
@@ -45,7 +44,12 @@ public class Frame extends JFrame {
 		
 		
 	}
-	
 
+	public Panel getPanelPrincipal() {
+		
+		return this.panelPrincipal;
+		
+	}
 	
 }
+

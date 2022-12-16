@@ -48,7 +48,7 @@ public class VistaConsola extends Vista {
 		}
 		else if (eleccion == OpcionesMenuPrincipal.CONFIGURACION.getId()) {
 			
-			this.menuPrincipal();
+			this.menuConfiguracion();
 			
 		}
 		else if (eleccion == OpcionesMenuPrincipal.SALIR.getId()) {
@@ -88,6 +88,8 @@ public class VistaConsola extends Vista {
 				e.printStackTrace();
 			}
 			
+			this.menuPrincipal();
+			
 		}
 		else {
 			
@@ -120,7 +122,86 @@ public class VistaConsola extends Vista {
 	}
 
 	public void menuConfiguracion() {
-		// TODO Auto-generated method stub
+		
+		int res;
+		
+		p.espacio();
+		p.printConEspacio("Menú de configuración");
+		p.print("1- Modificar apuesta mínima. (" + this.controlador.getApuestaMinima() + ")");
+		p.print("2- Modiificar monto inicial. (" + this.controlador.getDineroBase() + ") ");
+		p.print("3- Salir");
+		
+		res = sc.nextInt();
+		
+		if (res == 1) {
+			
+			p.printConEspacioAlto("Ingrese la nueva apuesta mínima: ");
+			res = sc.nextInt();
+			
+			
+			if (res <= 0) {
+				
+				p.printConEspacioAlto("El monto inicial no puede ser menor o igula a 0!");
+				
+			}
+			else {
+				
+				if (res > this.controlador.getDineroBase()) {
+					
+					this.controlador.setDineroBase(res);
+					p.printConEspacioAlto("(Se modificó el monto mínimo para que no sea menor que la apuesta mínima)");
+					
+				}
+				
+				this.controlador.setApuestaMinima(res);
+				
+			}
+			
+			this.menuConfiguracion();
+			
+		}
+		else if (res == 2) {
+			
+			p.printConEspacioAlto("Ingrese la nuevo monto inicial: ");
+			res = sc.nextInt();
+						
+			if (res <= 0) {
+				
+				p.printConEspacioAlto("El monto inicial no puede ser menor o igula a 0!");
+				
+			}
+			else {
+				
+				if (res < this.controlador.getApuestaMinima()) {
+					
+					this.controlador.setApuestaMinima(res);
+					p.printConEspacioAlto("(Se modificó la apuesta mínima para que no sea mayor que el monto inicial)");
+					
+				}
+				
+				this.controlador.setDineroBase(res);
+
+				
+			}
+			
+			
+			this.menuConfiguracion();
+			
+		}
+		else if (res == 3) {
+			
+			this.menuPrincipal();
+			
+		}
+		else {
+			
+			p.espacio();
+			p.print("La opción ingresada no es válida!");
+			this.menuConfiguracion();
+			
+		}
+		
+		
 		
 	}
 
@@ -158,15 +239,19 @@ public class VistaConsola extends Vista {
 
 	public void formularioSetApuesta(IJugador dato) {
 		
-		String monto;
-		
-		p.espacio();
-		p.print();
-		p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
-		p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
-		monto = sc.next();
-		
-		this.controlador.apostar(monto);
+		if (dato != null) {
+			
+			String monto;
+			
+			p.espacio();
+			p.print();
+			p.print(dato.getNombre() + " " + "ingrese su apuesta: ");
+			p.print("(Recuerde que la puesta mínima es de " + controlador.getApuestaMinima() + ")");
+			monto = sc.next();
+			
+			this.controlador.apostar(monto);
+			
+		}	
 		
 	}
 	
@@ -285,9 +370,7 @@ public class VistaConsola extends Vista {
 			}
 				
 		}
-		
-		this.menuPrincipal();
-		
+
 	}
 	
 	//////////////////////////////////

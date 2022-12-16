@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-import ar.edu.unlu.poo.gui.Boton;
 import ar.edu.unlu.poo.gui.ImageManager;
 import ar.edu.unlu.poo.trabajofinal.IJugador;
 
@@ -32,7 +31,7 @@ public class ModuloJugador extends JPanel {
 		JPanel panelNorte = new JPanel();
 		JPanel panelCentro = new JPanel();
 		
-		BorderLayout mayor = new BorderLayout();
+		BorderLayout mayor = new BorderLayout(10,10);
 		BorderLayout norte = new BorderLayout();
 		GridLayout cartas = new GridLayout(3, 3, espacioCartas, espacioCartas);
 		
@@ -54,7 +53,8 @@ public class ModuloJugador extends JPanel {
 		// Seteo panel central
 		for (String cartita : jugador.getIdCartas()) {
 			
-			panelCentro.add(this.manager.imagen(cartita));
+			JLabel carta = this.manager.imagenCarta(cartita);			
+			panelCentro.add(carta);
 			
 		}
 		

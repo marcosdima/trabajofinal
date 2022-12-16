@@ -14,7 +14,6 @@ public class BlackJack implements Observador {
 	private CrupierBlackJack crupier;
 	private ArrayList<IVista> interfaces;
 	public static final int MAXIMODEJUGADORES = 4;
-	private static int DINEROBASE = 1000;
 	private static int JUGADORES;
 
 	public BlackJack() {
@@ -40,7 +39,7 @@ public class BlackJack implements Observador {
 			
 		}
 
-		this.crupier.addJugador(nombre, BlackJack.DINEROBASE);
+		this.crupier.addJugador(nombre);
 		
 	}
 
@@ -55,16 +54,24 @@ public class BlackJack implements Observador {
 		if (monto.equals("cambiazo")) {
 			
 			this.cambiarVista();
-			
+			monto = "0";
+			this.actualizar(Evento.MOSTRARMANO, this.getDatosJugadores());
+		
 		}
 		
 		this.crupier.setApuestas(monto);
 		
 	}
 	
-	public void getDatosJugadores() {
+	public ArrayList<IJugador> getDatosJugadores() {
 
-		this.crupier.getDatosJugadores();
+		return this.crupier.getDatosJugadores();
+		
+	}
+	
+	public void setApuestaMinima(int monto) {
+		
+		this.crupier.setApuestaMinima(monto);
 		
 	}
 	
@@ -112,11 +119,22 @@ public class BlackJack implements Observador {
 		
 	}
 	
-	
 	public void cambiarVista() {
-		
+
 		this.interfaces.get(0).setActiva(!this.interfaces.get(0).getActiva());;
 		this.interfaces.get(1).setActiva(!this.interfaces.get(1).getActiva());;
+
+	}
+	
+	public int getDineroBase() {
+		
+		return this.crupier.getDineroBase();
+				
+	}
+
+	public void setDineroBase(int dineroBase) {
+		
+		this.crupier.setDineroBase(dineroBase);
 		
 	}
 	

@@ -1,0 +1,3 @@
+Ingresar nombre...,1000
+Ingresar nombre...,1000
+Crupier,0

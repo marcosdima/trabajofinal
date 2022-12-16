@@ -17,6 +17,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	private ArrayList<Observador> observers;
 	private int apuestaMinima;
 	private FileManager fileManager = new FileManager();
+	private int dineroBase = 1000;
 	
 	public CrupierBlackJack(int nroDeJugadores) {
 	
@@ -79,12 +80,12 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 
 	// Appendea un jugador al ArrayList de jugadores.
-	public void addJugador(String nombre, int plata) {
+	public void addJugador(String nombre) {
 			
 		boolean nombreNulo = (nombre == null);
 		boolean noHayJugadores = this.jugadores.isEmpty();
 		boolean seguir = false;
-		JugadorBlackJack player = new JugadorBlackJack(nombre, plata);
+		JugadorBlackJack player = new JugadorBlackJack(nombre, this.dineroBase);
 		
 		if (!nombreNulo) {
 			
@@ -937,5 +938,17 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
+	
+	public int getDineroBase() {
+		return dineroBase;
+	}
+
+	
+	public void setDineroBase(int dineroBase) {
+		this.dineroBase = dineroBase;
+	}
+
+	
+	
 }
 
