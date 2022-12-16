@@ -300,7 +300,6 @@ public class InterfazGrafica extends Vista {
 		main.addVacio(BorderLayout.EAST);
 		main.addVacio(BorderLayout.WEST);
 			
-	
 		this.frame.append(main);	
 		menu.updateUI();
 		
