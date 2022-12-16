@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -15,12 +17,12 @@ public class ModuloJugador extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ImageManager manager;
 	
+	
 	public ModuloJugador(IJugador player, ImageManager manager) {
 		
 		super();
 		this.setManager(manager);
 		this.setFormato(player);
-		
 		
 	}
 	
@@ -38,7 +40,7 @@ public class ModuloJugador extends JPanel {
 		JButton nombre = new JButton(jugador.getNombre());
 		JLabel dinero = new JLabel("Dinero: " + jugador.getDinero());
 		JLabel puntos = new JLabel("Puntaje: " + jugador.getPuntaje());
-		
+
 		this.setLayout(mayor);
 		panelNorte.setLayout(norte);
 		panelCentro.setLayout(cartas);
@@ -70,5 +72,5 @@ public class ModuloJugador extends JPanel {
 		this.manager = manager;
 		
 	}
-	
+
 }

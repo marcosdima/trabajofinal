@@ -1,22 +1,21 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ar.edu.unlu.poo.gui.Boton;
+import ar.edu.unlu.poo.gui.Panel;
 
 public class ModuloAgregarJugador extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField inputNombre;
 	private Boton add;
+	static Panel fondo = new Panel();
 	
 	public ModuloAgregarJugador() {
 		
@@ -105,8 +104,6 @@ public class ModuloAgregarJugador extends JPanel {
 
 	}
 		
-
-
 	public String getString() {
 		
 		return this.inputNombre.getText();

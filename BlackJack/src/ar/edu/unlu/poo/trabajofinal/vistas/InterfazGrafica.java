@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -105,7 +104,7 @@ public class InterfazGrafica extends Vista {
 			}});
 		rank.addActionListener(new ActionListener() {
 
-	public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {
 				
 				try {
 					ranking();
@@ -117,13 +116,13 @@ public class InterfazGrafica extends Vista {
 			}});
 		configuracion.addActionListener(new ActionListener() {
 
-	public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {
 				
 				menuConfiguracion();
 				framecito.setVisible(false);
 				
 			}});
-		
+
 		this.frame.add(framecito);
 		framecito.updateUI();
 		
@@ -168,12 +167,12 @@ public class InterfazGrafica extends Vista {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				main.setVisible(false);
+				//main.setVisible(false);
+				frame.getPanelPrincipal().remove(main);
 				menuPrincipal();
 				
 			}
-			
-			
+					
 		});
 
 		// Cambio de skin de carta
@@ -299,8 +298,7 @@ public class InterfazGrafica extends Vista {
 		main.addVacio(BorderLayout.WEST);
 			
 		this.frame.append(main);	
-		menu.updateUI();
-		
+
 	}
 
 	@Override
@@ -492,7 +490,7 @@ public class InterfazGrafica extends Vista {
 		ArrayList<String> listaStr = controlador.getRanking();
 		Panel rank = new Panel();
 		JLabel linea = new JLabel();
-		Font fuente = new Font("FreeMono", Font.ITALIC, linea.getFont().getSize() + 2);
+		Font fuente = new Font("FreeMono", Font.ITALIC, linea.getFont().getSize() + 10);
 		String[] spliteo = null;
 		String nombre = "";
 		String puntos = "";
