@@ -1,6 +1,7 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
@@ -39,13 +40,23 @@ public class BlackJack implements Observador {
 			
 		}
 
-		this.crupier.addJugador(nombre);
+		try {
+			this.crupier.addJugador(nombre);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
 	public void setInicio() {
 		
-		this.crupier.repartirPrimeraTanda();
+		try {
+			this.crupier.repartirPrimeraTanda();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -59,13 +70,27 @@ public class BlackJack implements Observador {
 		
 		}
 		
-		this.crupier.setApuestas(monto);
+		try {
+			this.crupier.setApuestas(monto);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
 	public ArrayList<IJugador> getDatosJugadores() {
 
-		return this.crupier.getDatosJugadores();
+		ArrayList<IJugador> result = null;
+		
+		try {
+			result = this.crupier.getDatosJugadores();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return result;
 		
 	}
 	
@@ -181,7 +206,12 @@ public class BlackJack implements Observador {
 				
 				case PREGUNTAROTRA:
 					
-					jugadorBJ = this.crupier.seleccionarJugador();
+					try {
+						jugadorBJ = this.crupier.seleccionarJugador();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 					if (vista.siONo(event, data)) {
 						
@@ -259,7 +289,12 @@ public class BlackJack implements Observador {
 				
 				case PRIMERAPUESTA:
 
-					vista.formularioSetApuesta(this.crupier.getApostador());
+					try {
+						vista.formularioSetApuesta(this.crupier.getApostador());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 				case FINDEMANO:
 				
@@ -270,8 +305,13 @@ public class BlackJack implements Observador {
 						
 						vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
 						this.setInicio();
-						vista.mostrarMano(this.crupier.getDatosJugadores());
-						vista.formularioSetApuesta(this.crupier.getApostador());
+						vista.mostrarMano(this.getDatosJugadores());
+						try {
+							vista.formularioSetApuesta(this.crupier.getApostador());
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 					}
 					else {
@@ -373,7 +413,12 @@ public class BlackJack implements Observador {
 						
 					case APUESTASETEADA:
 					
+					try {
 						playerContenedor = this.crupier.getApostador();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 						
 						if (playerContenedor != null) {
 							
@@ -383,13 +428,23 @@ public class BlackJack implements Observador {
 						}
 						else {
 							
-							this.crupier.repartir(this.crupier.seleccionarJugador());
+							try {
+								this.crupier.repartir(this.crupier.seleccionarJugador());
+							} catch (RemoteException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							
 						}
 						
 					case NOAPUESTA:
 						
+					try {
 						playerContenedor = this.crupier.getApostador();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 						
 						if (playerContenedor != null) {
 							
