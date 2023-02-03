@@ -1,6 +1,7 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -8,6 +9,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
+import ar.edu.unlu.poo.trabajofinal.commons.Mensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
@@ -787,7 +789,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	 * 
 */
 	
-	
+	// YA NO USAR!
 	@Override
 	public void agregarObservador(Observador observer) {
 		
@@ -798,12 +800,8 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	@Override
 	public boolean notificar(Evento mensaje, IJugador data) {
 		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, data);
-			
-		}
-		
+		Mensaje msj = new Mensaje(mensaje, data.getNombre());
+		this.adaptarNotificacion(msj);
 		return true;
 		
 	}
@@ -811,10 +809,11 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	@Override
 	public boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos) {
 		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, actuDatos);
-			
+		try {
+			this.notificarObservadores(actuDatos);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return true;
@@ -823,12 +822,8 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 
 	public boolean notificar(Evento mensaje) {
 		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje);
-			
-		}
-		
+		Mensaje msj = new Mensaje(mensaje, "NADA");
+		this.adaptarNotificacion(msj);
 		return true;
 		
 	}
@@ -836,28 +831,31 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	@Override
 	public boolean notificar(SaltoError mensaje, IJugador data) {
 		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, data);
-			
-		}
-		
+		Mensaje msj = new Mensaje(mensaje, data.getNombre());
+		this.adaptarNotificacion(msj);
 		return true;
-		
+
 	}
 	
 	public boolean notificar(Notificacion mensaje, IJugador data) {
 		
-		for (Observador observer: observers) {
-			
-			observer.actualizar(mensaje, data);
-			
-		}
-		
+		Mensaje msj = new Mensaje(mensaje, data.getNombre());
+		this.adaptarNotificacion(msj);
 		return true;
+		
 		
 	}
 	
+	public void adaptarNotificacion(Mensaje arg) {
+		
+		try {
+			this.notificarObservadores(arg);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 /*
 	 * 

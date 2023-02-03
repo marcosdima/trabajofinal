@@ -1,2 +1,2 @@
-Ingresar nombre...,1000
+Ingresar nombre...,889
 Crupier,0
