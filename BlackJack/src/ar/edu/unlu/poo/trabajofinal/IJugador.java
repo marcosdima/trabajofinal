@@ -14,6 +14,8 @@ public interface IJugador {
 	
 	public int getPuntaje();
 
+	public Mano getManoActual();
+	
 	// Dudoso...
 	public EstadoDeMano getEstadoDeMano();
 	

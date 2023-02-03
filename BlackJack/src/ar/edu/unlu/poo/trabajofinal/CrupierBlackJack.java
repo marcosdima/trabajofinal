@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
+import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
-public class CrupierBlackJack extends Crupier implements Observado {
+public class CrupierBlackJack extends ObservableRemoto implements Observado, IJugador {
 
 	private ArrayList<JugadorBlackJack> jugadores;
 	private ArrayList<Observador> observers;
@@ -19,9 +20,18 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	private FileManager fileManager = new FileManager();
 	private int dineroBase = 1000;
 	
+	// Atributos que eran de Crupier.
+	private Mazo mazo;
+	
+	// Atributos que eran de Jugador.
+	private Mano manoActual;
+	private boolean todaviaNoJugo;
+	
 	public CrupierBlackJack(int nroDeJugadores) {
 	
 		super();
+		this.setMazo();
+		this.setManoActual();
 		this.setJugadores(nroDeJugadores);
 		this.observers = new ArrayList<Observador>();
 		this.setApuestaMinima(100);
@@ -237,7 +247,7 @@ public class CrupierBlackJack extends Crupier implements Observado {
 	}
 	
 	// Revisa el estado del jugador y devuelve un enumerado con el resultado.
-	private EstadoDeMano checkEstadoJugador(Jugador player, int puntaje) {
+	private EstadoDeMano checkEstadoJugador(IJugador player, int puntaje) {
 		
 		Mano mano;
 		ArrayList<Carta> cartas;
@@ -937,17 +947,183 @@ public class CrupierBlackJack extends Crupier implements Observado {
 		
 	}
 
-	
 	public int getDineroBase() {
 		return dineroBase;
 	}
 
-	
 	public void setDineroBase(int dineroBase) {
 		this.dineroBase = dineroBase;
 	}
 
+	// Métodos que eran de crupier.
 	
+	public void barajar() {
+		
+		this.mazo.barajar();
+		
+	};
+	
+	public void setMazo(Mazo mazo) {
+		
+		this.mazo = mazo;
+		
+	}
+	
+	public void darCarta(Jugador player) {
+		
+		Carta cartita = this.mazo.agarrarCarta();
+		player.addCarta(cartita);
+		
+	}
+
+	public Mazo getMazo() {
+		return mazo;
+	}
+	
+	// Métodos que eran de Jugador.
+	
+	public void addCarta(Carta carta) {
+		
+		this.getManoActual().addCarta(carta);
+		
+	}
+	
+	public void clearMano() {
+		
+		this.getManoActual().clear();
+	
+	}
+	
+	public void mostrarCarta(int pos) {
+		
+		this.getManoActual().getCartas().get(pos).setVisibilidad(true);
+		
+	}
+	
+	public void mostrarCarta() {
+		
+		this.mostrarCarta(0);
+		
+	}
+	
+	public void mostrarCartas() {
+		
+		for (Carta carta : this.manoActual.getCartas()) {
+			
+			carta.setVisibilidad(true);
+			
+		}
+		
+	}
+
+	public int getNroCartas() {
+		
+		return this.getManoActual().getCartas().size();
+		
+	}
+	
+	//Estos son de la mano.
+
+	public Mano getManoActual() {
+		return manoActual;
+	}
+	
+	public void setManoActual() {
+		
+		this.manoActual = new Mano();
+		
+	} 
+	
+	public void setTodaviaNoJugo(boolean terminoTurno) {
+		this.todaviaNoJugo = terminoTurno;
+	}
+
+	public void yaJugo() {
+		
+		this.setTodaviaNoJugo(false);
+		
+	}
+
+	/////////////////////////////
+	// Implementación IJugador //
+	/////////////////////////////
+
+	public String[] getCartas() {
+		
+		int size = this.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
+		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (cartita.esVisible()) {
+				
+				cartas[contador] = cartita.getDesc();
+				
+			}
+			else {
+				
+				cartas[contador] = "Cubierta";
+				
+			}
+			
+			contador++;
+			
+		}
+		
+		return cartas;
+		
+	}
+	
+	public String[] getIdCartas() {
+		
+		int size = this.getManoActual().getCartas().size();
+		int contador = 0;
+		String[] cartas = new String[size];
+		
+		for (Carta cartita : this.getManoActual().getCartas()) {
+			
+			if (cartita.esVisible()) {
+				
+				cartas[contador] = cartita.getIdentificador();
+				
+			}
+			else {
+				
+				cartas[contador] = "CUBIERTA";
+				
+			}
+			
+			contador++;
+			
+		}
+		
+		return cartas;
+		
+	}
+	
+	public boolean todaviaNoJugo() {
+		return todaviaNoJugo;
+	}
+
+	public EstadoDeMano getEstadoDeMano() {
+		
+		return this.getManoActual().getEstado();
+		
+	}
+
+	
+	@Override
+	public String getNombre() {
+		// TODO Auto-generated method stub
+		return "Crupier";
+	}
+
+	@Override
+	public int getDinero() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
 
