@@ -51,7 +51,6 @@ public class InterfazGrafica extends Vista {
 		
 	}
 
-	@Override
 	public void setControlador(BlackJack controlador) {
 		
 		this.controlador = controlador;

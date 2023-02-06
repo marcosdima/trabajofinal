@@ -1,7 +1,10 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public class JugadorBlackJack extends Jugador {
+import java.io.Serializable;
+
+public class JugadorBlackJack extends Jugador implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private Apuesta apuesta;
 	private boolean todaviaNoAposto;
 	private boolean perdioLaMano;

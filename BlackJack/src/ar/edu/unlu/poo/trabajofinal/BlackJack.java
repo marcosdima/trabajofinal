@@ -5,22 +5,29 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
+import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
+import ar.edu.unlu.poo.trabajofinal.commons.Mensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 
-public class BlackJack implements Observador {
+public class BlackJack implements Observador, IObservadorRemoto, IControladorRemoto {
 	
-	private CrupierBlackJack crupier;
+	private ICrupier crupier;
 	private ArrayList<IVista> interfaces;
 	public static final int MAXIMODEJUGADORES = 4;
 	private static int JUGADORES;
-
+	
+	public <T extends IObservableRemoto> BlackJack(T modelo) {
+		this.setModeloRemoto(modelo);
+	}
+	
 	public BlackJack() {
 		
-		crupier = new CrupierBlackJack(MAXIMODEJUGADORES);
-		this.crupier.agregarObservador(this);
 		interfaces = new ArrayList<IVista>(2);
 		BlackJack.JUGADORES = 0;
 		
@@ -303,7 +310,7 @@ public class BlackJack implements Observador {
 					
 					if (!salir) {
 						
-						vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
+						//vista.mostrarMensaje(Evento.FINDEMANO, this.crupier);
 						this.setInicio();
 						vista.mostrarMano(this.getDatosJugadores());
 						try {
@@ -316,14 +323,14 @@ public class BlackJack implements Observador {
 					}
 					else {
 						
-						vista.mostrarMensaje(event, this.crupier);
+						//vista.mostrarMensaje(event, this.crupier);
 						vista.menuPrincipal();
 						
 					}	
 					
 				case FINDELJUEGO:
 					
-					vista.mostrarMensaje(event, this.crupier);
+					//vista.mostrarMensaje(event, this.crupier);
 					vista.menuPrincipal();
 					break;
 					
@@ -468,5 +475,57 @@ public class BlackJack implements Observador {
 		}
 
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
+		
+		Mensaje msj = (Mensaje) arg0; 
+		IMensaje tag = msj.getTag();
+		
+		if (tag instanceof Evento) {
+			
+			if (msj.getRemitente() == null) {
+				
+				this.actualizar((Evento)tag);
+				
+			}
+			else if (msj.getRemitente() instanceof IJugador) {
+				
+				this.actualizar((Evento)tag, (IJugador) msj.getRemitente());
+				
+			}
+			else {
+				
+				this.actualizar((Evento)tag, (ArrayList<IJugador>) msj.getRemitente());
+				
+			}
+			
+		}
+		else if (tag instanceof SaltoError) {
+			
+			this.actualizar((SaltoError)tag, (IJugador) msj.getRemitente());
+			
+		}
+		else {
+			
+			this.actualizar((Notificacion)tag, (IJugador) msj.getRemitente());
+			
+		}
+		
+	}
+	
+	public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) {
+		this.crupier = (ICrupier) modeloRemoto; // es necesario castear el modelo remoto 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -1,11 +1,13 @@
 package ar.edu.unlu.poo.trabajofinal;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
@@ -14,10 +16,10 @@ import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.Observado;
 import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
-public class CrupierBlackJack extends ObservableRemoto implements Observado, IJugador {
+public class CrupierBlackJack extends ObservableRemoto implements IJugador, Serializable, ICrupier {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<JugadorBlackJack> jugadores;
-	private ArrayList<Observador> observers;
 	private int apuestaMinima;
 	private FileManager fileManager = new FileManager();
 	private int dineroBase = 1000;
@@ -35,12 +37,12 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		this.setMazo();
 		this.setManoActual();
 		this.setJugadores(nroDeJugadores);
-		this.observers = new ArrayList<Observador>();
 		this.setApuestaMinima(100);
 
 	}
 
 	// Rutina que reparte la primera mano.
+	@Override
 	public void repartirPrimeraTanda() throws RemoteException {
 
 		this.barajar();
@@ -92,6 +94,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Appendea un jugador al ArrayList de jugadores.
+	@Override
 	public void addJugador(String nombre) throws RemoteException {
 			
 		boolean nombreNulo = (nombre == null);
@@ -136,6 +139,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Seteo de apuestas.
+	@Override
 	public void setApuestas(String monto) throws RemoteException {
 		
 		Apuesta apuesta = null;
@@ -220,6 +224,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Devuelve un arrray list con datos de los jugadores (Incluyendo al crupier).
+	@Override
 	public ArrayList<IJugador> getDatosJugadores() throws RemoteException {
 
 		ArrayList<IJugador> datosDeJugadores = new ArrayList<IJugador>(this.jugadores.size() + 1);
@@ -238,6 +243,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 	
 	// Retorna una carta del mazo.
+	@Override
 	public Carta darCarta() {
 		
 		Carta cartita = this.getMazo().agarrarCarta();
@@ -293,6 +299,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Devuelve un jugador disponible para jugar.
+	@Override
 	public JugadorBlackJack seleccionarJugador() throws RemoteException {
 		
 		boolean seteado = false;
@@ -316,6 +323,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 	
 	// Devuelve un jugador disponible para apostar.
+	@Override
 	public IJugador getApostador() throws RemoteException{
 		
 		boolean seteado = false;
@@ -337,6 +345,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 	
 	// Este metodo se encarga de repartir la carta a los JugadoresBlackJack.
+	@Override
 	public void repartir(JugadorBlackJack player) {
 		
 		// Repensar el sistema para repartir, corta.
@@ -413,6 +422,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 	
 	// Rutina para que se de cartas el crupier.
+	@Override
 	public void repartirCrupier() {
 
 		EstadoDeMano estado;
@@ -486,7 +496,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Rutina que prepara a los jugadores para la siguiente mano.
-	protected boolean reiniciarMano() {
+	public boolean reiniciarMano() {
 		
 		boolean salir = false;
 		ArrayList<JugadorBlackJack> eliminados = new ArrayList<JugadorBlackJack>();
@@ -530,6 +540,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Rutina que reparte las ganancias a los jugadores.
+	@Override
 	public void definirGanadores() {
 		
 		// Falta caso Black Jack.
@@ -564,6 +575,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 
 	// Devuelve true si detecta que es la primera mano.
+	@Override
 	public boolean primeraMano() {
 		
 		boolean res = false;
@@ -582,6 +594,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 	
+	@Override
 	public void terminarTurnoJugador(JugadorBlackJack player) {
 
 		JugadorBlackJack contenedor = null;
@@ -616,6 +629,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 	
 	// Saca un jugador del ArrayList 'jugadores' (Podría dejarlos en un array de perdedores)
+	@Override
 	public void eliminar(JugadorBlackJack player) {
 		
 		if (this.jugadores.size() == 1) {
@@ -702,6 +716,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 	
+	@Override
 	public Comparativo compararManos(IJugador player) {
 		
 		Comparativo comparacion;
@@ -713,6 +728,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	}
 	
 	// Genera los archivos de guardado.
+	@Override
 	public void guardado(String tag) throws IOException {
 		
 		ArrayList<String> guardado = new ArrayList<String>();
@@ -727,6 +743,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 	
+	@Override
 	public void cargado(String tag) throws IOException {
 		
 		JugadorBlackJack jugador;
@@ -820,18 +837,10 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	 * 
 */
 	
-	// YA NO USAR!
-	@Override
-	public void agregarObservador(Observador observer) {
-		
-		this.observers.add(observer);
-		
-	}
-
 	@Override
 	public boolean notificar(Evento mensaje, IJugador data) {
 		
-		Mensaje msj = new Mensaje(mensaje, data.getNombre());
+		Mensaje msj = new Mensaje(mensaje, data);
 		this.adaptarNotificacion(msj);
 		return true;
 		
@@ -840,20 +849,16 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	@Override
 	public boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos) {
 		
-		try {
-			this.notificarObservadores(actuDatos);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		Mensaje msj = new Mensaje(mensaje, actuDatos);
+		this.adaptarNotificacion(msj);
 		return true;
 		
 	}
 
+	@Override
 	public boolean notificar(Evento mensaje) {
 		
-		Mensaje msj = new Mensaje(mensaje, "NADA");
+		Mensaje msj = new Mensaje(mensaje, null);
 		this.adaptarNotificacion(msj);
 		return true;
 		
@@ -862,30 +867,29 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	@Override
 	public boolean notificar(SaltoError mensaje, IJugador data) {
 		
-		Mensaje msj = new Mensaje(mensaje, data.getNombre());
+		Mensaje msj = new Mensaje(mensaje, data);
 		this.adaptarNotificacion(msj);
 		return true;
 
 	}
 	
+	@Override
 	public boolean notificar(Notificacion mensaje, IJugador data) {
 		
-		Mensaje msj = new Mensaje(mensaje, data.getNombre());
+		Mensaje msj = new Mensaje(mensaje, data);
 		this.adaptarNotificacion(msj);
 		return true;
 		
-		
 	}
 	
+	@Override
 	public void adaptarNotificacion(Mensaje arg) {
-		
 		try {
 			this.notificarObservadores(arg);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 	
 /*
@@ -895,22 +899,26 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 */
 	
 	
+	@Override
 	public void setApuestaMinima(int montoMinimo) {
 		
 		this.apuestaMinima = montoMinimo;
 		
 	}
 
+	@Override
 	public int getApuestaMinima() {
 		
 		return this.apuestaMinima;
 		
 	}
 	
+	@Override
 	public void setJugadores(int n) {
 		this.jugadores = new ArrayList<JugadorBlackJack>(n);
 	}
 
+	@Override
 	public int getPuntaje() {
 		
 		Mano mano = this.getManoActual();
@@ -944,10 +952,12 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 	
+	@Override
 	public ArrayList<JugadorBlackJack> getJugadores() {
 		return jugadores;
 	}
 
+	@Override
 	public int nroDeJugadores() {
 		
 		int res = 0;
@@ -964,40 +974,47 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 
+	@Override
 	public ArrayList<String> getRanking() throws IOException {
 		
 		return this.fileManager.loadRanking();
 		
 	}
 
+	@Override
 	public ArrayList<String> getHelp() throws IOException {
 		
 		return this.fileManager.loadHelp();
 		
 	}
 
+	@Override
 	public int getDineroBase() {
 		return dineroBase;
 	}
 
+	@Override
 	public void setDineroBase(int dineroBase) {
 		this.dineroBase = dineroBase;
 	}
 
 	// Métodos que eran de crupier.
 	
+	@Override
 	public void barajar() {
 		
 		this.mazo.barajar();
 		
 	};
 	
+	@Override
 	public void setMazo(Mazo mazo) {
 		
 		this.mazo = mazo;
 		
 	}
 	
+	@Override
 	public void darCarta(Jugador player) {
 		
 		Carta cartita = this.mazo.agarrarCarta();
@@ -1005,36 +1022,42 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 
+	@Override
 	public Mazo getMazo() {
 		return mazo;
 	}
 	
 	// Métodos que eran de Jugador.
 	
+	@Override
 	public void addCarta(Carta carta) {
 		
 		this.getManoActual().addCarta(carta);
 		
 	}
 	
+	@Override
 	public void clearMano() {
 		
 		this.getManoActual().clear();
 	
 	}
 	
+	@Override
 	public void mostrarCarta(int pos) {
 		
 		this.getManoActual().getCartas().get(pos).setVisibilidad(true);
 		
 	}
 	
+	@Override
 	public void mostrarCarta() {
 		
 		this.mostrarCarta(0);
 		
 	}
 	
+	@Override
 	public void mostrarCartas() {
 		
 		for (Carta carta : this.manoActual.getCartas()) {
@@ -1045,6 +1068,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 
+	@Override
 	public int getNroCartas() {
 		
 		return this.getManoActual().getCartas().size();
@@ -1053,20 +1077,24 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	
 	//Estos son de la mano.
 
+	@Override
 	public Mano getManoActual() {
 		return manoActual;
 	}
 	
+	@Override
 	public void setManoActual() {
 		
 		this.manoActual = new Mano();
 		
 	} 
 	
+	@Override
 	public void setTodaviaNoJugo(boolean terminoTurno) {
 		this.todaviaNoJugo = terminoTurno;
 	}
 
+	@Override
 	public void yaJugo() {
 		
 		this.setTodaviaNoJugo(false);
@@ -1077,6 +1105,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 	// Implementación IJugador //
 	/////////////////////////////
 
+	@Override
 	public String[] getCartas() {
 		
 		int size = this.getManoActual().getCartas().size();
@@ -1104,6 +1133,7 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 	
+	@Override
 	public String[] getIdCartas() {
 		
 		int size = this.getManoActual().getCartas().size();
@@ -1131,10 +1161,12 @@ public class CrupierBlackJack extends ObservableRemoto implements Observado, IJu
 		
 	}
 	
+	@Override
 	public boolean todaviaNoJugo() {
 		return todaviaNoJugo;
 	}
 
+	@Override
 	public EstadoDeMano getEstadoDeMano() {
 		
 		return this.getManoActual().getEstado();

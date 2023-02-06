@@ -38,5 +38,5 @@ public interface IVista {
 	public boolean getActiva();
 	
 	public void help() throws IOException ;
-	
+
 }

@@ -1,11 +1,14 @@
 package ar.edu.unlu.poo.trabajofinal.commons;
 
-public class Mensaje {
+import java.io.Serializable;
 
+public class Mensaje implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private IMensaje tag;
-	private String remitente;
+	private Object remitente;
 	
-	public Mensaje(IMensaje tag, String remitente) {
+	public Mensaje(IMensaje tag, Object remitente) {
 		
 		this.tag = tag;
 		this.remitente = remitente;
@@ -16,7 +19,7 @@ public class Mensaje {
 		return tag;
 	}
 
-	public String getRemitente() {
+	public Object getRemitente() {
 		return remitente;
 	}
 	

@@ -1,8 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal.vistas;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
