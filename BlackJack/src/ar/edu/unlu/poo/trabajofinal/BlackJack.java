@@ -15,7 +15,7 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 
-public class BlackJack implements Observador, IObservadorRemoto, IControladorRemoto {
+public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 	
 	private ICrupier crupier;
 	private ArrayList<IVista> interfaces;
@@ -103,13 +103,27 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 	
 	public void setApuestaMinima(int monto) {
 		
-		this.crupier.setApuestaMinima(monto);
+		try {
+			this.crupier.setApuestaMinima(monto);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
 	public int getApuestaMinima() {
 		
-		return this.crupier.getApuestaMinima();
+		int apuestaMinima = 0;
+		
+		try {
+			apuestaMinima = this.crupier.getApuestaMinima();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return apuestaMinima;
 		
 	}
 	
@@ -160,13 +174,27 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 	
 	public int getDineroBase() {
 		
-		return this.crupier.getDineroBase();
-				
+		int dineroBase = 0;
+		
+		try {
+			dineroBase = this.crupier.getDineroBase();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		 return dineroBase;
+		 
 	}
 
 	public void setDineroBase(int dineroBase) {
 		
-		this.crupier.setDineroBase(dineroBase);
+		try {
+			this.crupier.setDineroBase(dineroBase);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -174,7 +202,7 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 	// Implementación de Observador //
 	//////////////////////////////////
 	
-	@Override
+	
 	public void actualizar(Evento event, ArrayList<IJugador> objeto) {
 		
 		for (IVista vista : this.interfaces) {
@@ -197,7 +225,8 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 				
 	}
 
-	public void actualizar(Evento event, IJugador data) {
+	
+	public void actualizar(Evento event, IJugador data) throws RemoteException {
 		
 		JugadorBlackJack jugadorBJ;
 		boolean guardar = false;
@@ -283,8 +312,7 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 		
 	};
 
-	@Override
-	public void actualizar(Evento event) {
+	public void actualizar(Evento event) throws RemoteException {
 		
 		boolean salir;
 		
@@ -353,7 +381,6 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 		
 	}
 
-	@Override
 	public void actualizar(SaltoError event, IJugador objeto) {
 		
 		for (IVista vista : this.interfaces) {
@@ -395,8 +422,7 @@ public class BlackJack implements Observador, IObservadorRemoto, IControladorRem
 
 	}
 	
-	@Override
-	public void actualizar(Notificacion event, IJugador data) {
+	public void actualizar(Notificacion event, IJugador data) throws RemoteException {
 		
 		IJugador playerContenedor;
 		

@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
 import ar.edu.unlu.poo.trabajofinal.vistas.InterfazGrafica;
+import ar.edu.unlu.poo.trabajofinal.vistas.VistaConsola;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
@@ -53,16 +54,17 @@ public class AppCliente {
 		
 		try {
 			c.iniciar(controlador);
-			controlador.iniciar();
 			
 			IVista vista = new InterfazGrafica(controlador);
-			IVista vistaConsola = new InterfazGrafica(controlador);
+			IVista vistaConsola = new VistaConsola(controlador);
 			
 			boolean consola = false;
 			boolean grafico = !consola;
 			
 			vista.setActiva(grafico);
 			vistaConsola.setActiva(consola);
+			
+			controlador.iniciar();
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

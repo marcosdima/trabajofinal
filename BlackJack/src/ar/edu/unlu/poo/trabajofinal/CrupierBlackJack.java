@@ -244,7 +244,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	
 	// Retorna una carta del mazo.
 	@Override
-	public Carta darCarta() {
+	public Carta darCarta() throws RemoteException {
 		
 		Carta cartita = this.getMazo().agarrarCarta();
 		
@@ -352,7 +352,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		EstadoDeMano estatus;
 		boolean primeraMano = false;
 		boolean terminar = false;
-		Carta cartita;
+		Carta cartita = null;
 		
 		// Si es la primera mano, muestra sus cartas y pone en true la variable 'primeraMano'.
 		if (player.primeraMano()) {
@@ -382,7 +382,12 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		}
 		else {
 			
-			cartita = this.darCarta();
+			try {
+				cartita = this.darCarta();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			player.addCarta(cartita);
 			player.mostrarCartas();
 			
@@ -460,7 +465,12 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 			
 			if (contadorDeGanadas < mitad) {
 				
-				this.addCarta(this.darCarta());			
+				try {
+					this.addCarta(this.darCarta());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
 				
 			}
 			else {
@@ -1089,7 +1099,6 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		
 	} 
 	
-	@Override
 	public void setTodaviaNoJugo(boolean terminoTurno) {
 		this.todaviaNoJugo = terminoTurno;
 	}

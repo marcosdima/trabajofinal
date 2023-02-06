@@ -8,8 +8,9 @@ import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Mensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public interface ICrupier {
+public interface ICrupier extends IObservableRemoto {
 
 	// Rutina que reparte la primera mano.
 	void repartirPrimeraTanda() throws RemoteException;
@@ -24,7 +25,7 @@ public interface ICrupier {
 	ArrayList<IJugador> getDatosJugadores() throws RemoteException;
 
 	// Retorna una carta del mazo.
-	Carta darCarta();
+	Carta darCarta() throws RemoteException;
 
 	// Devuelve un jugador disponible para jugar.
 	JugadorBlackJack seleccionarJugador() throws RemoteException;
@@ -33,102 +34,96 @@ public interface ICrupier {
 	IJugador getApostador() throws RemoteException;
 
 	// Este metodo se encarga de repartir la carta a los JugadoresBlackJack.
-	void repartir(JugadorBlackJack player);
+	void repartir(JugadorBlackJack player) throws RemoteException;
 
 	// Rutina para que se de cartas el crupier.
-	void repartirCrupier();
+	void repartirCrupier() throws RemoteException;
 
 	// Rutina que prepara a los jugadores para la siguiente mano.
-	boolean reiniciarMano();
+	boolean reiniciarMano() throws RemoteException;
 
 	// Rutina que reparte las ganancias a los jugadores.
-	void definirGanadores();
+	void definirGanadores() throws RemoteException;
 
 	// Devuelve true si detecta que es la primera mano.
-	boolean primeraMano();
+	boolean primeraMano() throws RemoteException;
 
-	void terminarTurnoJugador(JugadorBlackJack player);
+	void terminarTurnoJugador(JugadorBlackJack player) throws RemoteException;
 
 	// Saca un jugador del ArrayList 'jugadores' (Podría dejarlos en un array de perdedores)
-	void eliminar(JugadorBlackJack player);
+	void eliminar(JugadorBlackJack player) throws RemoteException;
 
-	Comparativo compararManos(IJugador player);
+	Comparativo compararManos(IJugador player) throws RemoteException;
 
 	// Genera los archivos de guardado.
 	void guardado(String tag) throws IOException;
 
 	void cargado(String tag) throws IOException;
 
-	boolean notificar(Evento mensaje, IJugador data);
+	boolean notificar(Evento mensaje, IJugador data) throws RemoteException;
 
-	boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos);
+	boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos) throws RemoteException;
 
-	boolean notificar(Evento mensaje);
+	boolean notificar(Evento mensaje) throws RemoteException;
 
-	boolean notificar(SaltoError mensaje, IJugador data);
+	boolean notificar(SaltoError mensaje, IJugador data) throws RemoteException;
 
-	boolean notificar(Notificacion mensaje, IJugador data);
+	boolean notificar(Notificacion mensaje, IJugador data) throws RemoteException;
 
-	void adaptarNotificacion(Mensaje arg);
+	void adaptarNotificacion(Mensaje arg) throws RemoteException;
 
-	void setApuestaMinima(int montoMinimo);
+	void setApuestaMinima(int montoMinimo) throws RemoteException; 
 
-	int getApuestaMinima();
+	int getApuestaMinima() throws RemoteException;
 
-	void setJugadores(int n);
+	void setJugadores(int n) throws RemoteException;
 
-	int getPuntaje();
+	int getPuntaje() throws RemoteException;
 
-	ArrayList<JugadorBlackJack> getJugadores();
+	ArrayList<JugadorBlackJack> getJugadores() throws RemoteException;
 
-	int nroDeJugadores();
+	int nroDeJugadores() throws RemoteException;
 
 	ArrayList<String> getRanking() throws IOException;
 
 	ArrayList<String> getHelp() throws IOException;
 
-	int getDineroBase();
+	int getDineroBase() throws RemoteException;
 
-	void setDineroBase(int dineroBase);
+	void setDineroBase(int dineroBase) throws RemoteException;
 
-	void barajar();
+	void barajar() throws RemoteException;
 
-	void setMazo(Mazo mazo);
+	void setMazo(Mazo mazo) throws RemoteException;
 
-	void darCarta(Jugador player);
+	void darCarta(Jugador player) throws RemoteException;
 
-	Mazo getMazo();
+	Mazo getMazo() throws RemoteException;
 
-	void addCarta(Carta carta);
+	void addCarta(Carta carta) throws RemoteException;
 
-	void clearMano();
+	void clearMano() throws RemoteException;
 
-	void mostrarCarta(int pos);
+	void mostrarCarta(int pos) throws RemoteException;
+ 
+	void mostrarCarta() throws RemoteException;
 
-	void mostrarCarta();
+	void mostrarCartas() throws RemoteException;
 
-	void mostrarCartas();
+	int getNroCartas() throws RemoteException;
 
-	int getNroCartas();
+	Mano getManoActual() throws RemoteException;
 
-	Mano getManoActual();
+	void setManoActual() throws RemoteException;
 
-	void setManoActual();
+	void yaJugo() throws RemoteException;
 
-	void setTodaviaNoJugo(boolean terminoTurno);
+	String[] getCartas() throws RemoteException;
 
-	void yaJugo();
+	String[] getIdCartas() throws RemoteException;
 
-	String[] getCartas();
+	boolean todaviaNoJugo() throws RemoteException;
 
-	String[] getIdCartas();
-
-	boolean todaviaNoJugo();
-
-	EstadoDeMano getEstadoDeMano();
-
-	String getNombre();
-
-	int getDinero();
+	EstadoDeMano getEstadoDeMano() throws RemoteException;
 
 }
