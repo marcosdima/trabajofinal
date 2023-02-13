@@ -1,8 +1,6 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-import java.io.Serializable;
-
-public class JugadorBlackJack extends Jugador implements Serializable {
+public class JugadorBlackJack extends Jugador {
 	
 	private static final long serialVersionUID = 1L;
 	private Apuesta apuesta;

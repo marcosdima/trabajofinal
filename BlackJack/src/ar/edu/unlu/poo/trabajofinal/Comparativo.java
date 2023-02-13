@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public enum Comparativo {
+import java.io.Serializable;
+
+public enum Comparativo implements Serializable {
 	MEJOR, PEOR, IGUAL;
 	
 	public boolean gana() {

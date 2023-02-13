@@ -5,6 +5,7 @@ import ar.edu.unlu.poo.mistads.Pila;
 
 public abstract class Mazo extends ConjuntoDeCartas {
 	
+	private static final long serialVersionUID = 2017586003893864754L;
 	private Pila<Carta> baraja;
 	public Rand random;
 	

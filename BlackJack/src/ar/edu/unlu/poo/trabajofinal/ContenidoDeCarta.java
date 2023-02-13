@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public enum ContenidoDeCarta {
+import java.io.Serializable;
+
+public enum ContenidoDeCarta implements Serializable {
 	
 	AS(11, "As"),
 	DOS(2, "2"),

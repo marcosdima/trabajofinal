@@ -214,9 +214,10 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 				case MOSTRARMANO:
 					
 					vista.mostrarMano(objeto);
+					break;
 					
-				default:;
-			
+				default:
+					break;			
 				}
 				
 			}
@@ -225,7 +226,6 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 				
 	}
 
-	
 	public void actualizar(Evento event, IJugador data) throws RemoteException {
 		
 		JugadorBlackJack jugadorBJ;
@@ -259,6 +259,7 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 						this.crupier.terminarTurnoJugador(jugadorBJ);
 						
 					}	
+					break;
 					
 				case TERMINOTURNO:
 					
@@ -300,10 +301,10 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 						vista.formularioSetApuesta(data);;
 						
 					}
+					break;
 
 			default:
-				
-				;
+				break;
 				}
 				
 			}
@@ -330,6 +331,7 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					break;
 					
 				case FINDEMANO:
 				
@@ -355,6 +357,7 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 						vista.menuPrincipal();
 						
 					}	
+					break;
 					
 				case FINDELJUEGO:
 					
@@ -370,8 +373,10 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					break;
 								
-				default:;
+				default:
+					break;
 				
 				}
 				
@@ -394,22 +399,27 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 					case ERRORMAXJUGADORES:
 						
 						this.setInicio();
+						break;
 						
 					case ERRORAPUESTA:
 						
 						vista.formularioSetApuesta(objeto);
+						break;
 						
 					case NOHAYJUGADORESCARGADOS:
 						
 						vista.formularioAgregarJugador();
+						break;
 						
 					case ERRORFALTADEDINERO:
 						
 						vista.formularioSetApuesta(objeto);
+						break;
 						
 					case APOSTONONUMERO:
 						
 						vista.formularioSetApuesta(objeto);
+						break;
 				
 				default:
 					break;
@@ -437,7 +447,8 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 					case JUGADORCARGADO:
 				
 						vista.mostrarMensaje(event, data);
-						vista.formularioAgregarJugador();		
+						vista.formularioAgregarJugador();	
+						break;
 						
 					case BLACKJACK:
 						
@@ -446,13 +457,13 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 						
 					case APUESTASETEADA:
 					
-					try {
-						playerContenedor = this.crupier.getApostador();
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-						
+						try {
+							playerContenedor = this.crupier.getApostador();
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+							
 						if (playerContenedor != null) {
 							
 							vista.mostrarMensaje(event, data);
@@ -469,15 +480,16 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 							}
 							
 						}
+						break;
 						
 					case NOAPUESTA:
 						
-					try {
-						playerContenedor = this.crupier.getApostador();
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						try {
+							playerContenedor = this.crupier.getApostador();
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						
 						if (playerContenedor != null) {
 							
@@ -490,10 +502,11 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 							this.actualizar(Evento.FINDEMANO);
 							
 						}
+						break;
 	
 					default:
 					
-					;
+						break;
 				}
 				
 			}
@@ -502,40 +515,49 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
 		
-		Mensaje msj = (Mensaje) arg0; 
-		IMensaje tag = msj.getTag();
+		IMensaje tag = null;
+		Mensaje msj = null;
 		
-		if (tag instanceof Evento) {
+		if (arg0 instanceof Mensaje) {
 			
-			if (msj.getRemitente() == null) {
+			msj = (Mensaje) arg0; 
+			tag = msj.getTag();
+			
+		
+			if (tag instanceof Evento) {
 				
-				this.actualizar((Evento)tag);
+				if (msj.getRemitente() == null) {
+					
+					this.actualizar((Evento)tag);
+					
+				}
+				else if (msj.getRemitente() instanceof IJugador) {
+					
+					this.actualizar((Evento)tag, (IJugador) msj.getRemitente());
+					
+				}
+				else {
+					
+					ArrayList<IJugador> datos = (ArrayList<IJugador>) msj.getRemitente();
+					System.out.println(datos);
+					this.actualizar((Evento)tag, datos);
+					
+				}
 				
 			}
-			else if (msj.getRemitente() instanceof IJugador) {
+			else if (tag instanceof SaltoError) {
 				
-				this.actualizar((Evento)tag, (IJugador) msj.getRemitente());
+				this.actualizar((SaltoError)tag, (IJugador) msj.getRemitente());
 				
 			}
 			else {
 				
-				this.actualizar((Evento)tag, (ArrayList<IJugador>) msj.getRemitente());
+				this.actualizar((Notificacion)tag, (IJugador) msj.getRemitente());
 				
 			}
-			
-		}
-		else if (tag instanceof SaltoError) {
-			
-			this.actualizar((SaltoError)tag, (IJugador) msj.getRemitente());
-			
-		}
-		else {
-			
-			this.actualizar((Notificacion)tag, (IJugador) msj.getRemitente());
 			
 		}
 		

@@ -1,9 +1,11 @@
 package ar.edu.unlu.poo.trabajofinal;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class ConjuntoDeCartas {
+public abstract class ConjuntoDeCartas implements Serializable {
 	
+	private static final long serialVersionUID = 4848483516597270146L;
 	private ArrayList<Carta> cartas;
 	private int tam;
 	

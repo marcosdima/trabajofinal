@@ -1,7 +1,10 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public class Carta {
+import java.io.Serializable;
+
+public class Carta implements Serializable {
 	
+	private static final long serialVersionUID = -6826004311205215753L;
 	private Palo paloDeCarta;
 	private ContenidoDeCarta contenido; 
 	private boolean visible;

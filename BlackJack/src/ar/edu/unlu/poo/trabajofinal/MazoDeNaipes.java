@@ -2,6 +2,8 @@ package ar.edu.unlu.poo.trabajofinal;
 
 public class MazoDeNaipes extends Mazo {
 	
+	private static final long serialVersionUID = -3813715092971835451L;
+
 	public MazoDeNaipes() {
 		
 		super(52);

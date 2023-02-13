@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public enum EstadoDeMano {
+import java.io.Serializable;
+
+public enum EstadoDeMano implements Serializable{
 	
 	BLACKJACK,
 	MENORA21, 

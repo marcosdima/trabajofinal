@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public interface IJugador {
+import java.io.Serializable;
+
+public interface IJugador extends Serializable {
 	
 	public String getNombre();
 	

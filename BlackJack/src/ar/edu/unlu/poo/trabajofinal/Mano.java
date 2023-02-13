@@ -4,6 +4,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 
 public class Mano extends ConjuntoDeCartas implements Puntuable {
 	
+	private static final long serialVersionUID = -2136579982370975264L;
 	private static final int MAXIMO = 10;
 	private EstadoDeMano estado;
 	

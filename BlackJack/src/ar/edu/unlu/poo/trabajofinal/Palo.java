@@ -1,6 +1,8 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public enum Palo {
+import java.io.Serializable;
+
+public enum Palo implements Serializable {
 	
 	CORAZON, PICA, TREBOL, DIAMANTE;
 

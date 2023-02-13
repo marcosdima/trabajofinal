@@ -142,7 +142,7 @@ public class InterfazGrafica extends Vista {
 				
 				
 			}
-
+			
 			this.controlador.addJugador(nombre);
 			
 		}

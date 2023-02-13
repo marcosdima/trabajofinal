@@ -4,6 +4,7 @@ import ar.edu.unlu.poo.trabajofinal.commons.Puntuable;
 
 public abstract class Jugador extends Persona implements Puntuable, IJugador {
 
+	private static final long serialVersionUID = 8457505670176367343L;
 	private Mano manoActual;
 	private boolean todaviaNoJugo;
 	

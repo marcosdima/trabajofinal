@@ -1,7 +1,10 @@
 package ar.edu.unlu.poo.trabajofinal;
 
-public class Apuesta {
+import java.io.Serializable;
+
+public class Apuesta implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private int monto;
 	
 	public Apuesta(int monto) {

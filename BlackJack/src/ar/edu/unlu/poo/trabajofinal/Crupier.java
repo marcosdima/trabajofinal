@@ -4,6 +4,7 @@ package ar.edu.unlu.poo.trabajofinal;
 
 public abstract class Crupier extends Jugador {
 
+	private static final long serialVersionUID = 5937487503730555056L;
 	private Mazo mazo;
 	
 	public Crupier() {

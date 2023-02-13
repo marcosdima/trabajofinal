@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FileManager {
+public class FileManager implements Serializable {
 	
+	private static final long serialVersionUID = -4797563195552787349L;
 	private final String RANKING = "Files/Rank/ranking.txt";
 	private final String SAVE = "Files/Save/";
 	private final String HELP = "Files/Help/help.txt";

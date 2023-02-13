@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import ar.edu.unlu.poo.misfunciones.Intencion;
 import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Mensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
-import ar.edu.unlu.poo.trabajofinal.commons.Observado;
-import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 
 public class CrupierBlackJack extends ObservableRemoto implements IJugador, Serializable, ICrupier {
 
@@ -850,7 +847,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	@Override
 	public boolean notificar(Evento mensaje, IJugador data) {
 		
-		Mensaje msj = new Mensaje(mensaje, data);
+		Mensaje msj = null;
+		try {
+			msj = new Mensaje(mensaje, data);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.adaptarNotificacion(msj);
 		return true;
 		
@@ -859,7 +862,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	@Override
 	public boolean notificar(Evento mensaje, ArrayList<IJugador> actuDatos) {
 		
-		Mensaje msj = new Mensaje(mensaje, actuDatos);
+		Mensaje msj = null;
+		try {
+			msj = new Mensaje(mensaje, actuDatos);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.adaptarNotificacion(msj);
 		return true;
 		
@@ -868,7 +877,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	@Override
 	public boolean notificar(Evento mensaje) {
 		
-		Mensaje msj = new Mensaje(mensaje, null);
+		Mensaje msj = null;
+		try {
+			msj = new Mensaje(mensaje, null);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.adaptarNotificacion(msj);
 		return true;
 		
@@ -877,7 +892,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	@Override
 	public boolean notificar(SaltoError mensaje, IJugador data) {
 		
-		Mensaje msj = new Mensaje(mensaje, data);
+		Mensaje msj = null;
+		try {
+			msj = new Mensaje(mensaje, data);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.adaptarNotificacion(msj);
 		return true;
 
@@ -886,7 +907,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	@Override
 	public boolean notificar(Notificacion mensaje, IJugador data) {
 		
-		Mensaje msj = new Mensaje(mensaje, data);
+		Mensaje msj = null;
+		try {
+			msj = new Mensaje(mensaje, data);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.adaptarNotificacion(msj);
 		return true;
 		
@@ -894,6 +921,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	
 	@Override
 	public void adaptarNotificacion(Mensaje arg) {
+
 		try {
 			this.notificarObservadores(arg);
 		} catch (RemoteException e) {
