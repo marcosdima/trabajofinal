@@ -132,6 +132,7 @@ public class InterfazGrafica extends Vista {
 	
 		String nombre = "";
 
+		/*
 		if (this.nombres.size() > 0) {
 			
 			nombre = this.nombres.get(0);
@@ -146,7 +147,14 @@ public class InterfazGrafica extends Vista {
 			this.controlador.addJugador(nombre);
 			
 		}
-
+		*/
+		if (this.nombres.size() > 0) {
+			
+			this.controlador.addJugador("test");
+			this.controlador.addJugador(null);
+			
+		}
+		
 	}
 
 	public void menuConfiguracion() {

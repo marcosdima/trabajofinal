@@ -205,6 +205,8 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 	
 	public void actualizar(Evento event, ArrayList<IJugador> objeto) {
 		
+		System.out.println(objeto);
+		
 		for (IVista vista : this.interfaces) {
 			
 			if (vista.isActiva()) {
@@ -212,7 +214,6 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 				switch ((Evento) event) {
 
 				case MOSTRARMANO:
-					
 					vista.mostrarMano(objeto);
 					break;
 					
@@ -446,8 +447,8 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 				
 					case JUGADORCARGADO:
 				
-						vista.mostrarMensaje(event, data);
-						vista.formularioAgregarJugador();	
+						// vista.mostrarMensaje(event, data);
+						// vista.formularioAgregarJugador();	
 						break;
 						
 					case BLACKJACK:
@@ -520,44 +521,54 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 		
 		IMensaje tag = null;
 		Mensaje msj = null;
+		msj = (Mensaje) arg1;
+		tag = msj.getTag();
 		
-		if (arg0 instanceof Mensaje) {
-			
-			msj = (Mensaje) arg0; 
-			tag = msj.getTag();
-			
+	    try {
+	    	tag = (Evento) tag;
+	    } catch (ClassCastException e1) {
+	        try {
+	        	tag = (SaltoError) tag;
+	        } catch (ClassCastException e2) {
+	        	tag = (Notificacion) tag;
+	        }
+	    }
 		
-			if (tag instanceof Evento) {
+		System.out.println("tag; " + tag + " es instancia de evento: " + (tag instanceof Evento));
+		System.out.println("tag; " + tag + " es instancia de SaltoError: " + (tag instanceof SaltoError));
+		System.out.println("tag; " + tag + " es instancia de Notificacion: " + (tag instanceof Notificacion));
+	
+		if (tag instanceof Evento) {
+			
+			System.out.println("Remitente: " + msj.getRemitente());
+			System.out.println("Remitente: ");
+			
+			if (msj.getRemitente() == null) {
 				
-				if (msj.getRemitente() == null) {
-					
-					this.actualizar((Evento)tag);
-					
-				}
-				else if (msj.getRemitente() instanceof IJugador) {
-					
-					this.actualizar((Evento)tag, (IJugador) msj.getRemitente());
-					
-				}
-				else {
-					
-					ArrayList<IJugador> datos = (ArrayList<IJugador>) msj.getRemitente();
-					System.out.println(datos);
-					this.actualizar((Evento)tag, datos);
-					
-				}
+				this.actualizar((Evento)tag);
 				
 			}
-			else if (tag instanceof SaltoError) {
+			else if (msj.getRemitente() instanceof IJugador) {
 				
-				this.actualizar((SaltoError)tag, (IJugador) msj.getRemitente());
+				this.actualizar((Evento)tag, (IJugador) msj.getRemitente());
 				
 			}
 			else {
-				
-				this.actualizar((Notificacion)tag, (IJugador) msj.getRemitente());
+				ArrayList<IJugador> datos = (ArrayList<IJugador>) msj.getRemitente();
+				System.out.println(datos);
+				this.actualizar((Evento)tag, datos);
 				
 			}
+			
+		}
+		else if (tag instanceof SaltoError) {
+			
+			this.actualizar((SaltoError)tag, (IJugador) msj.getRemitente());
+			
+		}
+		else {
+			
+			this.actualizar((Notificacion)tag, (IJugador) msj.getRemitente());
 			
 		}
 		
