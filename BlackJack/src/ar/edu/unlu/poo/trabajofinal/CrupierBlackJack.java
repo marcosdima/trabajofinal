@@ -13,28 +13,30 @@ import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.Mensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
 
-public class CrupierBlackJack extends ObservableRemoto implements IJugador, Serializable, ICrupier {
+public class CrupierBlackJack extends ObservableRemoto implements Serializable, ICrupier {
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<JugadorBlackJack> jugadores;
 	private int apuestaMinima;
 	private FileManager fileManager = new FileManager();
 	private int dineroBase = 1000;
+	private JugadorBlackJack crupier = null;
 	
 	// Atributos que eran de Crupier.
 	private Mazo mazo;
-	
-	// Atributos que eran de Jugador.
-	private Mano manoActual;
-	private boolean todaviaNoJugo;
 	
 	public CrupierBlackJack(int nroDeJugadores) {
 	
 		super();
 		this.setMazo();
-		this.setManoActual();
+		this.setCrupier();
 		this.setJugadores(nroDeJugadores);
-		this.setApuestaMinima(100);
+		try {
+			this.setApuestaMinima(100);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -79,14 +81,13 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		
 		//this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.CABALLERO));
 		//this.addCarta(new Carta(Palo.CORAZON, ContenidoDeCarta.AS));
-		if (this.getCartas().length < 2){
+		if (this.crupier.getCartas().length < 2){
 			
-			this.addCarta(this.darCarta());
-			this.addCarta(this.darCarta());
-			this.mostrarCarta();
+			this.crupier.addCarta(this.darCarta());
+			this.crupier.addCarta(this.darCarta());
+			this.crupier.mostrarCarta();
 			
 		}
-		
 		
 	}
 
@@ -109,14 +110,14 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 			}
 			else {
 				
-				seguir = this.notificar(SaltoError.ERRORMAXJUGADORES, this);
+				seguir = this.notificar(SaltoError.ERRORMAXJUGADORES, this.crupier);
 				
 			}
 			
 		}
 		else if (noHayJugadores) {
 			
-			this.notificar(SaltoError.NOHAYJUGADORESCARGADOS, this);
+			this.notificar(SaltoError.NOHAYJUGADORESCARGADOS, this.crupier);
 			
 		}
 		else {
@@ -126,7 +127,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		}
 		
 		if (seguir) {
-			
+
 			this.repartirPrimeraTanda();
 			this.notificar(Evento.MOSTRARMANO, this.getDatosJugadores());
 			this.notificar(Evento.PRIMERAPUESTA);
@@ -233,7 +234,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		}
 		
 		// Por último, agrego al crupier para que quede en la última posición.
-		datosDeJugadores.add(this);
+		datosDeJugadores.add(this.crupier);
 		
 		return datosDeJugadores;
 		
@@ -436,11 +437,11 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		
 		if (this.primeraMano()) {
 			
-			this.mostrarCartas();
+			this.crupier.mostrarCartas();
 		
 		}
 		
-		estado = this.checkEstadoJugador(this, this.getPuntaje());
+		estado = this.checkEstadoJugador(this.crupier, this.crupier.getPuntaje());
 		
 		// Si su mano no supera ni iguala los 21, hay que decidir si toma otra carta o termina la mano.
 		if (estado == EstadoDeMano.MENORA21) {
@@ -463,7 +464,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 			if (contadorDeGanadas < mitad) {
 				
 				try {
-					this.addCarta(this.darCarta());
+					this.crupier.addCarta(this.darCarta());
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -540,7 +541,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		}
 		
 		
-		this.clearMano();
+		this.crupier.clearMano();
 		
 		return salir;
 		
@@ -548,7 +549,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 
 	// Rutina que reparte las ganancias a los jugadores.
 	@Override
-	public void definirGanadores() {
+	public void definirGanadores() throws RemoteException {
 		
 		// Falta caso Black Jack.
 		Comparativo comparacion;
@@ -587,7 +588,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		
 		boolean res = false;
 		
-		for (Carta cartita : this.getManoActual().getCartas()) {
+		for (Carta cartita : this.crupier.getManoActual().getCartas()) {
 			
 			if (!cartita.esVisible()) {
 				
@@ -643,7 +644,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 			
 			// Atado con alambre.
 			this.jugadores.remove(player);
-			this.clearMano();
+			this.crupier.clearMano();
 			this.notificar(Evento.FINDELJUEGO);
 			
 		}
@@ -666,7 +667,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	
 	private Comparativo comparador(IJugador player) {
 
-		EstadoDeMano laMano = this.getEstadoDeMano();
+		EstadoDeMano laMano = this.crupier.getEstadoDeMano();
 		EstadoDeMano otraMano = player.getEstadoDeMano();
 		Comparativo comparador = Comparativo.PEOR;
 		
@@ -696,12 +697,12 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 				comparador = Comparativo.PEOR;
 				
 			}
-			else if (this.getPuntaje() == player.getPuntaje()) {
+			else if (this.crupier.getPuntaje() == player.getPuntaje()) {
 				
 				comparador = Comparativo.IGUAL;
 				
 			}
-			else if (this.getPuntaje() < player.getPuntaje()) {
+			else if (this.crupier.getPuntaje() < player.getPuntaje()) {
 				
 				comparador = Comparativo.PEOR;
 				
@@ -736,7 +737,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	
 	// Genera los archivos de guardado.
 	@Override
-	public void guardado(String tag) throws IOException {
+	public void guardado(String tag) throws RemoteException, IOException {
 		
 		ArrayList<String> guardado = new ArrayList<String>();
 		
@@ -747,14 +748,16 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		}		
 		
 		this.fileManager.save(tag, guardado);
+
 		
 	}
 	
 	@Override
-	public void cargado(String tag) throws IOException {
+	public void cargado(String tag) throws RemoteException, IOException {
 		
 		JugadorBlackJack jugador;
 		ArrayList<String> guardado = this.fileManager.load(tag);
+
 		String[] array;
 		String nombre = "";
 		int dinero = 0;
@@ -782,7 +785,7 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 	private void eliminarTodo() {
 		
 		this.jugadores.clear();
-		this.clearMano();
+		this.crupier.clearMano();
 		this.notificar(Evento.FINDELJUEGO);
 		
 	}
@@ -811,9 +814,10 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 			
 			try {
 				this.setRanking(this.getApostador());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (RemoteException e) {
 				e.printStackTrace();
+			} catch (IOException e2) {
+				e2.printStackTrace();
 			}
 			
 			this.notificar(Evento.TERMINOTURNO, player);
@@ -930,22 +934,22 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		}	
 	}
 	
+	
 /*
 	 * 
 	 - Getters and Setters 
 	 * 
 */
 	
-	
 	@Override
-	public void setApuestaMinima(int montoMinimo) {
+	public void setApuestaMinima(int montoMinimo) throws RemoteException  {
 		
 		this.apuestaMinima = montoMinimo;
-		
+		 
 	}
 
 	@Override
-	public int getApuestaMinima() {
+	public int getApuestaMinima() throws RemoteException {
 		
 		return this.apuestaMinima;
 		
@@ -956,33 +960,6 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		this.jugadores = new ArrayList<JugadorBlackJack>(n);
 	}
 
-	@Override
-	public int getPuntaje() {
-		
-		Mano mano = this.getManoActual();
-		int puntos = mano.getPuntaje();
-		ContenidoDeCarta contenido;
-
-		for (Carta cartita : mano.getCartas()) {
-			
-			if (cartita.esVisible()) {
-		
-				contenido = cartita.getContenido();
-				
-				if ((contenido == ContenidoDeCarta.AS) && (puntos > 21)) {
-					
-					puntos = puntos - 10;
-					
-				}
-			
-			}
-			
-		}
-		
-		return puntos;
-		
-	}
-	
 	protected void setMazo() {
 		
 		MazoDeNaipes m = new MazoDeNaipes();
@@ -1006,53 +983,56 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		
 	}
 	
-	private void setRanking(IJugador player) throws IOException {
+	private void setRanking(IJugador player) throws RemoteException, IOException {
 		
 		fileManager.addToRanking(player.getNombre(), (player.getDinero() - 1000));
 		
 	}
 
 	@Override
-	public ArrayList<String> getRanking() throws IOException {
+	public ArrayList<String> getRanking() throws RemoteException, IOException {
 		
 		return this.fileManager.loadRanking();
 		
 	}
 
 	@Override
-	public ArrayList<String> getHelp() throws IOException {
+	public ArrayList<String> getHelp() throws RemoteException, IOException {
 		
 		return this.fileManager.loadHelp();
 		
 	}
 
 	@Override
-	public int getDineroBase() {
+	public int getDineroBase() throws RemoteException {
 		return dineroBase;
 	}
 
 	@Override
-	public void setDineroBase(int dineroBase) {
+	public void setDineroBase(int dineroBase) throws RemoteException {
 		this.dineroBase = dineroBase;
 	}
 
+	private void setCrupier() {
+		
+		this.crupier = new JugadorBlackJack("Crupier", 0);
+		
+	}
+	
 	// Métodos que eran de crupier.
 	
-	@Override
 	public void barajar() {
 		
 		this.mazo.barajar();
 		
 	};
 	
-	@Override
 	public void setMazo(Mazo mazo) {
 		
 		this.mazo = mazo;
 		
 	}
 	
-	@Override
 	public void darCarta(Jugador player) {
 		
 		Carta cartita = this.mazo.agarrarCarta();
@@ -1060,167 +1040,8 @@ public class CrupierBlackJack extends ObservableRemoto implements IJugador, Seri
 		
 	}
 
-	@Override
 	public Mazo getMazo() {
 		return mazo;
-	}
-	
-	// Métodos que eran de Jugador.
-	
-	@Override
-	public void addCarta(Carta carta) {
-		
-		this.getManoActual().addCarta(carta);
-		
-	}
-	
-	@Override
-	public void clearMano() {
-		
-		this.getManoActual().clear();
-	
-	}
-	
-	@Override
-	public void mostrarCarta(int pos) {
-		
-		this.getManoActual().getCartas().get(pos).setVisibilidad(true);
-		
-	}
-	
-	@Override
-	public void mostrarCarta() {
-		
-		this.mostrarCarta(0);
-		
-	}
-	
-	@Override
-	public void mostrarCartas() {
-		
-		for (Carta carta : this.manoActual.getCartas()) {
-			
-			carta.setVisibilidad(true);
-			
-		}
-		
-	}
-
-	@Override
-	public int getNroCartas() {
-		
-		return this.getManoActual().getCartas().size();
-		
-	}
-	
-	//Estos son de la mano.
-
-	@Override
-	public Mano getManoActual() {
-		return manoActual;
-	}
-	
-	@Override
-	public void setManoActual() {
-		
-		this.manoActual = new Mano();
-		
-	} 
-	
-	public void setTodaviaNoJugo(boolean terminoTurno) {
-		this.todaviaNoJugo = terminoTurno;
-	}
-
-	@Override
-	public void yaJugo() {
-		
-		this.setTodaviaNoJugo(false);
-		
-	}
-
-	/////////////////////////////
-	// Implementación IJugador //
-	/////////////////////////////
-
-	@Override
-	public String[] getCartas() {
-		
-		int size = this.getManoActual().getCartas().size();
-		int contador = 0;
-		String[] cartas = new String[size];
-		
-		for (Carta cartita : this.getManoActual().getCartas()) {
-			
-			if (cartita.esVisible()) {
-				
-				cartas[contador] = cartita.getDesc();
-				
-			}
-			else {
-				
-				cartas[contador] = "Cubierta";
-				
-			}
-			
-			contador++;
-			
-		}
-		
-		return cartas;
-		
-	}
-	
-	@Override
-	public String[] getIdCartas() {
-		
-		int size = this.getManoActual().getCartas().size();
-		int contador = 0;
-		String[] cartas = new String[size];
-		
-		for (Carta cartita : this.getManoActual().getCartas()) {
-			
-			if (cartita.esVisible()) {
-				
-				cartas[contador] = cartita.getIdentificador();
-				
-			}
-			else {
-				
-				cartas[contador] = "CUBIERTA";
-				
-			}
-			
-			contador++;
-			
-		}
-		
-		return cartas;
-		
-	}
-	
-	@Override
-	public boolean todaviaNoJugo() {
-		return todaviaNoJugo;
-	}
-
-	@Override
-	public EstadoDeMano getEstadoDeMano() {
-		
-		return this.getManoActual().getEstado();
-		
-	}
-
-	
-	@Override
-	public String getNombre() {
-		// TODO Auto-generated method stub
-		return "Crupier";
-	}
-
-	@Override
-	public int getDinero() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 }

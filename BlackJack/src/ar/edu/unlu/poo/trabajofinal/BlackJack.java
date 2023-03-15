@@ -8,7 +8,6 @@ import ar.edu.unlu.poo.trabajofinal.commons.Evento;
 import ar.edu.unlu.poo.trabajofinal.commons.IMensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Mensaje;
 import ar.edu.unlu.poo.trabajofinal.commons.Notificacion;
-import ar.edu.unlu.poo.trabajofinal.commons.Observador;
 import ar.edu.unlu.poo.trabajofinal.commons.SaltoError;
 import ar.edu.unlu.poo.trabajofinal.vistas.IVista;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
@@ -105,11 +104,11 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 		
 		try {
 			this.crupier.setApuestaMinima(monto);
-		} catch (RemoteException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 	
 	public int getApuestaMinima() {
@@ -118,10 +117,11 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 		
 		try {
 			apuestaMinima = this.crupier.getApuestaMinima();
-		} catch (RemoteException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		
 		return apuestaMinima;
 		
@@ -204,9 +204,7 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 	
 	
 	public void actualizar(Evento event, ArrayList<IJugador> objeto) {
-		
-		System.out.println(objeto);
-		
+	
 		for (IVista vista : this.interfaces) {
 			
 			if (vista.isActiva()) {
@@ -533,15 +531,10 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 	        	tag = (Notificacion) tag;
 	        }
 	    }
-		
-		System.out.println("tag; " + tag + " es instancia de evento: " + (tag instanceof Evento));
-		System.out.println("tag; " + tag + " es instancia de SaltoError: " + (tag instanceof SaltoError));
-		System.out.println("tag; " + tag + " es instancia de Notificacion: " + (tag instanceof Notificacion));
+	    
+	    System.out.println(tag);
 	
 		if (tag instanceof Evento) {
-			
-			System.out.println("Remitente: " + msj.getRemitente());
-			System.out.println("Remitente: ");
 			
 			if (msj.getRemitente() == null) {
 				
@@ -555,7 +548,6 @@ public class BlackJack implements IObservadorRemoto, IControladorRemoto {
 			}
 			else {
 				ArrayList<IJugador> datos = (ArrayList<IJugador>) msj.getRemitente();
-				System.out.println(datos);
 				this.actualizar((Evento)tag, datos);
 				
 			}

@@ -56,9 +56,9 @@ public interface ICrupier extends IObservableRemoto {
 	Comparativo compararManos(IJugador player) throws RemoteException;
 
 	// Genera los archivos de guardado.
-	void guardado(String tag) throws IOException;
+	void guardado(String tag) throws RemoteException, IOException;
 
-	void cargado(String tag) throws IOException;
+	void cargado(String tag) throws RemoteException, IOException;
 
 	boolean notificar(Evento mensaje, IJugador data) throws RemoteException;
 
@@ -72,58 +72,22 @@ public interface ICrupier extends IObservableRemoto {
 
 	void adaptarNotificacion(Mensaje arg) throws RemoteException;
 
-	void setApuestaMinima(int montoMinimo) throws RemoteException; 
+	void setApuestaMinima(int montoMinimo) throws RemoteException;
 
 	int getApuestaMinima() throws RemoteException;
 
 	void setJugadores(int n) throws RemoteException;
 
-	int getPuntaje() throws RemoteException;
-
 	ArrayList<JugadorBlackJack> getJugadores() throws RemoteException;
 
 	int nroDeJugadores() throws RemoteException;
 
-	ArrayList<String> getRanking() throws IOException;
+	ArrayList<String> getRanking() throws RemoteException, IOException;
 
-	ArrayList<String> getHelp() throws IOException;
+	ArrayList<String> getHelp() throws RemoteException, IOException;
 
 	int getDineroBase() throws RemoteException;
 
 	void setDineroBase(int dineroBase) throws RemoteException;
-
-	void barajar() throws RemoteException;
-
-	void setMazo(Mazo mazo) throws RemoteException;
-
-	void darCarta(Jugador player) throws RemoteException;
-
-	Mazo getMazo() throws RemoteException;
-
-	void addCarta(Carta carta) throws RemoteException;
-
-	void clearMano() throws RemoteException;
-
-	void mostrarCarta(int pos) throws RemoteException;
- 
-	void mostrarCarta() throws RemoteException;
-
-	void mostrarCartas() throws RemoteException;
-
-	int getNroCartas() throws RemoteException;
-
-	Mano getManoActual() throws RemoteException;
-
-	void setManoActual() throws RemoteException;
-
-	void yaJugo() throws RemoteException;
-
-	String[] getCartas() throws RemoteException;
-
-	String[] getIdCartas() throws RemoteException;
-
-	boolean todaviaNoJugo() throws RemoteException;
-
-	EstadoDeMano getEstadoDeMano() throws RemoteException;
 
 }

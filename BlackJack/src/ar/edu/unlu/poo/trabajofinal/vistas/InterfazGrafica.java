@@ -395,12 +395,14 @@ public class InterfazGrafica extends Vista {
 
 	@Override
 	public void formularioSetApuesta(IJugador dato) {
-		
 
 		if (!flag) {
-			
-			JOptionPane pane = new JOptionPane("Hola", JOptionPane.INFORMATION_MESSAGE, JOptionPane.NO_OPTION);
-			String res = JOptionPane.showInputDialog(pane, "Ingrese su apuesta: (Apuesta minima " + this.controlador.getApuestaMinima() + ")", dato.getNombre(), JOptionPane.INFORMATION_MESSAGE);	
+
+			String res = JOptionPane.showInputDialog(
+					this.frame, 
+					"Ingrese su apuesta: (Apuesta minima " + this.controlador.getApuestaMinima() + ")", 
+					dato.getNombre(), 
+					JOptionPane.INFORMATION_MESSAGE);	
 			
 			if (res == null) {
 				
